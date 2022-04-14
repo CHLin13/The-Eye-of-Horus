@@ -8,7 +8,7 @@ const app = express();
 app.engine('hbs', exphbs.engine({ defaultLayout: 'main', extname: '.hbs' }));
 app.set('view engine', 'hbs');
 
-require('./routes')(app);
+require('./server/routes/index_route')(app);
 
 app.listen(port, () => {
   console.log(`App is running on port ${port}`);
