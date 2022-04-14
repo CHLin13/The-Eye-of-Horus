@@ -27,7 +27,7 @@
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
           <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a href="/admin/users" class="nav-link">
               <i class="nav-icon fa fa-users"></i>
               <p>
                 Users
@@ -35,7 +35,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="##" class="nav-link active">
+            <a href="/admin/roles" class="nav-link active">
               <i class="nav-icon fa fa-user-tag"></i>
               <p>
                 Roles
@@ -59,7 +59,7 @@
             <h1>Roles</h1>
           </div>
           <div class="d-flex justify-content-end">
-              <button class="btn btn-info">Add role</button>
+            <a href="/admin/roles/edit/1"><button class="btn btn-info">Add role</button></a>
           </div>
         </div>
       </div><!-- /.container-fluid -->
@@ -87,7 +87,7 @@
                     <tr>
                       <td> <a href="/dashboard/:id">role_A</a> </td>
                       <td> role_A Description</td>
-                      <td class="text-center"><a class="text-success" href="/dashboard/:id/edit"><i class="fas fa-edit"></i></a></td>
+                      <td class="text-center"><a class="text-success" href="/admin/roles/edit/1"><i class="fas fa-edit"></i></a></td>
                       <td class="d-flex align-items-center justify-content-center"><a href="/" class="text-danger font-weight-bold"> <i class="fas fa-minus-circle"></i></a></td>
                     </tr>
                     <tr>
