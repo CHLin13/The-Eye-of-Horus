@@ -161,7 +161,6 @@
   })
 
   $('#preview').on('click', async (e) => {
-    console.log('here')
     const response = await axios.post('/dashboards/preview',{ 
         timeRange: $('#time-range').val(),
         source: $('#source').val(),
