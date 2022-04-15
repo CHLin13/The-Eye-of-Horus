@@ -54,75 +54,80 @@
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
-        <form action="/chart" method="post">
+        <form action="/dashboards/1/create" method="post">
           <div class="row">
             <div class="col-12 mt-2 mb-5">
               <div class="d-flex justify-content-end mr-5 mb-3">
                   <div class="d-flex mr-5">
                     <label for="time-range" class="d-flex justify-content-center align-items-center m-0 mr-3">Time range</label>
-                    <select class="form-control" id="time-range" style="width: 15vw;">
-                      <option>Last 5 minutes</option>
-                      <option>Last 15 minutes</option>
-                      <option>Last 30 minutes</option>
-                      <option>Last 1 hour</option>
-                      <option>Last 3 hour</option>
-                      <option>Last 6 hour</option>
-                      <option>Last 12 hour</option>
-                      <option>Last 24 hour</option>
-                      <option>Last 2 days</option>
-                      <option>Last 7 days</option>
-                      <option>Last 30 days</option>
-                      <option>Last 90 days</option>
-                      <option>Last 6 months</option>
-                      <option>Last 1 year</option>
-                      <option>Last 2 years</option>
-                      <option>Last 5 years</option>
+                    <select class="form-control" id="time-range" style="width: 15vw;" name="timeRange">
+                      <option value="5-m">Last 5 minutes</option>
+                      <option value="15-m">Last 15 minutes</option>
+                      <option value="30-m">Last 30 minutes</option>
+                      <option value="1-h">Last 1 hour</option>
+                      <option value="3-h">Last 3 hour</option>
+                      <option value="6-h">Last 6 hour</option>
+                      <option value="12-h">Last 12 hour</option>
+                      <option value="24-h">Last 24 hour</option>
+                      <option value="2-d">Last 2 days</option>
+                      <option value="7-d">Last 7 days</option>
+                      <option value="30-d">Last 30 days</option>
+                      <option value="90-d">Last 90 days</option>
+                      <option value="6-M">Last 6 months</option>
+                      <option value="1-y">Last 1 year</option>
+                      <option value="2-y">Last 2 years</option>
+                      <option value="5-y">Last 5 years</option>
                     </select>
                   </div>
                   <button type="submit" class="btn btn-info mr-5">SAVE</button>
               </div>
               <div class="card m-auto" style="width: 90%;">
                 <!-- /.card-header -->
-                <div class="card-body table-responsive p-1 d-flex justify-content-center">
-                  <div class="image"></div>
+                <div class="card-body table-responsive p-1 d-flex justify-content-center" style="height: 50vh;">
+                  <div class="chart"></div>
                 </div>
                 <!-- /.card-body -->
               </div>
-              <div class="d-flex mt-3 ml-3">
-                <label for="source" class="d-flex justify-content-center align-items-center mx-5" style="display: block; width:3vw">Source</label>
-                <select class="form-control" id="source" style="width: 15vw;">
-                  <option>collectd-cpu_value</option>
-                  <option>collectd-memory_value</option>
-                  <option>collectd-disk_value</option>
-                </select>
+              <div class="d-flex mt-3 mr-5 ml-3 justify-content-between">
+                <div class="d-flex">
+                  <label for="source" class="d-flex justify-content-center align-items-center mx-5" style="display: block; width:3vw">Source</label>
+                  <select class="form-control" id="source" style="width: 15vw;" name="source">                 
+                    {{#each source}}
+                    <option value="{{this}}">{{this}}</option>
+                    {{/each}}
+                  </select>
+                </div>
+                <div>
+                  <div class="btn btn-primary mr-5" id="preview">Preview chart</div>
+                </div>
               </div>
               <div class="d-flex">
                 <div class="d-flex mt-3 ml-3">
                   <label for="style" class="d-flex justify-content-center align-items-center mx-5" style="display: block; width:3vw">Style</label>
-                  <select class="form-control" id="style" style="width: 15vw;">
-                    <option>line chart</option>
-                    <option>bar chart</option>
+                  <select class="form-control" id="style" style="width: 15vw;" name="style">
+                    <option value="line">line chart</option>
+                    <option value="bar">bar chart</option>
                   </select>
                 </div>
                 <div class="d-flex mt-3 ml-3">
                   <label for="interval" class="d-flex justify-content-center align-items-center mx-5" style="display: block; width:3vw">Interval</label>
-                  <input type="text" style="width: 75px;">
-                  <select class="form-control" id="unit" style="width: 5vw;" name="unit">
-                    <option>s</option>
-                    <option>m</option>
-                    <option>h</option>
-                    <option>d</option>
-                    <option>w</option>
+                  <input class="form-control" type="number" min="1" style="width: 75px;" name="interval" id="interval" value="1">
+                  <select class="form-control ml-2" style="width: 8vw;" name="interval_unit" id="interval_unit">
+                    <option value="s">second</option>
+                    <option value="m">minute</option>
+                    <option value="h">hour</option>
+                    <option value="d">day</option>
+                    <option value="w">week</option>
                   </select>
                 </div>
                 <div class="d-flex mt-3 ml-3">
                   <label for="select" class="d-flex justify-content-center align-items-center mx-5" style="display: block; width:3vw">Select</label>
-                  <select class="form-control" id="select" style="width: 15vw;" name="select">
-                    <option>min()</option>
-                    <option>max()</option>
-                    <option>mean()</option>
-                    <option>sum()</option>
-                    <option>count()</option>
+                  <select class="form-control" id="select" style="width: 15vw;" name="select" id="select">
+                    <option value="min">min</option>
+                    <option value="max">max</option>
+                    <option value="mean">mean</option>
+                    <option value="sum">sum</option>
+                    <option value="count">count</option>
                   </select>
                 </div>
               </div>
@@ -155,20 +160,37 @@
     }
   })
 
-  const A = $('.image')[0]
+  $('#preview').on('click', async (e) => {
+    const response = await axios.post('/dashboards/preview',{ 
+        timeRange: $('#time-range').val(),
+        source: $('#source').val(),
+        style: '',
+        interval: $('#interval').val(),
+        interval_unit: $('#interval_unit').val(),
+        select: $('#select').val()
+      });
+  
+    const chart = $('.chart')[0]
+    const result = response.data.data
+    const select = response.data.select + '_value'
 
-  var trace1 = {
-    x: [1, 2, 3, 4],
-    y: [10, 15, 13, 17],
-    type: 'scatter'
-  };
+    const data = []
+    for(let i = 0; i < result.length; i ++){
+      const trace = {
+        x: result[i].rows.map(row => row.time),
+        y: result[i].rows.map(row => row[select]),
+        type: 'scatter',
+        name: result[i].tags.type_instance,
+        connectgaps: true
+      }
+      data.push(trace)
+    }
 
-  var a = [trace1];
+    var layout = {
+      title:'Line and Scatter Plot'
+    };
 
-  var layout = {
-    title:'Line and Scatter Plot'
-  };
-
-  Plotly.newPlot(A, a);
+    Plotly.newPlot(chart, data);
+    })
 
 </script>
