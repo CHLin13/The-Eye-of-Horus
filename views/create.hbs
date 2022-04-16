@@ -57,7 +57,11 @@
         <form action="/dashboards/1/create" method="post">
           <div class="row">
             <div class="col-12 mt-2 mb-5">
-              <div class="d-flex justify-content-end mr-5 mb-3">
+              <div class="d-flex justify-content-between mr-5 mb-3">
+                  <div class="d-flex ml-5 pl-3">
+                    <label for="title" class="d-flex justify-content-center align-items-center m-0 mr-3">Title</label>
+                    <input class="form-control" type="text" id="title" name="title">
+                  </div>
                   <div class="d-flex mr-5">
                     <label for="time-range" class="d-flex justify-content-center align-items-center m-0 mr-3">Time range</label>
                     <select class="form-control" id="time-range" style="width: 15vw;" name="timeRange">
@@ -78,8 +82,9 @@
                       <option value="2-y">Last 2 years</option>
                       <option value="5-y">Last 5 years</option>
                     </select>
+                  <button type="submit" class="btn btn-info mr-3 ml-5">SAVE</button>
                   </div>
-                  <button type="submit" class="btn btn-info mr-5">SAVE</button>
+                  
               </div>
               <div class="card m-auto" style="width: 90%;">
                 <!-- /.card-header -->
@@ -179,7 +184,7 @@
       const trace = {
         x: result[i].rows.map(row => row.time),
         y: result[i].rows.map(row => row[select]),
-        type: 'scatter',
+        type: $('#style').val(),
         name: result[i].tags.type_instance,
         connectgaps: true
       }
@@ -187,10 +192,10 @@
     }
 
     var layout = {
-      title:'Line and Scatter Plot'
+      title:$('#title').val()
     };
 
-    Plotly.newPlot(chart, data);
+    Plotly.newPlot(chart, data, layout);
     })
 
 </script>
