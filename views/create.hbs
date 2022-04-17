@@ -60,9 +60,13 @@
               <div class="d-flex justify-content-between mr-5 mb-3">
                   <div class="d-flex ml-5 pl-3">
                     <label for="title" class="d-flex justify-content-center align-items-center m-0 mr-3">Title</label>
-                    <input class="form-control" type="text" id="title" name="title">
+                    <input class="form-control" type="text" id="title" name="title" placeholder="Chart-1" required>
                   </div>
-                  <div class="d-flex mr-5">
+                  <div class="d-flex ml-5 pl-3">
+                    <label for="font-size" class="d-flex justify-content-center align-items-center m-0 mr-3">Title font size</label>
+                    <input class="form-control" style="width: 100px;" type="number" min="0" id="font-size" name="fontSize" value="24" required>
+                  </div>
+                  <div class="d-flex mx-5">
                     <label for="time-range" class="d-flex justify-content-center align-items-center m-0 mr-3">Time range</label>
                     <select class="form-control" id="time-range" style="width: 15vw;" name="timeRange">
                       <option value="5-m">Last 5 minutes</option>
@@ -93,29 +97,31 @@
                 </div>
                 <!-- /.card-body -->
               </div>
-              <div class="d-flex mt-3 mr-5 ml-3 justify-content-between">
+              <div class="d-flex mt-3 mr-5 ml-3 justify-content-around">
                 <div class="d-flex">
-                  <label for="source" class="d-flex justify-content-center align-items-center mx-5" style="display: block; width:3vw">Source</label>
-                  <select class="form-control" id="source" style="width: 15vw;" name="source">                 
+                  <label for="source" class="d-flex justify-content-center align-items-center m-0 mx-5" style="width:3vw">Source</label>
+                  <select class="form-control ml-4" id="source" style="width: 15vw;" name="source">                 
                     {{#each source}}
                     <option value="{{this}}">{{this}}</option>
                     {{/each}}
                   </select>
                 </div>
+                <div class="d-flex mr-5" style="width: 33vw;">
+                </div>
                 <div>
-                  <div class="btn btn-primary mr-5" id="preview">Preview chart</div>
+                  <div class="btn btn-primary mr-2" id="preview">Preview chart</div>
                 </div>
               </div>
-              <div class="d-flex">
+              <div class="d-flex justify-content-around mr-5">
                 <div class="d-flex mt-3 ml-3">
-                  <label for="style" class="d-flex justify-content-center align-items-center mx-5" style="display: block; width:3vw">Style</label>
-                  <select class="form-control" id="style" style="width: 15vw;" name="style">
+                  <label for="style" class="d-flex justify-content-center align-items-center m-0 mx-5" style="width:3vw">Style</label>
+                  <select class="form-control ml-4" id="style" style="width: 15vw;" name="style">
                     <option value="line">line chart</option>
                     <option value="bar">bar chart</option>
                   </select>
                 </div>
                 <div class="d-flex mt-3 ml-3">
-                  <label for="interval" class="d-flex justify-content-center align-items-center mx-5" style="display: block; width:3vw">Interval</label>
+                  <label for="interval" class="d-flex justify-content-center align-items-center m-0 mx-5" style="width:3vw">Interval</label>
                   <input class="form-control" type="number" min="1" style="width: 75px;" name="interval" id="interval" value="1">
                   <select class="form-control ml-2" style="width: 8vw;" name="interval_unit" id="interval_unit">
                     <option value="s">second</option>
@@ -126,14 +132,42 @@
                   </select>
                 </div>
                 <div class="d-flex mt-3 ml-3">
-                  <label for="select" class="d-flex justify-content-center align-items-center mx-5" style="display: block; width:3vw">Select</label>
-                  <select class="form-control" id="select" style="width: 15vw;" name="select" id="select">
+                  <label for="select" class="d-flex justify-content-center align-items-center m-0 mx-5" style="width:3vw">Select</label>
+                  <select class="form-control" id="select" style="width: 10vw;" name="select" id="select">
                     <option value="min">min</option>
                     <option value="max">max</option>
                     <option value="mean">mean</option>
                     <option value="sum">sum</option>
                     <option value="count">count</option>
                   </select>
+                </div>
+              </div>
+              <div class="d-flex justify-content-around mr-5">
+                <div class="d-flex mt-3 ml-3">
+                  <label for="xAxis-title" class="d-flex justify-content-center align-items-center m-0 mx-3" style="width:10vw">x-Axis title</label>
+                  <input class="form-control" type="text" style="width: 200px;" name="xAxisTitle" id="xAxis-title" placeholder="xAxis">
+                </div>
+                <div class="d-flex mt-3 ml-3">
+                  <label for="xAxis-font-size" class="d-flex justify-content-center align-items-center m-0 mx-5" style="width:10vw">x-Axis title font size</label>
+                  <input class="form-control" type="number" min="1" style="width: 75px;" name="xAxisFontSize" id="xAxis-font-size" value="16">
+                </div>
+                <div class="d-flex mt-3 ml-3">
+                  <label for="xAxis-tick-font-size" class="d-flex justify-content-center align-items-center m-0 mx-5" style="width:10vw">x-Axis tick font size</label>
+                  <input class="form-control" type="number" min="1" style="width: 75px;" name="xAxisTickFontSize" id="xAxis-tick-font-size" value="12">
+                </div>
+              </div>
+              <div class="d-flex justify-content-around mr-5">
+                <div class="d-flex mt-3 ml-3">
+                  <label for="yAxis-title" class="d-flex justify-content-center align-items-center m-0 mx-3" style="width:10vw">y-Axis title</label>
+                  <input class="form-control" type="text" style="width: 200px;" name="yAxisTitle" id="yAxis-title" placeholder="yAxis">
+                </div>
+                <div class="d-flex mt-3 ml-3">
+                  <label for="yAxis-font-size" class="d-flex justify-content-center align-items-center m-0 mx-5" style="width:10vw">y-Axis title font size</label>
+                  <input class="form-control" type="number" min="1" style="width: 75px;" name="yAxisFontSize" id="yAxis-font-size" value="16">
+                </div>
+                <div class="d-flex mt-3 ml-3">
+                  <label for="yAxis-tick-font-size" class="d-flex justify-content-center align-items-center m-0 mx-5" style="width:10vw;">y-Axis tick font size</label>
+                  <input class="form-control" type="number" min="1" style="width: 75px;" name="yAxisTickFontSize" id="yAxis-tick-font-size" value="12">
                 </div>
               </div>
             </div>
@@ -151,6 +185,7 @@
 <!-- ./wrapper -->
 </body>
 <script>
+  document.querySelector
   $('.nav-item').on('click',(e) => {
     if (e.target.tagName === "A"){
       for(let i = 0; i < e.target.parentElement.parentElement.childElementCount; i++){
@@ -192,7 +227,18 @@
     }
 
     var layout = {
-      title:$('#title').val()
+      title:$('#title').val(),
+      titlefont: { size: $('#font-size').val() },
+        xaxis: {
+          title: $('#xAxis-title').val(),
+          titlefont: { size: $('#xAxis-font-size').val() },
+          tickfont: { size: $('#xAxis-tick-font-size').val()  }
+        },
+        yaxis: {
+          title: $('#yAxis-title').val(),
+          titlefont: { size: $('#yAxis-font-size').val() },
+          tickfont: { size: $('#yAxis-tick-font-size').val() }
+        } 
     };
 
     Plotly.newPlot(chart, data, layout);
