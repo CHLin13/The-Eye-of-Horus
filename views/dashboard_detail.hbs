@@ -70,8 +70,54 @@
     <section class="content">
       <div class="container-fluid">
         <div class="card-wrapper d-flex flex-wrap ml-5">
-          <div class="card m-3 A" style="width: 45%; height: 50vh"></div>
-          <div class="card m-3 B" style="width: 45%; height: 50vh"></div>
+          {{#each chart}}
+          <div class="card m-3 {{this.id}}" style="width: 40%; height: 50vh"></div>
+          <a href="/dashboards/{{this.dashboardId}}/chart/{{this.id}}" class="btn btn-success mt-3" style="height: 4vh; line-height:100%">edit</a>
+          <script>
+          async function chart() {
+            console.log('here{{this.id}}')
+            const response = await axios.post('/dashboards/chart/preview',{ 
+                timeRange: '{{this.time_range}}',
+                source: '{{this.database}}/{{this.measurement}}',
+                style: '{{this.chart_type}}',
+                interval: '{{this.interval}}',
+                interval_unit: '{{this.interval_unit}}',
+                select: '{{this.select}}'
+              });
+            console.log('{{this.id}}:', response)
+            const chart = $('.{{this.id}}')[0]
+            const result = response.data.data
+            const select = response.data.select + '_value'
+            const rangeIntoSec = ('{{this.time_range}}'.split('-')[0] * units['{{this.time_range}}'.split('-')[1]])*1000;
+            const data = []
+            for(let i = 0; i < result.length; i ++){
+              const trace = {
+                x: result[i].rows.map(row => row.time),
+                y: result[i].rows.map(row => row[select]),
+                type: $('#style').val(),
+                name: result[i].tags.type_instance,
+                connectgaps: true
+              }
+              data.push(trace)
+            }
+
+            var layout = JSON.parse('{{{this.layout}}}')
+
+            Plotly.newPlot(chart, data, layout);
+          }
+          
+          {{!-- function chart{{this.id}}() {
+              chart();
+              setTimeout(function() {
+                  chart{{this.id}}();
+              }, {{{this.setInterval}}});
+          }
+
+          chart{{this.id}}(); --}}
+          chart()
+          setInterval(chart, {{{this.setInterval}}})
+          </script>
+          {{/each}}
         </div>
       </div><!-- /.container-fluid -->
     </section>
@@ -85,6 +131,14 @@
 <!-- ./wrapper -->
 </body>
 <script>
+  const units = {
+            s: 1,
+            m: 60,
+            h: 60 * 60,
+            d: 24 * 60 * 60,
+            M: 30 * 24 * 60 * 60,
+            y: 365 * 30 * 24 * 60 * 60,
+          };
   $('.nav-item').on('click',(e) => {
     if (e.target.tagName === "A"){
       for(let i = 0; i < e.target.parentElement.parentElement.childElementCount; i++){
@@ -98,37 +152,4 @@
       e.target.parentElement.classList.add("active");
     }
   })
-
-  const A = document.querySelector('.A')
-  const B = document.querySelector('.B')
-
-var trace1 = {
-  x: [1, 2, 3, 4],
-  y: [10, 15, 13, 17],
-  type: 'scatter'
-};
-
-var a = [trace1];
-
-var layout = {
-  title:'Line and Scatter Plot'
-};
-
-Plotly.newPlot(A, a, layout);
-
-  var data = [
-  {
-    x: ['giraffes', 'orangutans', 'monkeys'],
-    y: [20, 14, 23],
-    type: 'bar'
-  }
-];
-
-var layoutt = {
-  title: 'January 2013 Sales Report',
-  barmode: 'stack'
-};
-
-
-Plotly.newPlot(B, data, layoutt);
 </script>

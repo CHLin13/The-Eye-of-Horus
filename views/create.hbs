@@ -54,32 +54,41 @@
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
-        <form action="/dashboards/1/create" method="post">
+        <form {{#if data}} action="/dashboards/{{data.dashboardId}}/chart/{{data.chartId}}/" {{else}} action="/dashboards/{{dashboardId}}/create" {{/if}} method="post">
           <div class="row">
             <div class="col-12 mt-2 mb-5">
-              <div class="d-flex justify-content-end mr-5 mb-3">
-                  <div class="d-flex mr-5">
+              <div class="d-flex justify-content-between mr-5 mb-3">
+                  <div class="d-flex ml-5 pl-3">
+                    <label for="title" class="d-flex justify-content-center align-items-center m-0 mr-3">Title</label>
+                    <input class="form-control" type="text" id="title" name="title" placeholder="Chart-1" value="{{data.title}}" required>
+                  </div>
+                  <div class="d-flex ml-5 pl-3">
+                    <label for="font-size" class="d-flex justify-content-center align-items-center m-0 mr-3">Title font size</label>
+                    <input class="form-control" style="width: 100px;" type="number" min="0" id="font-size" name="fontSize" {{#if data}}value="{{data.titleFontSize}}" {{else}} value="24" {{/if}} required>
+                  </div>
+                  <div class="d-flex mx-5">
                     <label for="time-range" class="d-flex justify-content-center align-items-center m-0 mr-3">Time range</label>
                     <select class="form-control" id="time-range" style="width: 15vw;" name="timeRange">
-                      <option value="5-m">Last 5 minutes</option>
-                      <option value="15-m">Last 15 minutes</option>
-                      <option value="30-m">Last 30 minutes</option>
-                      <option value="1-h">Last 1 hour</option>
-                      <option value="3-h">Last 3 hour</option>
-                      <option value="6-h">Last 6 hour</option>
-                      <option value="12-h">Last 12 hour</option>
-                      <option value="24-h">Last 24 hour</option>
-                      <option value="2-d">Last 2 days</option>
-                      <option value="7-d">Last 7 days</option>
-                      <option value="30-d">Last 30 days</option>
-                      <option value="90-d">Last 90 days</option>
-                      <option value="6-M">Last 6 months</option>
-                      <option value="1-y">Last 1 year</option>
-                      <option value="2-y">Last 2 years</option>
-                      <option value="5-y">Last 5 years</option>
+                      <option value="5-m" {{#ifCond data.timeRange '5-m'}}selected{{/ifCond}}>Last 5 minutes</option>
+                      <option value="15-m"{{#ifCond data.timeRange '15-m'}}selected{{/ifCond}}>Last 15 minutes</option>
+                      <option value="30-m"{{#ifCond data.timeRange '30-m'}}selected{{/ifCond}}>Last 30 minutes</option>
+                      <option value="1-h" {{#ifCond data.timeRange '1-h'}}selected{{/ifCond}}>Last 1 hour</option>
+                      <option value="3-h" {{#ifCond data.timeRange '3-h'}}selected{{/ifCond}}>Last 3 hour</option>
+                      <option value="6-h" {{#ifCond data.timeRange '6-h'}}selected{{/ifCond}}>Last 6 hour</option>
+                      <option value="12-h" {{#ifCond data.timeRange '12-h'}}selected{{/ifCond}}>Last 12 hour</option>
+                      <option value="24-h" {{#ifCond data.timeRange '24-h'}}selected{{/ifCond}}>Last 24 hour</option>
+                      <option value="2-d" {{#ifCond data.timeRange '2-d'}}selected{{/ifCond}}>Last 2 days</option>
+                      <option value="7-d" {{#ifCond data.timeRange '7-d'}}selected{{/ifCond}}>Last 7 days</option>
+                      <option value="30-d" {{#ifCond data.timeRange '30-d'}}selected{{/ifCond}}>Last 30 days</option>
+                      <option value="90-d" {{#ifCond data.timeRange '90-d'}}selected{{/ifCond}}>Last 90 days</option>
+                      <option value="6-M" {{#ifCond data.timeRange '6-M'}}selected{{/ifCond}}>Last 6 months</option>
+                      <option value="1-y" {{#ifCond data.timeRange '1-y'}}selected{{/ifCond}}>Last 1 year</option>
+                      <option value="2-y" {{#ifCond data.timeRange '2-y'}}selected{{/ifCond}}>Last 2 years</option>
+                      <option value="5-y"{{#ifCond data.timeRange '5-y'}}selected{{/ifCond}}>Last 5 years</option>
                     </select>
+                  <button type="submit" class="btn btn-info mr-3 ml-5">SAVE</button>
                   </div>
-                  <button type="submit" class="btn btn-info mr-5">SAVE</button>
+                  
               </div>
               <div class="card m-auto" style="width: 90%;">
                 <!-- /.card-header -->
@@ -88,47 +97,83 @@
                 </div>
                 <!-- /.card-body -->
               </div>
-              <div class="d-flex mt-3 mr-5 ml-3 justify-content-between">
+              <div class="d-flex mt-3 mr-5 ml-3 justify-content-around">
                 <div class="d-flex">
-                  <label for="source" class="d-flex justify-content-center align-items-center mx-5" style="display: block; width:3vw">Source</label>
-                  <select class="form-control" id="source" style="width: 15vw;" name="source">                 
-                    {{#each source}}
-                    <option value="{{this}}">{{this}}</option>
-                    {{/each}}
+                  <label for="source" class="d-flex justify-content-center align-items-center m-0 mx-5" style="width:3vw">Source</label>
+                  <select class="form-control ml-4" id="source" style="width: 15vw;" name="source">                 
+                    {{#if data}}
+                      {{#each source}}
+                      <option value="{{this}}" {{#ifCond this ../data.source }}selected{{/ifCond}}>{{this}}</option>
+                      {{/each}}
+                    {{else}}
+                      {{#each source}}
+                      <option value="{{this}}">{{this}}</option>
+                      {{/each}}
+                    {{/if}}
                   </select>
+                </div>
+                <div class="d-flex mr-5" style="width: 33vw;">
                 </div>
                 <div>
-                  <div class="btn btn-primary mr-5" id="preview">Preview chart</div>
+                  <div class="btn btn-primary mr-2" id="preview">Preview chart</div>
                 </div>
               </div>
-              <div class="d-flex">
+              <div class="d-flex justify-content-around mr-5">
                 <div class="d-flex mt-3 ml-3">
-                  <label for="style" class="d-flex justify-content-center align-items-center mx-5" style="display: block; width:3vw">Style</label>
-                  <select class="form-control" id="style" style="width: 15vw;" name="style">
-                    <option value="line">line chart</option>
-                    <option value="bar">bar chart</option>
+                  <label for="style" class="d-flex justify-content-center align-items-center m-0 mx-5" style="width:3vw">Style</label>
+                  <select class="form-control ml-4" id="style" style="width: 15vw;" name="style">
+                    <option value="line" {{#ifCond data.style 'line'}}selected{{/ifCond}}>line chart</option>
+                    <option value="bar" {{#ifCond data.style 'bar'}}selected{{/ifCond}}>bar chart</option>
                   </select>
                 </div>
                 <div class="d-flex mt-3 ml-3">
-                  <label for="interval" class="d-flex justify-content-center align-items-center mx-5" style="display: block; width:3vw">Interval</label>
-                  <input class="form-control" type="number" min="1" style="width: 75px;" name="interval" id="interval" value="1">
+                  <label for="interval" class="d-flex justify-content-center align-items-center m-0 mx-5" style="width:3vw">Interval</label>
+                  <input class="form-control" type="number" min="1" style="width: 75px;" name="interval" id="interval" {{#if data}}value="{{data.interval}}" {{else}} value="1" {{/if}}>
                   <select class="form-control ml-2" style="width: 8vw;" name="interval_unit" id="interval_unit">
-                    <option value="s">second</option>
-                    <option value="m">minute</option>
-                    <option value="h">hour</option>
-                    <option value="d">day</option>
-                    <option value="w">week</option>
+                    <option value="s" {{#ifCond data.interval_unit 's'}}selected{{/ifCond}}>second</option>
+                    <option value="m" {{#ifCond data.interval_unit 'm'}}selected{{/ifCond}}>minute</option>
+                    <option value="h" {{#ifCond data.interval_unit 'h'}}selected{{/ifCond}}>hour</option>
+                    <option value="d" {{#ifCond data.interval_unit 'd'}}selected{{/ifCond}}>day</option>
+                    <option value="w" {{#ifCond data.interval_unit 'w'}}selected{{/ifCond}}>week</option>
                   </select>
                 </div>
                 <div class="d-flex mt-3 ml-3">
-                  <label for="select" class="d-flex justify-content-center align-items-center mx-5" style="display: block; width:3vw">Select</label>
-                  <select class="form-control" id="select" style="width: 15vw;" name="select" id="select">
-                    <option value="min">min</option>
-                    <option value="max">max</option>
-                    <option value="mean">mean</option>
-                    <option value="sum">sum</option>
-                    <option value="count">count</option>
+                  <label for="select" class="d-flex justify-content-center align-items-center m-0 mx-5" style="width:3vw">Select</label>
+                  <select class="form-control" id="select" style="width: 10vw;" name="select" id="select">
+                    <option value="min" {{#ifCond data.select 'min'}}selected{{/ifCond}}>min</option>
+                    <option value="max" {{#ifCond data.select 'max'}}selected{{/ifCond}}>max</option>
+                    <option value="mean" {{#ifCond data.select 'mean'}}selected{{/ifCond}}>mean</option>
+                    <option value="sum" {{#ifCond data.select 'sum'}}selected{{/ifCond}}>sum</option>
+                    <option value="count" {{#ifCond data.select 'count'}}selected{{/ifCond}}>count</option>
                   </select>
+                </div>
+              </div>
+              <div class="d-flex justify-content-around mr-5">
+                <div class="d-flex mt-3 ml-3">
+                  <label for="xAxis-title" class="d-flex justify-content-center align-items-center m-0 mx-3" style="width:10vw">x-Axis title</label>
+                  <input class="form-control" type="text" style="width: 200px;" name="xAxisTitle" id="xAxis-title" placeholder="xAxis" {{#if data}}value="{{data.xAxisTitle}}"{{/if}}>
+                </div>
+                <div class="d-flex mt-3 ml-3">
+                  <label for="xAxis-font-size" class="d-flex justify-content-center align-items-center m-0 mx-5" style="width:10vw">x-Axis title font size</label>
+                  <input class="form-control" type="number" min="1" style="width: 75px;" name="xAxisFontSize" id="xAxis-font-size" {{#if data}} value="{{data.xAxisFontSize}}" {{else}} value="16" {{/if}}>
+                </div>
+                <div class="d-flex mt-3 ml-3">
+                  <label for="xAxis-tick-font-size" class="d-flex justify-content-center align-items-center m-0 mx-5" style="width:10vw">x-Axis tick font size</label>
+                  <input class="form-control" type="number" min="1" style="width: 75px;" name="xAxisTickFontSize" id="xAxis-tick-font-size" {{#if data}} value="{{data.xAxisTickFontSize}}" {{else}} value="12" {{/if}}>
+                </div>
+              </div>
+              <div class="d-flex justify-content-around mr-5">
+                <div class="d-flex mt-3 ml-3">
+                  <label for="yAxis-title" class="d-flex justify-content-center align-items-center m-0 mx-3" style="width:10vw">y-Axis title</label>
+                  <input class="form-control" type="text" style="width: 200px;" name="yAxisTitle" id="yAxis-title" placeholder="yAxis" {{#if data}}value="{{data.yAxisTitle}}"{{/if}}>
+                </div>
+                <div class="d-flex mt-3 ml-3">
+                  <label for="yAxis-font-size" class="d-flex justify-content-center align-items-center m-0 mx-5" style="width:10vw">y-Axis title font size</label>
+                  <input class="form-control" type="number" min="1" style="width: 75px;" name="yAxisFontSize" id="yAxis-font-size" {{#if data}} value="{{data.yAxisFontSize}}" {{else}} value="16" {{/if}}>
+                </div>
+                <div class="d-flex mt-3 ml-3">
+                  <label for="yAxis-tick-font-size" class="d-flex justify-content-center align-items-center m-0 mx-5" style="width:10vw;">y-Axis tick font size</label>
+                  <input class="form-control" type="number" min="1" style="width: 75px;" name="yAxisTickFontSize" id="yAxis-tick-font-size" {{#if data}} value="{{data.yAxisTickFontSize}}" {{else}} value="12" {{/if}}>
                 </div>
               </div>
             </div>
@@ -146,6 +191,7 @@
 <!-- ./wrapper -->
 </body>
 <script>
+  document.querySelector
   $('.nav-item').on('click',(e) => {
     if (e.target.tagName === "A"){
       for(let i = 0; i < e.target.parentElement.parentElement.childElementCount; i++){
@@ -161,7 +207,7 @@
   })
 
   $('#preview').on('click', async (e) => {
-    const response = await axios.post('/dashboards/preview',{ 
+    const response = await axios.post('/dashboards/chart/preview',{ 
         timeRange: $('#time-range').val(),
         source: $('#source').val(),
         style: '',
@@ -179,7 +225,7 @@
       const trace = {
         x: result[i].rows.map(row => row.time),
         y: result[i].rows.map(row => row[select]),
-        type: 'scatter',
+        type: $('#style').val(),
         name: result[i].tags.type_instance,
         connectgaps: true
       }
@@ -187,10 +233,21 @@
     }
 
     var layout = {
-      title:'Line and Scatter Plot'
+      title:$('#title').val(),
+      titlefont: { size: $('#font-size').val() },
+        xaxis: {
+          title: $('#xAxis-title').val(),
+          titlefont: { size: $('#xAxis-font-size').val() },
+          tickfont: { size: $('#xAxis-tick-font-size').val()  }
+        },
+        yaxis: {
+          title: $('#yAxis-title').val(),
+          titlefont: { size: $('#yAxis-font-size').val() },
+          tickfont: { size: $('#yAxis-tick-font-size').val() }
+        } 
     };
 
-    Plotly.newPlot(chart, data);
+    Plotly.newPlot(chart, data, layout);
     })
 
 </script>
