@@ -117,6 +117,29 @@ router.post('/:dashboardId/create', async (req, res) => {
   res.redirect(`/dashboards/${dashboardId}`);
 });
 
+router.get('/:dashboardId', async (req, res) => {
+  const units = {
+    s: 1,
+    m: 60,
+    h: 60 * 60,
+    d: 24 * 60 * 60,
+    M: 30 * 24 * 60 * 60,
+    y: 365 * 30 * 24 * 60 * 60,
+  };
+
+  const dashboardId = req.params.dashboardId;
+  const [chart] = await db.query(
+    `select * from dashboard inner join chart on chart.dashboard_id = dashboard.id where chart.dashboard_id = ?`,
+    [dashboardId]
+  );
+
+  for (let i = 0; i < chart.length; i++) {
+    chart[i].dashboardId = dashboardId;
+  }
+
+  return res.render('dashboard_detail', { chart });
+});
+
 router.get('/setting/:id', async (req, res) => {
   return res.render('dashboard_setting');
 });
