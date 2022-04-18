@@ -1,4 +1,37 @@
 <body class="hold-transition sidebar-mini">
+  <script>
+    async function chart(id, time_range, database, measurement, chart_type, interval, interval_unit, selects, layout) {
+
+    const response = await axios.post('/dashboards/chart/preview',{
+      timeRange: time_range,
+      source: database + '/' + measurement,
+      style: chart_type,
+      interval: interval,
+      interval_unit: interval_unit,
+      select: selects
+    });
+
+    const chart = $(`.${id}`)[0]
+    const result = response.data.data
+    const select = response.data.select + '_value'
+    const rangeIntoSec = (`${time_range}`.split('-')[0] * units[`${time_range}`.split('-')[1]])*1000;
+    const data = []
+    for(let i = 0; i < result.length; i ++){
+      const trace = {
+        x: result[i].rows.map(row => row.time),
+        y: result[i].rows.map(row => row[select]),
+        type: chart_type,
+        name: result[i].tags.type_instance,
+        connectgaps: true
+      }
+      data.push(trace)
+    }
+
+    var layout = JSON.parse(layout)
+
+    Plotly.newPlot(chart, data, layout);
+  }
+  </script>
 <div class="wrapper">
   <!-- Navbar -->
   <nav class="main-header navbar navbar-expand navbar-white navbar-light">
@@ -71,52 +104,19 @@
       <div class="container-fluid">
         <div class="card-wrapper d-flex flex-wrap ml-5">
           {{#each chart}}
-          <div class="card m-3 {{this.id}}" style="width: 40%; height: 50vh"></div>
-          <a href="/dashboards/{{this.dashboardId}}/chart/{{this.id}}" class="btn btn-success mt-3" style="height: 4vh; line-height:100%">edit</a>
-          <script>
-          async function chart() {
-            console.log('here{{this.id}}')
-            const response = await axios.post('/dashboards/chart/preview',{ 
-                timeRange: '{{this.time_range}}',
-                source: '{{this.database}}/{{this.measurement}}',
-                style: '{{this.chart_type}}',
-                interval: '{{this.interval}}',
-                interval_unit: '{{this.interval_unit}}',
-                select: '{{this.select}}'
-              });
-            console.log('{{this.id}}:', response)
-            const chart = $('.{{this.id}}')[0]
-            const result = response.data.data
-            const select = response.data.select + '_value'
-            const rangeIntoSec = ('{{this.time_range}}'.split('-')[0] * units['{{this.time_range}}'.split('-')[1]])*1000;
-            const data = []
-            for(let i = 0; i < result.length; i ++){
-              const trace = {
-                x: result[i].rows.map(row => row.time),
-                y: result[i].rows.map(row => row[select]),
-                type: $('#style').val(),
-                name: result[i].tags.type_instance,
-                connectgaps: true
-              }
-              data.push(trace)
+            <div class="card m-3 {{this.id}}" style="width: 40%; height: 50vh"></div>
+            <a href="/dashboards/{{this.dashboardId}}/chart/{{this.id}}" class="btn btn-success mt-3" style="height: 4vh; line-height:100%">edit</a>
+            <script>
+              
+            function runner{{this.id}}() {
+                chart({{this.id}}, '{{this.time_range}}','{{this.database}}','{{this.measurement}}','{{this.chart_type}}',{{this.interval}},'{{this.interval_unit}}','{{this.select}}','{{{this.layout}}}', '{{this.chart_type}}');
+                setTimeout(function() {
+                    runner{{this.id}}();
+                }, {{{this.setInterval}}});
             }
-
-            var layout = JSON.parse('{{{this.layout}}}')
-
-            Plotly.newPlot(chart, data, layout);
-          }
-          
-          {{!-- function chart{{this.id}}() {
-              chart();
-              setTimeout(function() {
-                  chart{{this.id}}();
-              }, {{{this.setInterval}}});
-          }
-
-          chart{{this.id}}(); --}}
-          chart()
-          setInterval(chart, {{{this.setInterval}}})
-          </script>
+            
+            runner{{this.id}}();
+            </script>
           {{/each}}
         </div>
       </div><!-- /.container-fluid -->
