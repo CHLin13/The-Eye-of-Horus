@@ -181,6 +181,10 @@ router.get('/:dashboardId/chart/:chartId', async (req, res) => {
   return res.render('create', { data, source });
 });
 
+router.post('/:dashboardId/chart/:chartId', async (req, res) =>{
+
+})
+
 router.get('/setting/:id', async (req, res) => {
   return res.render('dashboard_setting');
 });
