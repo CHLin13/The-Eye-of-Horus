@@ -140,6 +140,47 @@ router.get('/:dashboardId', async (req, res) => {
   return res.render('dashboard_detail', { chart });
 });
 
+router.get('/:dashboardId/chart/:chartId', async (req, res) => {
+  const { dashboardId, chartId } = req.params;
+  const idb = await influx.getDatabaseNames();
+  const newDB = idb.slice(1);
+  const measurements = [];
+  for (let i = 0; i < newDB.length; i++) {
+    const measurement = await influx.getMeasurements(newDB[i]);
+    measurements.push(measurement);
+  }
+  let source = [];
+  for (let i = 0; i < newDB.length; i++) {
+    source.push(
+      measurements[i].map((measurement) => newDB[i] + '/' + measurement)
+    );
+  }
+  source = source.flat();
+
+  const [chart] = await db.query(`select * from chart where id = ?`, [chartId]);
+  const layout = JSON.parse(chart[0].layout);
+  const data = {
+    dashboardId: dashboardId,
+    chartId: chartId,
+    title: layout.title,
+    titleFontSize: layout.titlefont.size,
+    timeRange: chart[0].time_range,
+    source: chart[0].database + '/' + chart[0].measurement,
+    style: chart[0].chart_type,
+    interval: chart[0].interval,
+    interval_unit: chart[0].interval_unit,
+    select: chart[0].select,
+    xAxisTitle: layout.xaxis.title,
+    xAxisFontSize: layout.xaxis.titlefont.size,
+    xAxisTickFontSize: layout.xaxis.tickfont.size,
+    yAxisTitle: layout.yaxis.title,
+    yAxisFontSize: layout.yaxis.titlefont.size,
+    yAxisTickFontSize: layout.yaxis.tickfont.size,
+  };
+
+  return res.render('create', { data, source });
+});
+
 router.get('/setting/:id', async (req, res) => {
   return res.render('dashboard_setting');
 });
