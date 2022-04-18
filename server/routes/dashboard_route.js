@@ -1,8 +1,6 @@
 require('dotenv').config();
 const express = require('express');
 const router = express.Router();
-const pool = require('../../configs/mysqlConnect');
-const units = require('../../utils/units');
 const {
   getSource,
   postChart,
@@ -10,7 +8,6 @@ const {
   getCharts,
   previewChart,
 } = require('../models/dashboard_model');
-const Influxdb = require('influx');
 
 router.get('/', async (req, res) => {
   return res.render('dashboards');
