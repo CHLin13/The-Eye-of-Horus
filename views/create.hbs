@@ -128,7 +128,7 @@
                 </div>
                 <div class="d-flex mt-3 ml-3">
                   <label for="interval" class="d-flex justify-content-center align-items-center m-0 mx-5" style="width:3vw">Interval</label>
-                  <input class="form-control" type="number" min="1" style="width: 75px;" name="interval" id="interval" {{#if data}}value="{{data.interval}}" {{else}} value="1" {{/if}}>
+                  <input class="form-control" type="number" min="1" style="width: 75px;" name="interval" id="interval" {{#if data}}value="{{data.interval}}" {{else}} value="10" {{/if}}>
                   <select class="form-control ml-2" style="width: 8vw;" name="interval_unit" id="interval_unit">
                     <option value="s" {{#ifCond data.interval_unit 's'}}selected{{/ifCond}}>second</option>
                     <option value="m" {{#ifCond data.interval_unit 'm'}}selected{{/ifCond}}>minute</option>
