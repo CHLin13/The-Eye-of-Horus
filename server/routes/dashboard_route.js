@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const router = express.Router();
+const db = require('../../configs/mysqlConnect');
 const Influxdb = require('influx');
 const influx = new Influxdb.InfluxDB(process.env.URL);
 
@@ -52,8 +53,67 @@ router.get('/:id/create', async (req, res) => {
   return res.render('create', { source });
 });
 
-router.get('/:id', async (req, res) => {
-  return res.render('dashboard_detail');
+router.post('/:dashboardId/create', async (req, res) => {
+  const dashboardId = req.params.dashboardId;
+  const units = {
+    s: 1,
+    m: 60,
+    h: 60 * 60,
+    d: 24 * 60 * 60,
+    M: 30 * 24 * 60 * 60,
+    y: 365 * 30 * 24 * 60 * 60,
+  };
+  const {
+    timeRange,
+    source,
+    style,
+    interval,
+    interval_unit,
+    select,
+    title,
+    fontSize,
+    xAxisTitle,
+    xAxisFontSize,
+    xAxisTickFontSize,
+    yAxisTitle,
+    yAxisFontSize,
+    yAxisTickFontSize,
+  } = req.body;
+  const database = source.split('/')[0];
+  const measurement = source.split('/')[1];
+
+  const layout = {
+    title: title,
+    titlefont: { size: fontSize },
+    xaxis: {
+      title: xAxisTitle,
+      titlefont: { size: xAxisFontSize },
+      tickfont: { size: xAxisTickFontSize },
+    },
+    yaxis: {
+      title: yAxisTitle,
+      titlefont: { size: yAxisFontSize },
+      tickfont: { size: yAxisTickFontSize },
+    },
+  };
+
+  let setInterval = interval * units[interval_unit] * 1000;
+  setInterval = setInterval < 9999 ? 10000 : setInterval;
+  const data = {
+    dashboard_id: dashboardId,
+    database: database,
+    measurement: measurement,
+    chart_type: style,
+    time_range: timeRange,
+    interval: interval,
+    interval_unit: interval_unit,
+    select: select,
+    layout: JSON.stringify(layout),
+    setInterval: setInterval,
+  };
+
+  db.query(`INSERT INTO chart SET ?`, [data]);
+  res.redirect(`/dashboards/${dashboardId}`);
 });
 
 router.get('/setting/:id', async (req, res) => {
