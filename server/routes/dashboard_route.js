@@ -1,9 +1,9 @@
 require('dotenv').config();
 const express = require('express');
 const router = express.Router();
-const db = require('../../configs/mysqlConnect');
+const pool = require('../../configs/mysqlConnect');
 const units = require('../../utils/units');
-const { getSource } = require('../models/dashboard_model');
+const { getSource, postChart } = require('../models/dashboard_model');
 const Influxdb = require('influx');
 
 router.get('/', async (req, res) => {
@@ -35,63 +35,13 @@ router.get('/:dashboardId/create', async (req, res) => {
 });
 
 router.post('/:dashboardId/create', async (req, res) => {
-  const dashboardId = req.params.dashboardId;
-  const {
-    timeRange,
-    source,
-    style,
-    interval,
-    interval_unit,
-    select,
-    title,
-    fontSize,
-    xAxisTitle,
-    xAxisFontSize,
-    xAxisTickFontSize,
-    yAxisTitle,
-    yAxisFontSize,
-    yAxisTickFontSize,
-  } = req.body;
-  const database = source.split('/')[0];
-  const measurement = source.split('/')[1];
-
-  const layout = {
-    title: title,
-    titlefont: { size: fontSize },
-    xaxis: {
-      title: xAxisTitle,
-      titlefont: { size: xAxisFontSize },
-      tickfont: { size: xAxisTickFontSize },
-    },
-    yaxis: {
-      title: yAxisTitle,
-      titlefont: { size: yAxisFontSize },
-      tickfont: { size: yAxisTickFontSize },
-    },
-  };
-
-  let setInterval = interval * units.timeUnits[interval_unit] * 1000;
-  setInterval = setInterval < 9999 ? 10000 : setInterval;
-  const data = {
-    dashboard_id: dashboardId,
-    database: database,
-    measurement: measurement,
-    chart_type: style,
-    time_range: timeRange,
-    interval: interval,
-    interval_unit: interval_unit,
-    select: select,
-    layout: JSON.stringify(layout),
-    setInterval: setInterval,
-  };
-
-  db.query(`INSERT INTO chart SET ?`, [data]);
-  res.redirect(`/dashboards/${dashboardId}`);
+  postChart(req);
+  return res.redirect(`/dashboards/${req.params.dashboardId}`);
 });
 
 router.get('/:dashboardId', async (req, res) => {
   const dashboardId = req.params.dashboardId;
-  const [chart] = await db.query(
+  const [chart] = await pool.query(
     `select * from dashboard inner join chart on chart.dashboard_id = dashboard.id where chart.dashboard_id = ?`,
     [dashboardId]
   );
@@ -106,7 +56,7 @@ router.get('/:dashboardId', async (req, res) => {
 router.get('/:dashboardId/chart/:chartId', async (req, res) => {
   const { dashboardId, chartId } = req.params;
   const source = await getSource();
-  const [chart] = await db.query(`select * from chart where id = ?`, [chartId]);
+  const [chart] = await pool.query(`select * from chart where id = ?`, [chartId]);
   const layout = JSON.parse(chart[0].layout);
   const data = {
     dashboardId: dashboardId,
@@ -131,58 +81,8 @@ router.get('/:dashboardId/chart/:chartId', async (req, res) => {
 });
 
 router.post('/:dashboardId/chart/:chartId', async (req, res) => {
-  const { dashboardId, chartId } = req.params;
-  const {
-    timeRange,
-    source,
-    style,
-    interval,
-    interval_unit,
-    select,
-    title,
-    fontSize,
-    xAxisTitle,
-    xAxisFontSize,
-    xAxisTickFontSize,
-    yAxisTitle,
-    yAxisFontSize,
-    yAxisTickFontSize,
-  } = req.body;
-
-  const database = source.split('/')[0];
-  const measurement = source.split('/')[1];
-  let setInterval = interval * units.timeUnits[interval_unit] * 1000;
-  setInterval = setInterval < 9999 ? 10000 : setInterval;
-
-  const layout = {
-    title: title,
-    titlefont: { size: fontSize },
-    xaxis: {
-      title: xAxisTitle,
-      titlefont: { size: xAxisFontSize },
-      tickfont: { size: xAxisTickFontSize },
-    },
-    yaxis: {
-      title: yAxisTitle,
-      titlefont: { size: yAxisFontSize },
-      tickfont: { size: yAxisTickFontSize },
-    },
-  };
-
-  const data = {
-    dashboard_id: dashboardId,
-    database: database,
-    measurement: measurement,
-    chart_type: style,
-    time_range: timeRange,
-    interval: interval,
-    interval_unit: interval_unit,
-    select: select,
-    layout: JSON.stringify(layout),
-    setInterval: setInterval,
-  };
-  db.query(`update chart SET ? where id = ?`, [data, chartId]);
-  return res.redirect(`/dashboards/${dashboardId}`);
+  postChart(req);
+  return res.redirect(`/dashboards/${req.params.dashboardId}`);
 });
 
 router.get('/setting/:id', async (req, res) => {

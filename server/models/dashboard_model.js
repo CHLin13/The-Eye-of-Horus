@@ -1,4 +1,5 @@
-const db = require('../../configs/mysqlConnect');
+const pool = require('../../configs/mysqlConnect');
+const units = require('../../utils/units');
 const Influxdb = require('influx');
 const influx = new Influxdb.InfluxDB(process.env.URL);
 
@@ -20,39 +21,77 @@ const getSource = async () => {
   return source;
 };
 
-// const createOrder = async (order) => {
-//   const [result] = await pool.query('INSERT INTO order_table SET ?', order);
-//   return result.insertId;
-// };
+const postChart = async (req) => {
+  const { dashboardId, chartId } = req.params;
+  const {
+    timeRange,
+    source,
+    style,
+    interval,
+    interval_unit,
+    select,
+    title,
+    fontSize,
+    xAxisTitle,
+    xAxisFontSize,
+    xAxisTickFontSize,
+    yAxisTitle,
+    yAxisFontSize,
+    yAxisTickFontSize,
+  } = req.body;
 
-// const createPayment = async function (orderId, payment) {
-//   const conn = await pool.getConnection();
-//   try {
-//     await conn.query('START TRANSACTION');
-//     await conn.query('INSERT INTO payment SET ?', payment);
-//     await conn.query('UPDATE order_table SET status = ? WHERE id = ?', [
-//       0,
-//       orderId,
-//     ]);
-//     await conn.query('COMMIT');
-//     return true;
-//   } catch (error) {
-//     await conn.query('ROLLBACK');
-//     return { error };
-//   } finally {
-//     conn.release();
-//   }
-// };
+  const database = source.split('/')[0];
+  const measurement = source.split('/')[1];
 
+  const layout = {
+    title: title,
+    titlefont: { size: fontSize },
+    xaxis: {
+      title: xAxisTitle,
+      titlefont: { size: xAxisFontSize },
+      tickfont: { size: xAxisTickFontSize },
+    },
+    yaxis: {
+      title: yAxisTitle,
+      titlefont: { size: yAxisFontSize },
+      tickfont: { size: yAxisTickFontSize },
+    },
+  };
 
+  let setInterval = interval * units.timeUnits[interval_unit] * 1000;
+  setInterval = setInterval < 9999 ? 10000 : setInterval;
 
-// const getUserPaymentsGroupByDB = async () => {
-//   const [orders] = await pool.query(
-//     'SELECT user_id, SUM(total) as total_payment FROM order_table GROUP BY user_id'
-//   );
-//   return orders;
-// };
+  const data = {
+    dashboard_id: dashboardId,
+    database: database,
+    measurement: measurement,
+    chart_type: style,
+    time_range: timeRange,
+    interval: interval,
+    interval_unit: interval_unit,
+    select: select,
+    layout: JSON.stringify(layout),
+    setInterval: setInterval,
+  };
+
+  const conn = await pool.getConnection();
+  try {
+    if (chartId) {
+      conn.query(`UPDATE chart SET ? WHERE id = ?`, [data, chartId]);
+    } else {
+      conn.query(`INSERT INTO chart SET ?`, [data]);
+    }
+    await conn.query('COMMIT');
+    return true;
+  } catch (error) {
+    await conn.query('ROLLBACK');
+    return { error };
+  } finally {
+    conn.release();
+  }
+};
 
 module.exports = {
   getSource,
+  postChart,
 };
