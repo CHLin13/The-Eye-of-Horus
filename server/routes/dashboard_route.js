@@ -2,9 +2,9 @@ require('dotenv').config();
 const express = require('express');
 const router = express.Router();
 const db = require('../../configs/mysqlConnect');
-const units = require('../../utils/units')
+const units = require('../../utils/units');
+const { getSource } = require('../models/dashboard_model');
 const Influxdb = require('influx');
-const influx = new Influxdb.InfluxDB(process.env.URL);
 
 router.get('/', async (req, res) => {
   return res.render('dashboards');
@@ -30,20 +30,7 @@ router.post('/chart/preview', async (req, res) => {
 
 router.get('/:dashboardId/create', async (req, res) => {
   const dashboardId = req.params.dashboardId;
-  const db = await influx.getDatabaseNames();
-  const newDB = db.slice(1);
-  const measurements = [];
-  for (let i = 0; i < newDB.length; i++) {
-    const measurement = await influx.getMeasurements(newDB[i]);
-    measurements.push(measurement);
-  }
-  let source = [];
-  for (let i = 0; i < newDB.length; i++) {
-    source.push(
-      measurements[i].map((measurement) => newDB[i] + '/' + measurement)
-    );
-  }
-  source = source.flat();
+  const source = await getSource();
   return res.render('create', { source, dashboardId });
 });
 
@@ -118,21 +105,7 @@ router.get('/:dashboardId', async (req, res) => {
 
 router.get('/:dashboardId/chart/:chartId', async (req, res) => {
   const { dashboardId, chartId } = req.params;
-  const idb = await influx.getDatabaseNames();
-  const newDB = idb.slice(1);
-  const measurements = [];
-  for (let i = 0; i < newDB.length; i++) {
-    const measurement = await influx.getMeasurements(newDB[i]);
-    measurements.push(measurement);
-  }
-  let source = [];
-  for (let i = 0; i < newDB.length; i++) {
-    source.push(
-      measurements[i].map((measurement) => newDB[i] + '/' + measurement)
-    );
-  }
-  source = source.flat();
-
+  const source = await getSource();
   const [chart] = await db.query(`select * from chart where id = ?`, [chartId]);
   const layout = JSON.parse(chart[0].layout);
   const data = {
