@@ -35,7 +35,8 @@ router.post('/chart/preview', async (req, res) => {
   return res.json({ data: data, select: select });
 });
 
-router.get('/:id/create', async (req, res) => {
+router.get('/:dashboardId/create', async (req, res) => {
+  const dashboardId = req.params.dashboardId
   const db = await influx.getDatabaseNames();
   const newDB = db.slice(1);
   const measurements = [];
@@ -50,7 +51,7 @@ router.get('/:id/create', async (req, res) => {
     );
   }
   source = source.flat();
-  return res.render('create', { source });
+  return res.render('create', { source, dashboardId });
 });
 
 router.post('/:dashboardId/create', async (req, res) => {
