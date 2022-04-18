@@ -8,7 +8,7 @@ router.get('/', async (req, res) => {
   return res.render('dashboards');
 });
 
-router.post('/preview', async (req, res) => {
+router.post('/chart/preview', async (req, res) => {
   const units = {
     s: 1,
     m: 60,
@@ -18,8 +18,7 @@ router.post('/preview', async (req, res) => {
     y: 365 * 30 * 24 * 60 * 60,
   };
 
-  const { timeRange, source, style, interval, interval_unit, select } =
-    req.body;
+  const { timeRange, source, interval, interval_unit, select } = req.body;
   const database = source.split('/')[0];
   const measurement = source.split('/')[1];
   const influxdb = new Influxdb.InfluxDB(process.env.URL + database);
