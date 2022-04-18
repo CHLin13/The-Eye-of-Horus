@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const router = express.Router();
 const db = require('../../configs/mysqlConnect');
+const units = require('../../utils/units')
 const Influxdb = require('influx');
 const influx = new Influxdb.InfluxDB(process.env.URL);
 
@@ -10,22 +11,14 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/chart/preview', async (req, res) => {
-  const units = {
-    s: 1,
-    m: 60,
-    h: 60 * 60,
-    d: 24 * 60 * 60,
-    M: 30 * 24 * 60 * 60,
-    y: 365 * 30 * 24 * 60 * 60,
-  };
-
   const { timeRange, source, interval, interval_unit, select } = req.body;
   const database = source.split('/')[0];
   const measurement = source.split('/')[1];
   const influxdb = new Influxdb.InfluxDB(process.env.URL + database);
 
-  const intervalN = interval * units[interval_unit];
-  const rangeIntoSec = timeRange.split('-')[0] * units[timeRange.split('-')[1]];
+  const intervalN = interval * units.timeUnits[interval_unit];
+  const rangeIntoSec =
+    timeRange.split('-')[0] * units.timeUnits[timeRange.split('-')[1]];
   const limit = Math.floor(rangeIntoSec / intervalN);
 
   const system = await influxdb.query(
@@ -56,14 +49,6 @@ router.get('/:dashboardId/create', async (req, res) => {
 
 router.post('/:dashboardId/create', async (req, res) => {
   const dashboardId = req.params.dashboardId;
-  const units = {
-    s: 1,
-    m: 60,
-    h: 60 * 60,
-    d: 24 * 60 * 60,
-    M: 30 * 24 * 60 * 60,
-    y: 365 * 30 * 24 * 60 * 60,
-  };
   const {
     timeRange,
     source,
@@ -98,7 +83,7 @@ router.post('/:dashboardId/create', async (req, res) => {
     },
   };
 
-  let setInterval = interval * units[interval_unit] * 1000;
+  let setInterval = interval * units.timeUnits[interval_unit] * 1000;
   setInterval = setInterval < 9999 ? 10000 : setInterval;
   const data = {
     dashboard_id: dashboardId,
@@ -118,15 +103,6 @@ router.post('/:dashboardId/create', async (req, res) => {
 });
 
 router.get('/:dashboardId', async (req, res) => {
-  const units = {
-    s: 1,
-    m: 60,
-    h: 60 * 60,
-    d: 24 * 60 * 60,
-    M: 30 * 24 * 60 * 60,
-    y: 365 * 30 * 24 * 60 * 60,
-  };
-
   const dashboardId = req.params.dashboardId;
   const [chart] = await db.query(
     `select * from dashboard inner join chart on chart.dashboard_id = dashboard.id where chart.dashboard_id = ?`,
@@ -182,14 +158,6 @@ router.get('/:dashboardId/chart/:chartId', async (req, res) => {
 });
 
 router.post('/:dashboardId/chart/:chartId', async (req, res) => {
-  const units = {
-    s: 1,
-    m: 60,
-    h: 60 * 60,
-    d: 24 * 60 * 60,
-    M: 30 * 24 * 60 * 60,
-    y: 365 * 30 * 24 * 60 * 60,
-  };
   const { dashboardId, chartId } = req.params;
   const {
     timeRange,
@@ -210,7 +178,7 @@ router.post('/:dashboardId/chart/:chartId', async (req, res) => {
 
   const database = source.split('/')[0];
   const measurement = source.split('/')[1];
-  let setInterval = interval * units[interval_unit] * 1000;
+  let setInterval = interval * units.timeUnits[interval_unit] * 1000;
   setInterval = setInterval < 9999 ? 10000 : setInterval;
 
   const layout = {
