@@ -63,6 +63,10 @@ const dashboardController = {
       console.error(`Put chart error: ${error}`);
     }
   },
+
+  getDashboardSetting: async (req, res) => {
+    return res.render('dashboard_setting');
+  },
 };
 
 module.exports = dashboardController;
