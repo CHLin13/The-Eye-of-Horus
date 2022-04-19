@@ -27,7 +27,7 @@ const dashboardController = {
 
   postDashboardCreate: async (req, res) => {
     try {
-      dashboardModel.postChart(req);
+      await dashboardModel.postChart(req);
       return res.redirect(`/dashboards/${req.params.dashboardId}`);
     } catch (error) {
       console.error(`Post dashboard create error: ${error}`);

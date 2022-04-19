@@ -1,5 +1,13 @@
 <body class="hold-transition sidebar-mini">
   <script>
+    const units = {
+          s: 1,
+          m: 60,
+          h: 60 * 60,
+          d: 24 * 60 * 60,
+          M: 30 * 24 * 60 * 60,
+          y: 365 * 30 * 24 * 60 * 60,
+        };
     async function chart(id, time_range, database, measurement, chart_type, interval, interval_unit, selects, layout) {
 
     const response = await axios.post('/dashboards/chart/preview',{
@@ -64,8 +72,17 @@
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
                 Dashboard
+                <i class="right fas fa-angle-left"></i>
               </p>
             </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Dashboard A</p>
+                </a>
+              </li>
+            </ul>
           </li>
           <li class="nav-item">
             <a href="/profile" class="nav-link">
@@ -151,26 +168,3 @@
 </div>
 <!-- ./wrapper -->
 </body>
-<script>
-  const units = {
-            s: 1,
-            m: 60,
-            h: 60 * 60,
-            d: 24 * 60 * 60,
-            M: 30 * 24 * 60 * 60,
-            y: 365 * 30 * 24 * 60 * 60,
-          };
-  $('.nav-item').on('click',(e) => {
-    if (e.target.tagName === "A"){
-      for(let i = 0; i < e.target.parentElement.parentElement.childElementCount; i++){
-      e.target.parentElement.parentElement.children[i].children[0].classList.remove('active')
-      }
-      e.target.classList.add("active");
-    } else if (e.target.tagName === "I" || e.target.tagName === "P" ){
-      for(let i = 0; i < e.target.parentElement.parentElement.parentElement.childElementCount; i++){
-      e.target.parentElement.parentElement.parentElement.children[i].children[0].classList.remove('active')
-      }
-      e.target.parentElement.classList.add("active");
-    }
-  })
-</script>

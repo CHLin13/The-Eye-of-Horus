@@ -124,18 +124,3 @@
 </div>
 <!-- ./wrapper -->
 </body>
-<script>
-  $('.nav-item').on('click',(e) => {
-    if (e.target.tagName === "A"){
-      for(let i = 0; i < e.target.parentElement.parentElement.childElementCount; i++){
-      e.target.parentElement.parentElement.children[i].children[0].classList.remove('active')
-      }
-      e.target.classList.add("active");
-    } else if (e.target.tagName === "I" || e.target.tagName === "P" ){
-      for(let i = 0; i < e.target.parentElement.parentElement.parentElement.childElementCount; i++){
-      e.target.parentElement.parentElement.parentElement.children[i].children[0].classList.remove('active')
-      }
-      e.target.parentElement.classList.add("active");
-    }
-  })
-</script>
