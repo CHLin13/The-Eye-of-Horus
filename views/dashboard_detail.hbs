@@ -104,8 +104,13 @@
       <div class="container-fluid">
         <div class="card-wrapper d-flex flex-wrap ml-5">
           {{#each chart}}
-            <div class="card m-3 {{this.id}}" style="width: 40%; height: 50vh"></div>
-            <a href="/dashboards/{{this.dashboardId}}/chart/{{this.id}}" class="btn btn-success mt-3" style="height: 4vh; line-height:100%">edit</a>
+            <div class="card m-3 {{this.id}}" style="width: 45%; height: 50vh; position:relative">
+              <a href="/dashboards/{{this.dashboardId}}/chart/{{this.id}}" class="btn btn-success mt-3" style="height: 4vh; line-height:100%; position:absolute; left: 5%">edit</a>
+              <form action="#" method="post" style="position:absolute; right: 5%">
+                <button type="submit" class="btn btn-danger mt-3" style="height: 4vh; line-height:100%;" >X</button>
+              </form>
+            </div>
+            
             <script>
               
             function runner{{this.id}}() {
