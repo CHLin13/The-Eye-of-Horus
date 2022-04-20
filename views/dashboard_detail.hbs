@@ -32,7 +32,9 @@
         name: result[i].tags.type_instance,
         connectgaps: true
       }
-      data.push(trace)
+      if(result[i].tags.type_instance !== 'idle'){
+        data.push(trace)
+      }
     }
 
     var layout = JSON.parse(layout)
@@ -42,7 +44,7 @@
   </script>
 <div class="wrapper">
   <!-- Navbar -->
-  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+  <nav class="main-header navbar navbar-expand navbar-dark">
     <!-- Left navbar links -->
     <ul class="navbar-nav">
       <li class="nav-item">
@@ -68,12 +70,12 @@
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
           <li class="nav-item">
-            <a href="/dashboards" class="nav-link active">
+            <a href="/dashboards" class="nav-link"  style="background-color:#8C745E;">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
                 Dashboard
-                <i class="right fas fa-angle-left"></i>
               </p>
+              <i class="right fas fa-angle-left"></i>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
@@ -83,6 +85,14 @@
                 </a>
               </li>
             </ul>
+          </li>
+          <li class="nav-item">
+            <a href="/dashboards" class="nav-link">
+              <i class="nav-icon fas fa-bell"></i>
+              <p>
+                Alert
+              </p>
+            </a>
           </li>
           <li class="nav-item">
             <a href="/profile" class="nav-link">
@@ -116,17 +126,17 @@
   </aside>
 
   <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
+  <div class="content-wrapper bg-dark">
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <div class="container-fluid">
         <div class="mx-5 d-flex justify-content-between">
           <div class="d-flex align-items-center">
-            <h1>dashboard_A</h1>
+            <h1>Server Insights</h1>
             <a class="text-secondary ml-3" href="/dashboard/:id/setting"><i class="fas fa-cog"></i></a>
           </div>
           <div class="d-flex justify-content-end">
-              <a href="/dashboards/1/create"><button class="btn btn-info"><i class="fas fa-plus"></i></button></a>
+              <a href="/dashboards/1/create"><button class="btn" style="background-color: #BFB6AE;"><i class="fas fa-plus"></i></button></a>
           </div>
         </div>
       </div><!-- /.container-fluid -->
@@ -135,12 +145,12 @@
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
-        <div class="card-wrapper d-flex flex-wrap ml-5">
+        <div class="card-wrapper d-flex flex-wrap ml-3 bg-dark ">
           {{#each chart}}
-            <div class="card m-3 {{this.id}}" style="width: 45%; height: 50vh; position:relative">
-              <a href="/dashboards/{{this.dashboardId}}/chart/{{this.id}}" class="btn btn-success mt-3" style="height: 4vh; line-height:100%; position:absolute; left: 5%">edit</a>
+            <div class="card m-2 bg-dark {{this.id}}" style="width: 48%; height: 50vh; position:relative; box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.651)">
+              <a href="/dashboards/{{this.dashboardId}}/chart/{{this.id}}" class="btn mt-3" style="height: 4vh; line-height:100%; position:absolute; left: 5%"><i class="fas fa-edit" style="color:#8C745E;"></i></a>
               <form action="#" method="post" style="position:absolute; right: 5%">
-                <button type="submit" class="btn btn-danger mt-3" style="height: 4vh; line-height:100%;" >X</button>
+                <button type="submit" class="btn mt-3 font-weight-bold" style="height: 4vh; line-height:100%; background-color:transparent; border:none; color:aliceblue" >X</button>
               </form>
             </div>
             
@@ -162,7 +172,7 @@
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
-  <footer class="main-footer">
+  <footer class="main-footer bg-dark">
     <strong>Copyright &copy; 2022 &nbsp;</strong> All rights reserved.
   </footer>
 </div>

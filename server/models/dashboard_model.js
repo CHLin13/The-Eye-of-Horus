@@ -46,17 +46,21 @@ const dashboardModel = {
 
     const layout = {
       title: title,
-      titlefont: { size: fontSize },
+      titlefont: { size: fontSize, color: '#FFF' },
       xaxis: {
         title: xAxisTitle,
-        titlefont: { size: xAxisFontSize },
-        tickfont: { size: xAxisTickFontSize },
+        titlefont: { size: xAxisFontSize, color: '#FFF' },
+        tickfont: { size: xAxisTickFontSize, color: '#FFF' },
       },
       yaxis: {
         title: yAxisTitle,
-        titlefont: { size: yAxisFontSize },
-        tickfont: { size: yAxisTickFontSize },
+        titlefont: { size: yAxisFontSize, color: '#FFF' },
+        tickfont: { size: yAxisTickFontSize, color: '#FFF' },
       },
+      
+      paper_bgcolor: 'rgb(52,58,64)',
+      plot_bgcolor: 'rgba(0,0,0,0)',
+      legend: { font: { color: '#FFF' } },
     };
 
     let setInterval = interval * units.timeUnits[interval_unit] * 1000;
