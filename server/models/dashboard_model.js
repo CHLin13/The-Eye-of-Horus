@@ -1,3 +1,4 @@
+require('dotenv').config();
 const pool = require('../../configs/mysqlConnect');
 const units = require('../../utils/units');
 const Influxdb = require('influx');
@@ -57,7 +58,7 @@ const dashboardModel = {
         titlefont: { size: yAxisFontSize, color: '#FFF' },
         tickfont: { size: yAxisTickFontSize, color: '#FFF' },
       },
-      
+
       paper_bgcolor: 'rgb(52,58,64)',
       plot_bgcolor: 'rgba(0,0,0,0)',
       legend: { font: { color: '#FFF' } },
