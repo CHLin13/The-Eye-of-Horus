@@ -78,7 +78,7 @@
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
-        <form action="/" method="post">
+        <form action="/alerts/create" method="post">
           <div class="row">
             <div class="col-12 mt-2 mb-5">
               <div class="d-flex justify-content-between mr-5 mb-3">
@@ -167,11 +167,11 @@
                 </div>
                 <div class="d-flex mt-3 ml-2">
                   <select class="form-control" id="condition" style="width: 13vw; background: #343A40; color:white;" name="condition">
-                    <option value="1">IS ABOVE</option>
-                    <option value="2">IS BELOW</option>
-                    <option value="3">IS OUTSIDE RANGE</option>
-                    <option value="4">IS WITHIN RANGE</option>
-                    <option value="5">HAS NO VALUE</option>
+                    <option value="above">IS ABOVE</option>
+                    <option value="below">IS BELOW</option>
+                    <option value="outside">IS OUTSIDE RANGE</option>
+                    <option value="within">IS WITHIN RANGE</option>
+                    <option value="noVal">HAS NO VALUE</option>
                   </select>
                 </div>
                 <div id="value">
@@ -188,8 +188,8 @@
               </div>
               <div class="d-flex mr-5">
                 <div class="d-flex mt-3" style="margin-left: 2vw;">
-                  <label for="eval-every-input" class="d-flex justify-content-center align-items-center m-0 ml-4 mr-3" style="width:10vw">Evaluate every</label>
-                  <select class="form-control" id="eval-every-input" style="width: 8vw; background: #343A40; color:white;" name="eval-every-input">
+                  <label for="eval_every_input" class="d-flex justify-content-center align-items-center m-0 ml-4 mr-3" style="width:10vw">Evaluate every</label>
+                  <select class="form-control" id="eval_every_input" style="width: 8vw; background: #343A40; color:white;" name="eval_every_input">
                     <option value="1m">1m</option>
                     <option value="5m">5m</option>
                     <option value="10m">10m</option>
@@ -213,20 +213,17 @@
                   <div class="d-flex justify-content-center align-items-center m-0 ml-4 mr-3" style="width:3vw;">for</div>
                 </div>
                 <div class="d-flex mt-3 ml-2">
-                  <input class="form-control" type="text" style="width: 75px; background: #343A40; color:white" name="eval-for-input" id="eval-for-input" value="5m">
+                  <input class="form-control" type="text" style="width: 75px; background: #343A40; color:white" name="eval_for_input" id="eval_for_input" value="5m">
                 </div>
               </div>
               <div class="p-3 d-none" style="margin: 3vh 5vw 0 5vw; background-color:#4b535a; color:#bec4ca" id="warning"><i class="fas fa-exclamation-triangle text-warning mr-3"></i>Setting a "for" duration that is less than or equal to the evaluation interval will result in the evaluation interval being used to calculate when an alert that has stopped receiving data will be closed.</div>
               <div class="d-flex mr-5">
                 <div class="d-flex mt-3">
-                  <label for="receiver" class="d-flex justify-content-center align-items-center m-0" style="width:15vw">Receiver</label>
-                    <select class="form-control" id="receiver" style="width: 8vw; background: #343A40; color:white;" name="receiver">
+                  <label for="receiver_id" class="d-flex justify-content-center align-items-center m-0" style="width:15vw">Receiver</label>
+                    <select class="form-control" id="receiver_id" style="width: 8vw; background: #343A40; color:white;" name="receiver_id">
                     {{#each receiver}}
-                      <option value="{{this.id}}">{{this}}</option>
+                      <option value="{{this.id}}">{{this.title}}</option>
                     {{/each}}
-                    <option value="A">A</option>
-                    <option value="B">B</option>
-                    <option value="C">C</option>
                   </select>
                 </div>
               </div>
@@ -255,7 +252,6 @@
     const response = await axios.post('/dashboards/chart/preview',{ 
         timeRange: $('#time-range').val(),
         source: $('#source').val(),
-        style: '',
         interval: $('#interval').val(),
         interval_unit: $('#interval_unit').val(),
         select: $('#select').val()
@@ -283,14 +279,12 @@
       title:$('#title').val(),
       titlefont: { size: $('#font-size').val(), color: '#FFF' },
         xaxis: {
-          title: $('#xAxis-title').val(),
-          titlefont: { size: $('#xAxis-font-size').val(), color: '#FFF' },
-          tickfont: { size: $('#xAxis-tick-font-size').val(), color: '#FFF'  }
+          titlefont: { color: '#FFF' },
+          tickfont: { color: '#FFF'  }
         },
         yaxis: {
-          title: $('#yAxis-title').val(),
-          titlefont: { size: $('#yAxis-font-size').val(), color: '#FFF' },
-          tickfont: { size: $('#yAxis-tick-font-size').val(), color: '#FFF' }
+          titlefont: { color: '#FFF' },
+          tickfont: { color: '#FFF' }
         }, 
       paper_bgcolor: 'rgb(52,58,64)',
       plot_bgcolor: 'rgba(0,0,0,0)',
