@@ -1,4 +1,5 @@
 const pool = require('../../configs/mysqlConnect');
+const redis = require('../../configs/redisConnect');
 
 const alertModel = {
   getReceiver: async () => {
@@ -34,11 +35,18 @@ const alertModel = {
     };
 
     const conn = await pool.getConnection();
+
     try {
       if (alertId) {
-        conn.query(`UPDATE alert SET ? WHERE id = ?`, [data, alertId]);
+        await conn.query(`UPDATE alert SET ? WHERE id = ?`, [data, alertId]);
+        await redis.HSET(eval_every_input, alertId, JSON.stringify(data));
       } else {
-        conn.query(`INSERT INTO alert SET ?`, [data]);
+        const [result] = await conn.query(`INSERT INTO alert SET ?`, [data]);
+        await redis.HSET(
+          eval_every_input,
+          result.insertId,
+          JSON.stringify(data)
+        );
       }
       await conn.query('COMMIT');
       return true;
