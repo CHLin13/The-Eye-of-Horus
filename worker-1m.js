@@ -9,7 +9,6 @@ const work = (async function () {
     JSON.parse(response)
   );
 
-  // console.log(result);
   for (let i = 0; i < result.length; i++) {
     const database = result[i].source.split('/')[0];
     const measurement = result[i].source.split('/')[1];
@@ -21,9 +20,9 @@ const work = (async function () {
       (forArr[0] * units.timeUnits[forArr[1]]) /
         (everyArr[0] * units.timeUnits[everyArr[1]])
     );
-    
+
     const system = await influxdb.query(
-      `select ${result[i].select}(*) from ${measurement} GROUP BY type_instance, time(${result[i].eval_every_input}) order by DESC limit ${limit}`
+      `select ${result[i].select}(*) from ${measurement} WHERE type_instance = '${result[i].type}' GROUP BY time(${result[i].eval_every_input}) order by DESC limit ${limit}`
     );
 
     const select = result[i].select + '_value';
@@ -49,10 +48,12 @@ const work = (async function () {
             : (count += 0);
           break;
         case 5:
+          system[j][select] === null ? count++ : (count += 0);
           break;
       }
+
       if (count === 5) {
-        console.log(result[i].receiver_id);
+      console.log(result[i].message);
       }
     }
   }
