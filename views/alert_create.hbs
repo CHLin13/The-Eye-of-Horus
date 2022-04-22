@@ -266,38 +266,31 @@
     const response = await axios.post('/dashboards/chart/preview',{ 
         timeRange: $('#time-range').val(),
         source: $('#source').val(),
+        type: $('#type').val(),
+        style: '',
         interval: $('#interval').val(),
         interval_unit: $('#interval_unit').val(),
         select: $('#select').val()
       });
-  
+
     const chart = $('.chart')[0]
     const result = response.data.data
     const select = response.data.select + '_value'
 
-    const data = []
-    for(let i = 0; i < result.length; i ++){
-      const trace = {
-        x: result[i].rows.map(row => row.time),
-        y: result[i].rows.map(row => row[select]),
-        type: $('#style').val(),
-        name: result[i].tags.type_instance,
-        connectgaps: true
-      }
-      if(result[i].tags.type_instance !== 'idle'){
-        data.push(trace)
-      }
+    const trace = {
+      x: result.map(item => item.time),
+      y: result.map(item => item[select]),
+      type: $('#style').val(),
+      connectgaps: true
     }
 
     var layout = {
       title:$('#title').val(),
       titlefont: { size: $('#font-size').val(), color: '#FFF' },
         xaxis: {
-          titlefont: { color: '#FFF' },
           tickfont: { color: '#FFF'  }
         },
         yaxis: {
-          titlefont: { color: '#FFF' },
           tickfont: { color: '#FFF' }
         }, 
       paper_bgcolor: 'rgb(52,58,64)',
@@ -305,7 +298,7 @@
       legend: { font: { color: '#FFF' } },
     };
 
-    Plotly.newPlot(chart, data, layout);
+    Plotly.newPlot(chart, [trace], layout);
     })
 
   $('#condition').change((e) => {
