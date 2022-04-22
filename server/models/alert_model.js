@@ -12,6 +12,7 @@ const alertModel = {
     const { alertId } = req.params;
     const {
       source,
+      type,
       select,
       condition,
       value,
@@ -24,6 +25,7 @@ const alertModel = {
 
     const data = {
       source: source,
+      type: type,
       select: select,
       condition: condition,
       value: Number(value),
