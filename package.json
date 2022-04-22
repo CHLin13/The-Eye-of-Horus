@@ -10,10 +10,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.26.1",
+    "discord.js": "^13.6.0",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
     "express-handlebars": "^6.0.5",
     "influx": "^5.9.3",
+    "mailgun-js": "^0.22.0",
     "method-override": "^3.0.0",
     "mysql2": "^2.3.3",
     "redis": "^4.0.6"
