@@ -17,4 +17,6 @@ router.put('/:dashboardId/chart/:chartId', dashboardController.putChart);
 
 router.get('/setting/:id', dashboardController.getDashboardSetting);
 
+router.post('/type_instance', dashboardController.getTypeInstance);
+
 module.exports = router;

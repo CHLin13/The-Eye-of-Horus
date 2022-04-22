@@ -133,7 +133,7 @@ const dashboardModel = {
   },
 
   previewChart: async (req) => {
-    const { timeRange, source, interval, interval_unit, select } = req.body;
+    const { timeRange, source, interval, type, interval_unit, select } = req.body;
     const database = source.split('/')[0];
     const measurement = source.split('/')[1];
     const influxdb = new Influxdb.InfluxDB(process.env.URL + database);
@@ -144,9 +144,22 @@ const dashboardModel = {
     const limit = Math.floor(rangeIntoSec / intervalN);
 
     const system = await influxdb.query(
-      `select ${select}(*) from ${measurement} GROUP BY type_instance, time(${interval}${interval_unit}) order by DESC limit ${limit}`
+      `select ${select}(*) from ${measurement} WHERE type_instance = '${type}' GROUP BY time(${interval}${interval_unit}) order by DESC limit ${limit}`
     );
-    return system.groupRows;
+
+    return system;
+  },
+
+  getTypeInstance: async (source) => {
+    const database = source.split('/')[0];
+    const measurement = source.split('/')[1];
+    const influxdb = new Influxdb.InfluxDB(process.env.URL + database);
+    const system = await influxdb.query(
+      `SHOW tag values ON ${database} from ${measurement} with key = type_instance`
+    );
+    const typeInstance = [];
+    system.forEach((item) => typeInstance.push(item.value));
+    return typeInstance;
   },
 };
 

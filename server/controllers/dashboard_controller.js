@@ -67,6 +67,12 @@ const dashboardController = {
   getDashboardSetting: async (req, res) => {
     return res.render('dashboard_setting');
   },
+
+  getTypeInstance: async(req,res) => {
+    const {source} = req.body
+    const result = await dashboardModel.getTypeInstance(source)
+    return res.json(result)
+  }
 };
 
 module.exports = dashboardController;
