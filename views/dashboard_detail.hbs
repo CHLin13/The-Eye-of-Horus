@@ -8,11 +8,12 @@
           M: 30 * 24 * 60 * 60,
           y: 365 * 30 * 24 * 60 * 60,
         };
-    async function chart(id, time_range, database, measurement, chart_type, interval, interval_unit, selects, layout) {
+    async function chart(id, time_range, database, measurement, type, chart_type, interval, interval_unit, selects, layout) {
 
     const response = await axios.post('/dashboards/chart/preview',{
       timeRange: time_range,
       source: database + '/' + measurement,
+      type: type,
       style: chart_type,
       interval: interval,
       interval_unit: interval_unit,
@@ -23,23 +24,17 @@
     const result = response.data.data
     const select = response.data.select + '_value'
     const rangeIntoSec = (`${time_range}`.split('-')[0] * units[`${time_range}`.split('-')[1]])*1000;
-    const data = []
-    for(let i = 0; i < result.length; i ++){
-      const trace = {
-        x: result[i].rows.map(row => row.time),
-        y: result[i].rows.map(row => row[select]),
-        type: chart_type,
-        name: result[i].tags.type_instance,
-        connectgaps: true
-      }
-      if(result[i].tags.type_instance !== 'idle'){
-        data.push(trace)
-      }
+
+    const trace = {
+      x: result.map(item => item.time),
+      y: result.map(item => item[select]),
+      type: chart_type,
+      connectgaps: true
     }
 
-    var layout = JSON.parse(layout)
+     layout = JSON.parse(layout)
 
-    Plotly.newPlot(chart, data, layout);
+    Plotly.newPlot(chart, [trace], layout);
   }
   </script>
 <div class="wrapper">
@@ -157,7 +152,7 @@
             <script>
             
             function runner{{this.id}}() {
-                chart({{this.id}}, '{{this.time_range}}','{{this.database}}','{{this.measurement}}','{{this.chart_type}}',{{this.interval}},'{{this.interval_unit}}','{{this.select}}','{{{this.layout}}}', '{{this.chart_type}}');
+                chart({{this.id}}, '{{this.time_range}}','{{this.database}}','{{this.measurement}}','{{this.type}}','{{this.chart_type}}',{{this.interval}},'{{this.interval_unit}}','{{this.select}}','{{{this.layout}}}', '{{this.chart_type}}');
                 setTimeout(function() {
                     runner{{this.id}}();
                 }, {{{this.setInterval}}});

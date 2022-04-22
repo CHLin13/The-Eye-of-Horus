@@ -49,7 +49,8 @@ const dashboardController = {
       const { dashboardId, chartId } = req.params;
       const data = await dashboardModel.getChartDetail(dashboardId, chartId);
       const source = await dashboardModel.getSource();
-      return res.render('create', { data, source });
+      const type = await dashboardModel.getTypeInstance(data.source);
+      return res.render('create', { data, source, type });
     } catch (error) {
       console.error(`Get chart detail error: ${error}`);
     }
@@ -68,11 +69,11 @@ const dashboardController = {
     return res.render('dashboard_setting');
   },
 
-  getTypeInstance: async(req,res) => {
-    const {source} = req.body
-    const result = await dashboardModel.getTypeInstance(source)
-    return res.json(result)
-  }
+  getTypeInstance: async (req, res) => {
+    const { source } = req.body;
+    const result = await dashboardModel.getTypeInstance(source);
+    return res.json(result);
+  },
 };
 
 module.exports = dashboardController;

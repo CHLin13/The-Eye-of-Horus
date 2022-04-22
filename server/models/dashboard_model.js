@@ -28,6 +28,7 @@ const dashboardModel = {
     const {
       timeRange,
       source,
+      type,
       style,
       interval,
       interval_unit,
@@ -71,6 +72,7 @@ const dashboardModel = {
       dashboard_id: dashboardId,
       database: database,
       measurement: measurement,
+      type: type,
       chart_type: style,
       time_range: timeRange,
       interval: interval,
@@ -108,6 +110,7 @@ const dashboardModel = {
       titleFontSize: layout.titlefont.size,
       timeRange: chart[0].time_range,
       source: chart[0].database + '/' + chart[0].measurement,
+      type: chart[0].type,
       style: chart[0].chart_type,
       interval: chart[0].interval,
       interval_unit: chart[0].interval_unit,
@@ -133,7 +136,8 @@ const dashboardModel = {
   },
 
   previewChart: async (req) => {
-    const { timeRange, source, interval, type, interval_unit, select } = req.body;
+    const { timeRange, source, interval, type, interval_unit, select } =
+      req.body;
     const database = source.split('/')[0];
     const measurement = source.split('/')[1];
     const influxdb = new Influxdb.InfluxDB(process.env.URL + database);

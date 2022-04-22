@@ -139,6 +139,11 @@
                 <div class="d-flex mr-5" style="width: 33vw;">
                   <label for="type" class="d-flex justify-content-center align-items-center m-0 mx-3" style="width:10vw">Type instance</label>
                   <select class="form-control ml-4" id="type" style="width: 10vw; background: #343A40; color:white" name="type">
+                    {{#if data}}
+                      {{#each type}}
+                        <option value="{{this}}" {{#ifCond this ../data.type }}selected{{/ifCond}}>{{this}}</option>
+                      {{/each}}
+                    {{/if}}
                   </select>
                 </div>
                 <div>
