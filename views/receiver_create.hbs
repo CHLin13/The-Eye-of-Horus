@@ -43,7 +43,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="/receivers" class="nav-link">
+            <a href="/receivers" class="nav-link select">
               <i class="nav-icon fas fa-envelope"></i>
               <p>
                 Receiver
@@ -51,7 +51,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="/profile" class="nav-link select">
+            <a href="/profile" class="nav-link">
               <i class="nav-icon fa fa-user"></i>
               <p>
                 Profile
@@ -83,51 +83,53 @@
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper bg-dark">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <div class="container-fluid">
-        <div class="mx-5 d-flex justify-content-between">
-          <div>
-            <h1>Profile</h1>
-          </div>
-        </div>
-      </div><!-- /.container-fluid -->
-    </section>
-
-    <!-- Main content -->
-    <section class="content">
+    <section class="content pt-5">
       <div class="container-fluid">
         <!-- /.row -->
         <div class="row">
           <div class="col-12">
             <div class="card m-auto bg-dark" style="width: 90%;">
               <!-- form start -->
-              <form>
+              <form action="/receivers/create" method="post"></form>
                 <div class="card-body">
-                  <div class="form-group">
+                   <div class="form-group">
                     <label for="name">Name</label>
-                    <input type="text" class="form-control" id="name" placeholder="Name">
-                  </div>
-                  <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" class="form-control" id="email" placeholder="Email">
-                  </div>
-                  <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" class="form-control" id="password" placeholder="Password">
-                  </div>
-                  <div class="form-group">
-                    <label for="newPassword">New Password</label>
-                    <input type="password" class="form-control" id="newPassword" placeholder="New Password">
-                  </div>
-                  <div class="form-group">
-                    <label for="passwordConfirm">Password Confirm</label>
-                    <input type="password" class="form-control" id="passwordConfirm" placeholder="Password Confirm">
+                    <input class="form-control" type="text" name="name" placeholder="Name" value={{name}}>
+                    </div>
+                    <div class="form-group mb-5">
+                      <label for="status">Type</label>
+                      <select class="form-control" id="type">
+                        <option value="1">Email</option>
+                        <option value="2">Slack</option>
+                        <option value="3">Discord</option>
+                      </select>
+                    </div>
+                    <div class="form-group row" id="email">
+                      <label for="emailValue" class="col-sm-2 col-form-label">Email</label>
+                      <div class="col-sm-10">
+                        <input type="email" class="form-control" id="emailValue" name="emailValue" placeholder="email@example.com">
+                      </div>
+                    </div>
+                    <div class="form-group row d-none" id="slack">
+                      <label for="webhookURL" class="col-sm-2 col-form-label">webhookURL</label>
+                      <div class="col-sm-10">
+                        <input type="text" class="form-control" id="webhookURL" name="webhookURL" placeholder="https://hooks.slack.com/services/TT3AGEYIK2D/Y63KL5ATFR8/BtVtp3SDGCVSersdjliE">
+                      </div>
+                    </div>
+                    <div class="form-group row d-none" id="discord">
+                      <label for="idValue" class="col-sm-2 col-form-label mb-3">ID</label>
+                      <div class="col-sm-10">
+                        <input type="text" class="form-control" id="idValue" name="idValue" placeholder="123456789012345678">
+                      </div>
+                      <label for="tokenValue" class="col-sm-2 col-form-label">Token</label>
+                      <div class="col-sm-10">
+                        <input type="text" class="form-control" id="tokenValue" name="tokenValue" placeholder="fHcPlAKpqNpd_LlqrfxHdksegWAdfwdgersda4PB5ANU9ssfrgarxxhRWg7X">
+                      </div>
                   </div>
                 </div>
                 <!-- /.card-body -->
-                <div class="card-footer bg-dark">
-                  <button type="submit" class="btn btn-primary">Submit</button>
+                <div class="card-footer">
+                  <button type="submit" class="btn btn-secondary">Save</button>
                 </div>
               </form>
             <!-- /.card -->
@@ -144,3 +146,20 @@
 </div>
 <!-- ./wrapper -->
 </body>
+<script>
+  $('#type').change(()=> {
+    if ($('#type')[0].value === '1') {
+      $('#email')[0].classList.remove('d-none')
+      $('#slack')[0].classList.add('d-none')
+      $('#discord')[0].classList.add('d-none')
+    } else if ($('#type')[0].value === '2') {
+      $('#email')[0].classList.add('d-none')
+      $('#slack')[0].classList.remove('d-none')
+      $('#discord')[0].classList.add('d-none')
+    } else if ($('#type')[0].value === '3') {
+      $('#email')[0].classList.add('d-none')
+      $('#slack')[0].classList.add('d-none')
+      $('#discord')[0].classList.remove('d-none')
+    }
+  })
+</script>
