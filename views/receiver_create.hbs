@@ -90,7 +90,7 @@
           <div class="col-12">
             <div class="card m-auto bg-dark" style="width: 90%;">
               <!-- form start -->
-              <form action="/receivers/create" method="post"></form>
+              <form action="/receivers/create" method="post">
                 <div class="card-body">
                    <div class="form-group">
                     <label for="name">Name</label>
@@ -98,10 +98,10 @@
                     </div>
                     <div class="form-group mb-5">
                       <label for="status">Type</label>
-                      <select class="form-control" id="type">
-                        <option value="1">Email</option>
-                        <option value="2">Slack</option>
-                        <option value="3">Discord</option>
+                      <select class="form-control" id="type" name="type">
+                        <option value="Email">Email</option>
+                        <option value="Slack">Slack</option>
+                        <option value="Discord">Discord</option>
                       </select>
                     </div>
                     <div class="form-group row" id="email">
@@ -148,15 +148,15 @@
 </body>
 <script>
   $('#type').change(()=> {
-    if ($('#type')[0].value === '1') {
+    if ($('#type')[0].value === 'Email') {
       $('#email')[0].classList.remove('d-none')
       $('#slack')[0].classList.add('d-none')
       $('#discord')[0].classList.add('d-none')
-    } else if ($('#type')[0].value === '2') {
+    } else if ($('#type')[0].value === 'Slack') {
       $('#email')[0].classList.add('d-none')
       $('#slack')[0].classList.remove('d-none')
       $('#discord')[0].classList.add('d-none')
-    } else if ($('#type')[0].value === '3') {
+    } else if ($('#type')[0].value === 'Discord') {
       $('#email')[0].classList.add('d-none')
       $('#slack')[0].classList.add('d-none')
       $('#discord')[0].classList.remove('d-none')
