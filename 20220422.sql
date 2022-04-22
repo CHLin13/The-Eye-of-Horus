@@ -37,7 +37,7 @@ CREATE TABLE `alert` (
   PRIMARY KEY (`id`),
   KEY `alert_ibfk_1` (`receiver_id`),
   CONSTRAINT `alert_ibfk_1` FOREIGN KEY (`receiver_id`) REFERENCES `receiver` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -46,7 +46,6 @@ CREATE TABLE `alert` (
 
 LOCK TABLES `alert` WRITE;
 /*!40000 ALTER TABLE `alert` DISABLE KEYS */;
-INSERT INTO `alert` VALUES (4,'collectd/cpu_value','system','min','1',123,0,'1m','5m',1,'adsfsaf'),(5,'collectd/cpu_value','user','mean','1',0,0,'1m','5m',1,'ERROR: dsafsdfsdf');
 /*!40000 ALTER TABLE `alert` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -173,11 +172,11 @@ DROP TABLE IF EXISTS `receiver`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `receiver` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `title` varchar(128) NOT NULL,
-  `type` varchar(20) NOT NULL,
-  `detail` varchar(256) NOT NULL,
+  `name` varchar(128) NOT NULL,
+  `type` varchar(10) NOT NULL,
+  `detail` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -186,7 +185,6 @@ CREATE TABLE `receiver` (
 
 LOCK TABLES `receiver` WRITE;
 /*!40000 ALTER TABLE `receiver` DISABLE KEYS */;
-INSERT INTO `receiver` VALUES (1,'test','test','test');
 /*!40000 ALTER TABLE `receiver` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -278,4 +276,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-04-22 16:13:06
+-- Dump completed on 2022-04-22 19:05:48
