@@ -1,5 +1,6 @@
 require('dotenv').config();
 const redis = require('./configs/redisConnect');
+const pool = require('./configs/mysqlConnect');
 const Influxdb = require('influx');
 const axios = require('axios');
 const mailgun = require('mailgun-js');
@@ -68,6 +69,17 @@ const work = (async function () {
       if (count === 5) {
         const detail = JSON.parse(result[i].receiver_detail);
         const errorMessage = result[i].message;
+        const conn = await pool.getConnection();
+
+        try {
+          conn.query(`UPDATE alert SET status = '1' WHERE id = ${result[i].id}`);
+        } catch (error) {
+          await conn.query('ROLLBACK');
+          return { error };
+        } finally {
+          conn.release();
+        }
+        
         switch (result[i].receiver_type) {
           case 'Email':
             const data = {

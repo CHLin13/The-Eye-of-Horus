@@ -86,13 +86,13 @@
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
-        <form action="/alerts/create" method="post">
+        <form {{#if data}} action="/alerts/{{data.id}}?_method=PUT" {{else}} action="/alerts/create" {{/if}} method="post">
           <div class="row">
             <div class="col-12 mt-2 mb-5">
               <div class="d-flex justify-content-between mr-5 mb-3">
                   <div class="d-flex ml-5 pl-3">
                     <label for="name" class="d-flex justify-content-center align-items-center m-0 mr-3">Name</label>
-                    <input class="form-control" type="text" id="name" placeholder="Name"style="background: #343A40; color:white" required>
+                    <input class="form-control" type="text" id="name" placeholder="Name" name="name" style="background: #343A40; color:white" value="{{data.name}}" required>
                   </div>
                   <div class="d-flex mx-5">
                     <label for="time-range" class="d-flex justify-content-center align-items-center m-0 mr-3">Time range</label>
@@ -145,7 +145,7 @@
                   <select class="form-control ml-4" id="type" style="width: 10vw; background: #343A40; color:white" name="type">
                     {{#if data}}
                       {{#each type}}
-                        <option value="{{this}}" {{#ifCond this ../data.type }}selected{{/ifCond}}>{{this}}</option>
+                        <option value="{{data.type}}" {{#ifCond this ../data.type }}selected{{/ifCond}}>{{this}}</option>
                       {{/each}}
                     {{/if}}
                   </select>
@@ -180,62 +180,62 @@
                 <div class="d-flex mt-3" style="margin-left: 2vw;">
                   <label for="select" class="d-flex justify-content-center align-items-center m-0 ml-5 mr-3" style="width:3vw">When</label>
                   <select class="form-control" id="select" style="width: 10vw; background: #343A40; color:white;" name="select" id="select">
-                    <option value="min">min</option>
-                    <option value="max">max</option>
-                    <option value="mean">mean</option>
-                    <option value="sum">sum</option>
-                    <option value="count">count</option>
+                    <option value="min" {{#ifCond data.select 'min'}}selected{{/ifCond}}>min</option>
+                    <option value="max" {{#ifCond data.select 'max'}}selected{{/ifCond}}>max</option>
+                    <option value="mean" {{#ifCond data.select 'mean'}}selected{{/ifCond}}>mean</option>
+                    <option value="sum" {{#ifCond data.select 'sum'}}selected{{/ifCond}}>sum</option>
+                    <option value="count" {{#ifCond data.select 'count'}}selected{{/ifCond}}>count</option>
                   </select>
                 </div>
                 <div class="d-flex mt-3 ml-2">
                   <select class="form-control" id="condition" style="width: 13vw; background: #343A40; color:white;" name="condition">
-                    <option value="1">GREATER THAN  ">"</option>
-                    <option value="2">LESS THAN  "<"</option>
-                    <option value="3">IS OUTSIDE</option>
-                    <option value="4">IS BETWEEN</option>
-                    <option value="5">HAS NO VALUE</option>
+                    <option value="1" {{#ifCond data.condition '1'}}selected{{/ifCond}}>GREATER THAN  ">"</option>
+                    <option value="2" {{#ifCond data.condition '2'}}selected{{/ifCond}}>LESS THAN  "<"</option>
+                    <option value="3" {{#ifCond data.condition '3'}}selected{{/ifCond}}>IS OUTSIDE</option>
+                    <option value="4" {{#ifCond data.condition '4'}}selected{{/ifCond}}>IS BETWEEN</option>
+                    <option value="5" {{#ifCond data.condition '5'}}selected{{/ifCond}}>HAS NO VALUE</option>
                   </select>
                 </div>
                 <div id="value">
                 <div class="d-flex mt-3 ml-2" >
-                  <input class="form-control" type="number" style="width: 75px; background: #343A40; color:white" name="value">
+                  <input class="form-control" type="number" id="value_min" style="width: 75px; background: #343A40; color:white" name="value" value="{{data.value}}">
                 </div>
                 </div>
                 <div class="d-none" >
                   <div class="d-flex mt-3">
                     <label for="value_max" class="d-flex justify-content-center align-items-center m-0 mx-1" style="width:3vw">TO</label>
-                    <input class="form-control" type="number" style="width: 75px; background: #343A40; color:white" id="value_max" name="value_max">
+                    <input class="form-control" type="number" style="width: 75px; background: #343A40; color:white" id="value_max" name="value_max" value="{{data.value_max}}">
                   </div>
                 </div>
               </div>
               <div class="d-flex mr-5">
                 <div class="d-flex mt-3" style="margin-left: 2vw;">
-                  <label for="eval_every_input" class="d-flex justify-content-center align-items-center m-0 ml-4 mr-3" style="width:10vw">Evaluate every</label>
-                  <select class="form-control" id="eval_every_input" style="width: 8vw; background: #343A40; color:white;" name="eval_every_input">
-                    <option value="1m">1m</option>
-                    <option value="5m">5m</option>
-                    <option value="10m">10m</option>
-                    <option value="30m">30m</option>
-                    <option value="1h">1h</option>
-                    <option value="3h">3h</option>
-                    <option value="5h">6h</option>
-                    <option value="12h">12h</option>
-                    <option value="18h">18h</option>
-                    <option value="1d">1d</option>
-                    <option value="3d">3d</option>
-                    <option value="1w">1w</option>
-                    <option value="1M">1M</option>
-                    <option value="3M">3M</option>
-                    <option value="6M">6M</option>
-                    <option value="1y">1y</option>
-                    <option value="2y">2y</option>
+                  <label for="eval-every-input" class="d-flex justify-content-center align-items-center m-0 ml-4 mr-3" style="width:10vw">Evaluate every</label>
+                  <select class="form-control" id="eval-every-input" style="width: 8vw; background: #343A40; color:white;" name="eval_every_input">
+                    <option value="1m" {{#ifCond data.eval_every_input '1m'}}selected{{/ifCond}}>1m</option>
+                    <option value="5m" {{#ifCond data.eval_every_input '5m'}}selected{{/ifCond}}>5m</option>
+                    <option value="10m" {{#ifCond data.eval_every_input '10m'}}selected{{/ifCond}}>10m</option>
+                    <option value="30m" {{#ifCond data.eval_every_input '30m'}}selected{{/ifCond}}>30m</option>
+                    <option value="1h" {{#ifCond data.eval_every_input '1h'}}selected{{/ifCond}}>1h</option>
+                    <option value="3h" {{#ifCond data.eval_every_input '3h'}}selected{{/ifCond}}>3h</option>
+                    <option value="5h" {{#ifCond data.eval_every_input '6h'}}selected{{/ifCond}}>6h</option>
+                    <option value="12h" {{#ifCond data.eval_every_input '12h'}}selected{{/ifCond}}>12h</option>
+                    <option value="18h" {{#ifCond data.eval_every_input '18h'}}selected{{/ifCond}}>18h</option>
+                    <option value="1d" {{#ifCond data.eval_every_input '1d'}}selected{{/ifCond}}>1d</option>
+                    <option value="3d" {{#ifCond data.eval_every_input '3d'}}selected{{/ifCond}}>3d</option>
+                    <option value="1w" {{#ifCond data.eval_every_input '1w'}}selected{{/ifCond}}>1w</option>
+                    <option value="1M" {{#ifCond data.eval_every_input '1M'}}selected{{/ifCond}}>1M</option>
+                    <option value="3M" {{#ifCond data.eval_every_input '3M'}}selected{{/ifCond}}>3M</option>
+                    <option value="6M" {{#ifCond data.eval_every_input '6M'}}selected{{/ifCond}}>6M</option>
+                    <option value="1y" {{#ifCond data.eval_every_input '1y'}}selected{{/ifCond}}>1y</option>
+                    <option value="2y" {{#ifCond data.eval_every_input '2y'}}selected{{/ifCond}}>2y</option>
                   </select>
                 </div>
                 <div class="d-flex mt-3">
                   <div class="d-flex justify-content-center align-items-center m-0 ml-4 mr-3" style="width:3vw;">for</div>
                 </div>
                 <div class="d-flex mt-3 ml-2">
-                  <input class="form-control" type="text" style="width: 75px; background: #343A40; color:white" name="eval_for_input" id="eval_for_input" value="5m">
+                  <input class="form-control" type="text" style="width: 75px; background: #343A40; color:white" id="eval-for-input" name="eval_for_input" {{#if data}}value="{{data.eval_for_input}}"{{else}}value="5m"{{/if}}>
                 </div>
               </div>
               <div class="p-3 d-none" style="margin: 3vh 5vw 0 5vw; background-color:#4b535a; color:#bec4ca" id="warning"><i class="fas fa-exclamation-triangle text-warning mr-3"></i>Setting a "for" duration that is less than or equal to the evaluation interval will result in the evaluation interval being used to calculate when an alert that has stopped receiving data will be closed.</div>
@@ -243,16 +243,22 @@
                 <div class="d-flex mt-3">
                   <label for="receiver_id" class="d-flex justify-content-center align-items-center m-0" style="width:15vw">Receiver</label>
                     <select class="form-control" id="receiver_id" style="width: 20vw; background: #343A40; color:white;" name="receiver_id">
-                    {{#each receiver}}
-                      <option value="{{this.id}}">{{this.name}}/{{this.type}}</option>
-                    {{/each}}
+                    {{#if data}}
+                      {{#each receiver}}
+                        <option value="{{this.id}}" {{#ifCond this.id ../data.receiver_id }}selected{{/ifCond}}>{{this.name}}/{{this.type}}</option>
+                      {{/each}}
+                    {{else}}
+                      {{#each receiver}}
+                        <option value="{{this.id}}">{{this.name}}/{{this.type}}</option>
+                      {{/each}}
+                    {{/if}}
                   </select>
                 </div>
               </div>
               <div class="d-flex mr-5">
                 <div class="d-flex mt-3" style="margin-left: 2vw;">
-                  <label for="eval-every-input" class="d-flex justify-content-center align-items-center m-0 ml-4 mr-3" style="width:15vw">Alert message</label>
-                  <textarea class="form-control" name="message" id="message" cols="30" rows="10" style="background-color:#4b535a; color:#bec4ca"></textarea>
+                  <label for="message" class="d-flex justify-content-center align-items-center m-0 ml-4 mr-3" style="width:15vw">Alert message</label>
+                  <textarea class="form-control" name="message" id="message" cols="30" rows="10" style="background-color:#4b535a; color:#e9ecee">{{data.message}}</textarea>
                 </div>
               </div>
             </div>
@@ -309,17 +315,23 @@
     Plotly.newPlot(chart, [trace], layout);
     })
 
+  if ($('#condition').val() === '5'){
+    $('#value')[0].classList.add('d-none')
+  }
+
   $('#condition').change((e) => {
     if (e.currentTarget.value === '3' || e.currentTarget.value === '4'){
       e.currentTarget.parentElement.parentElement.lastElementChild.classList.remove("d-none")
       $('#value')[0].classList.remove('d-none')
     } else if (e.currentTarget.value === '5') {
-      console.log($('#value')[0])
       $('#value')[0].classList.add('d-none')
       e.currentTarget.parentElement.parentElement.lastElementChild.classList.add("d-none")
+      $('#value_max').val(null)
+      $('#value_min').val(null)
     } else {
       e.currentTarget.parentElement.parentElement.lastElementChild.classList.add("d-none")
       $('#value')[0].classList.remove('d-none')
+      $('#value_max').val(null)
     }
   })
 
@@ -332,7 +344,7 @@
   'y': 365 * 30 * 24 * 60 * 60,
   }
 
-    $('#eval-every-input').change((e) => {
+  $('#eval-every-input').change((e) => {
     const evalEveryInput = $('#eval-every-input').val().match(/[a-zA-Z]+|[0-9]+/g)
     const evalForInput = $('#eval-for-input').val().match(/[a-zA-Z]+|[0-9]+/g)
     const everyValue = evalEveryInput[0] * timeUnits[evalEveryInput[1]]
@@ -345,7 +357,6 @@
   })
 
   $('#eval-for-input').change((e) => {
-    console.log('for')
     const evalEveryInput = $('#eval-every-input').val().match(/[a-zA-Z]+|[0-9]+/g)
     const evalForInput = $('#eval-for-input').val().match(/[a-zA-Z]+|[0-9]+/g)
     const everyValue = evalEveryInput[0] * timeUnits[evalEveryInput[1]]

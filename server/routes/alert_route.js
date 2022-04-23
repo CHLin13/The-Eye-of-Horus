@@ -9,4 +9,7 @@ router.get('/', alertController.getAlertList);
 router.get('/create', alertController.getAlertCreate);
 router.post('/create', alertController.postAlertCreate);
 
+router.get('/:alertId', alertController.getAlert);
+router.put('/:alertId', alertController.putAlert);
+
 module.exports = router;

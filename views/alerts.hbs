@@ -116,18 +116,16 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td> <i class="fas fa-circle text-success"></i> </td>
-                      <td> Alert A</td>
-                      <td class="text-center"><a class="text-secondary" href="/admin/roles/edit/1"><i class="fas fa-edit"></i></a></td>
-                      <td class="d-flex align-items-center justify-content-center"><a href="/" class="text-light font-weight-bold"> X</a></td>
-                    </tr>
-                    <tr>
-                      <td> <i class="fas fa-circle text-danger"></i> </td>
-                      <td> Alert B</td>
-                      <td class="text-center"><a class="text-secondary" href="/dashboard/:id/edit"><i class="fas fa-edit"></i></a></td>
-                      <td class="d-flex align-items-center justify-content-center"><a href="/" class="text-light font-weight-bold"> X</a></td>
-                    </tr>
+                    {{#each alert}}
+                      <tr>
+                        {{#ifCond this.status '0'}} <td> <i class="fas fa-circle text-success"></i>  </td>
+                        {{else}} <td> <i class="fas fa-circle text-danger"></i> </td>
+                        {{/ifCond}}
+                        <td> {{this.name}}</td>
+                        <td class="text-center"><a class="text-secondary" href="/alerts/{{this.id}}"><i class="fas fa-edit"></i></a></td>
+                        <td class="d-flex align-items-center justify-content-center"><a href="/" class="text-light font-weight-bold"> X</a></td>
+                      </tr>
+                    {{/each}}
                   </tbody>
                 </table>
               </div>

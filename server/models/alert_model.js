@@ -2,6 +2,12 @@ const pool = require('../../configs/mysqlConnect');
 const redis = require('../../configs/redisConnect');
 
 const alertModel = {
+  getAlerts: async () => {
+    const sql = 'SELECT * FROM alert';
+    const [alert] = await pool.query(sql);
+    return alert;
+  },
+
   getReceiver: async () => {
     const sql = 'SELECT * FROM receiver';
     const [receiver] = await pool.query(sql);
@@ -11,6 +17,7 @@ const alertModel = {
   postAlert: async (req) => {
     const { alertId } = req.params;
     const {
+      name,
       source,
       type,
       select,
@@ -28,6 +35,7 @@ const alertModel = {
     ]);
 
     const mqlData = {
+      name: name,
       source: source,
       type: type,
       select: select,
@@ -38,8 +46,10 @@ const alertModel = {
       eval_for_input: eval_for_input,
       receiver_id: receiver_id,
       message: message,
+      status: 0,
     };
     const redisData = {
+      name: name,
       source: source,
       type: type,
       select: select,
@@ -62,6 +72,7 @@ const alertModel = {
         await redis.HSET(eval_every_input, alertId, JSON.stringify(redisData));
       } else {
         const [result] = await conn.query(`INSERT INTO alert SET ?`, [mqlData]);
+        redisData.id = result.insertId;
         await redis.HSET(
           eval_every_input,
           result.insertId,
@@ -77,6 +88,12 @@ const alertModel = {
       conn.release();
     }
   },
+
+  getAlert: async (alertId) => {
+    const sql = 'SELECT * FROM alert WHERE id = ?';
+    const [data] = await pool.query(sql, [alertId]);
+    return data[0];
+  }
 };
 
 module.exports = alertModel;
