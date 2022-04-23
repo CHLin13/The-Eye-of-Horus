@@ -147,10 +147,15 @@ const dashboardModel = {
       timeRange.split('-')[0] * units.timeUnits[timeRange.split('-')[1]];
     const limit = Math.floor(rangeIntoSec / intervalN);
 
+    if (type) {
+      const system = await influxdb.query(
+        `select ${select}(*) from ${measurement} WHERE type_instance = '${type}' GROUP BY time(${interval}${interval_unit}) order by DESC limit ${limit}`
+      );
+      return system;
+    }
     const system = await influxdb.query(
-      `select ${select}(*) from ${measurement} WHERE type_instance = '${type}' GROUP BY time(${interval}${interval_unit}) order by DESC limit ${limit}`
+      `select ${select}(*) from ${measurement} GROUP BY time(${interval}${interval_unit}) order by DESC limit ${limit}`
     );
-
     return system;
   },
 

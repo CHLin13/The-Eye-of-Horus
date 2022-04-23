@@ -30,9 +30,14 @@ const work = (async function () {
         (everyArr[0] * units.timeUnits[everyArr[1]])
     );
 
-    const system = await influxdb.query(
-      `select ${result[i].select}(*) from ${measurement} WHERE type_instance = '${result[i].type}' GROUP BY time(${result[i].eval_every_input}) order by DESC limit ${limit}`
-    );
+    let influxSql = '';
+    if (result[i].type) {
+      influxSql = `select ${result[i].select}(*) from ${measurement} WHERE type_instance = '${result[i].type}' GROUP BY time(${result[i].eval_every_input}) order by DESC limit ${limit}`;
+    } else {
+      influxSql = `select ${result[i].select}(*) from ${measurement} GROUP BY time(${result[i].eval_every_input}) order by DESC limit ${limit}`;
+    }
+
+    const system = await influxdb.query(influxSql);
     const select = result[i].select + '_value';
     let count = 0;
     for (let j = 0; j < limit; j++) {
@@ -98,4 +103,4 @@ const work = (async function () {
   }
 })();
 
-console.log('working');
+console.log('1m-working');
