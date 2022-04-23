@@ -4,14 +4,22 @@ const alertModel = require('../models/alert_model');
 
 const alertController = {
   getAlertList: async (req, res) => {
-    const alert = await alertModel.getAlerts();
-    return res.render('alerts', { alert });
+    try {
+      const alert = await alertModel.getAlerts();
+      return res.render('alerts', { alert });
+    } catch (error) {
+      console.error(`Get alert list error: ${error}`);
+    }
   },
 
   getAlertCreate: async (req, res) => {
-    const source = await dashboardModel.getSource();
-    const receiver = await alertModel.getReceiver();
-    return res.render('alert_create', { source, receiver });
+    try {
+      const source = await dashboardModel.getSource();
+      const receiver = await alertModel.getReceiver();
+      return res.render('alert_create', { source, receiver });
+    } catch (error) {
+      console.error(`Get alert create error: ${error}`);
+    }
   },
 
   postAlertCreate: async (req, res) => {
@@ -24,12 +32,16 @@ const alertController = {
   },
 
   getAlert: async (req, res) => {
-    const alertId = req.params.alertId;
-    const source = await dashboardModel.getSource();
-    const receiver = await alertModel.getReceiver();
-    const data = await alertModel.getAlert(alertId);
-    const type = await dashboardModel.getTypeInstance(data.source);
-    return res.render('alert_create', { data, source, receiver, type });
+    try {
+      const alertId = req.params.alertId;
+      const source = await dashboardModel.getSource();
+      const receiver = await alertModel.getReceiver();
+      const data = await alertModel.getAlert(alertId);
+      const type = await dashboardModel.getTypeInstance(data.source);
+      return res.render('alert_create', { data, source, receiver, type });
+    } catch (error) {
+      console.error(`Get alert error: ${error}`);
+    }
   },
 
   putAlert: async (req, res) => {
@@ -37,7 +49,9 @@ const alertController = {
       await alertModel.postAlert(req);
       return res.redirect(`/alerts`);
     } catch (error) {
-      console.error(`Put alert create error: ${error}`);
+      console.error(`Put alert error: ${error}`);
+    }
+  },
 
   deleteAlert: async (req, res) => {
     try {
