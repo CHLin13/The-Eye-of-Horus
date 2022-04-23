@@ -93,7 +93,21 @@ const alertModel = {
     const sql = 'SELECT * FROM alert WHERE id = ?';
     const [data] = await pool.query(sql, [alertId]);
     return data[0];
-  }
+  },
+
+  deleteAlert: async (alertId) => {
+    const conn = await pool.getConnection();
+
+    try {
+      const sql = 'DELETE FROM alert WHERE id = ?';
+      await conn.query(sql, [alertId]);
+    } catch (error) {
+      await conn.query('ROLLBACK');
+      return { error };
+    } finally {
+      conn.release();
+    }
+  },
 };
 
 module.exports = alertModel;

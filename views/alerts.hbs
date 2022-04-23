@@ -123,7 +123,7 @@
                         {{/ifCond}}
                         <td> {{this.name}}</td>
                         <td class="text-center"><a class="text-secondary" href="/alerts/{{this.id}}"><i class="fas fa-edit"></i></a></td>
-                        <td class="d-flex align-items-center justify-content-center"><a href="/" class="text-light font-weight-bold"> X</a></td>
+                        <td class="d-flex align-items-center justify-content-center"><form action="/alerts/{{this.id}}?_method=DELETE" method="post"><button type="submit" style="border: none; background-color:transparent; color:white">X</button></form></td>
                       </tr>
                     {{/each}}
                   </tbody>

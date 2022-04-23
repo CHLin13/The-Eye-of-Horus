@@ -11,5 +11,6 @@ router.post('/create', alertController.postAlertCreate);
 
 router.get('/:alertId', alertController.getAlert);
 router.put('/:alertId', alertController.putAlert);
+router.delete('/:alertId', alertController.deleteAlert);
 
 module.exports = router;

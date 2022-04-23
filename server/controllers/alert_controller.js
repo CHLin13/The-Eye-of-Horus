@@ -38,6 +38,14 @@ const alertController = {
       return res.redirect(`/alerts`);
     } catch (error) {
       console.error(`Put alert create error: ${error}`);
+
+  deleteAlert: async (req, res) => {
+    try {
+      const alertId = req.params.alertId;
+      await alertModel.deleteAlert(alertId);
+      return res.redirect(`/alerts`);
+    } catch (error) {
+      console.error(`Delete alert error: ${error}`);
     }
   },
 };
