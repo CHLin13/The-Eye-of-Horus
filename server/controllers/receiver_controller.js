@@ -12,7 +12,11 @@ const receiverController = {
   },
 
   getReceiverCreate: async (req, res) => {
-    return res.render('receiver_create');
+    try {
+      return res.render('receiver_create');
+    } catch (error) {
+      console.error(`Get receiver create error: ${error}`);
+    }
   },
 
   postReceiverCreate: async (req,res) => {
