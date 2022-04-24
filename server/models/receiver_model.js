@@ -1,6 +1,23 @@
 const pool = require('../../configs/mysqlConnect');
 
 const receiverModel = {
+  getReceiver: async (receiverId) => {
+    let sql = 'SELECT * FROM receiver';
+
+    if (receiverId) {
+      sql = 'SELECT * FROM receiver WHERE id = ?';
+    }
+
+    const [receiver] = await pool.query(sql, [receiverId]);
+    receiver.map((receiver) => (receiver.detail = JSON.parse(receiver.detail)));
+    receiver.map((receiver) => {
+      receiver.d0 = receiver.detail[0];
+      receiver.d1 = receiver.detail[1];
+    });
+
+    return receiver;
+  },
+
   postReceiver: async (req) => {
     const { receiverId } = req.params;
     const { name, type, emailValue, webhookURL, idValue, tokenValue } =

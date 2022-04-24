@@ -3,7 +3,7 @@ const router = express.Router();
 
 const receiverController = require('../controllers/receiver_controller');
 
-router.get('/', receiverController.getReceiverList);
+router.get('/', receiverController.getReceivers);
 
 router.get('/create', receiverController.getReceiverCreate);
 
