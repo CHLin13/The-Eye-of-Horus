@@ -65,6 +65,16 @@ const dashboardController = {
     }
   },
 
+  deleteChart: async (req, res) => {
+    try {
+      const { chartId, dashboardId } = req.params;
+      await dashboardModel.deleteChart(chartId);
+      return res.redirect(`/dashboards/${dashboardId}`);
+    } catch (error) {
+      console.error(`Delete chart error: ${error}`);
+    }
+  },
+
   getDashboardSetting: async (req, res) => {
     return res.render('dashboard_setting');
   },

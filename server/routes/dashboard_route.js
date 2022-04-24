@@ -14,6 +14,7 @@ router.post('/:dashboardId/create', dashboardController.postDashboardCreate);
 
 router.get('/:dashboardId/chart/:chartId', dashboardController.getChartDetail);
 router.put('/:dashboardId/chart/:chartId', dashboardController.putChart);
+router.delete('/:dashboardId/chart/:chartId', dashboardController.deleteChart);
 
 router.get('/setting/:id', dashboardController.getDashboardSetting);
 

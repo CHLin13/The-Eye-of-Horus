@@ -69,6 +69,7 @@ const dashboardModel = {
     setInterval = setInterval < 9999 ? 10000 : setInterval;
 
     const data = {
+      title: title,
       dashboard_id: dashboardId,
       database: database,
       measurement: measurement,
@@ -89,6 +90,20 @@ const dashboardModel = {
       } else {
         conn.query(`INSERT INTO chart SET ?`, [data]);
       }
+      await conn.query('COMMIT');
+      return true;
+    } catch (error) {
+      await conn.query('ROLLBACK');
+      return { error };
+    } finally {
+      conn.release();
+    }
+  },
+
+  deleteChart: async (chartId) => {
+    const conn = await pool.getConnection();
+    try {
+      conn.query(`DELETE FROM chart WHERE id = ?`, [chartId]);
       await conn.query('COMMIT');
       return true;
     } catch (error) {
