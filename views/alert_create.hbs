@@ -86,7 +86,7 @@
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
-        <form {{#if data}} action="/alerts/{{data.id}}?_method=PUT" {{else}} action="/alerts/create" {{/if}} method="post">
+        <form {{#if data}} action="/alerts/{{data.id}}?_method=PUT" {{else}} action="/alerts" {{/if}} method="post">
           <div class="row">
             <div class="col-12 mt-2 mb-5">
               <div class="d-flex justify-content-between mr-5 mb-3">

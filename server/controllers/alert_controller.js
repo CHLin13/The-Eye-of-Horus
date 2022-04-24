@@ -22,7 +22,7 @@ const alertController = {
     }
   },
 
-  postAlertCreate: async (req, res) => {
+  postAlert: async (req, res) => {
     try {
       await alertModel.postAlert(req);
       return res.redirect(`/alerts`);
@@ -41,15 +41,6 @@ const alertController = {
       return res.render('alert_create', { data, source, receiver, type });
     } catch (error) {
       console.error(`Get alert error: ${error}`);
-    }
-  },
-
-  putAlert: async (req, res) => {
-    try {
-      await alertModel.postAlert(req);
-      return res.redirect(`/alerts`);
-    } catch (error) {
-      console.error(`Put alert error: ${error}`);
     }
   },
 
