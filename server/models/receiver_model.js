@@ -20,8 +20,15 @@ const receiverModel = {
 
   postReceiver: async (req) => {
     const { receiverId } = req.params;
-    const { name, type, emailValue, webhookURL, idValue, tokenValue } =
-      req.body;
+    const {
+      name,
+      description,
+      type,
+      emailValue,
+      webhookURL,
+      idValue,
+      tokenValue,
+    } = req.body;
 
     const detail = [];
     if (emailValue !== '') {
@@ -34,8 +41,14 @@ const receiverModel = {
     } else {
       return { error };
     }
-    const data = { name: name, type: type, detail: JSON.stringify(detail) };
-    
+
+    const data = {
+      name: name,
+      description: description,
+      type: type,
+      detail: JSON.stringify(detail),
+    };
+
     const conn = await pool.getConnection();
 
     try {

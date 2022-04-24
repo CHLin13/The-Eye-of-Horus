@@ -19,10 +19,34 @@ const receiverController = {
     }
   },
 
-  postReceiverCreate: async (req,res) => {
-    await receiverModel.postReceiver(req)
-    return res.redirect('/receivers');
-  }
+  postReceiver: async (req, res) => {
+    try {
+      await receiverModel.postReceiver(req);
+      return res.redirect('/receivers');
+    } catch (error) {
+      console.error(`Post receiver error: ${error}`);
+    }
+  },
+
+  getReceiver: async (req, res) => {
+    try {
+      const { receiverId } = req.params;
+      const [receiver] = await receiverModel.getReceiver(receiverId);
+      return res.render('receiver_create', { receiver });
+    } catch (error) {
+      console.error(`Get receiver error: ${error}`);
+    }
+  },
+
+  deleteReceiver: async (req, res) => {
+    const { receiverId } = req.params;
+    try {
+      await receiverModel.deleteReceiver(receiverId);
+      return res.redirect('/receivers');
+    } catch (error) {
+      console.error(`Delete receiver error: ${error}`);
+    }
+  },
 };
 
 module.exports = receiverController;
