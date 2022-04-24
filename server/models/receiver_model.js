@@ -56,6 +56,20 @@ const receiverModel = {
       conn.release();
     }
   },
+
+  deleteReceiver: async (receiverId) => {
+    const conn = await pool.getConnection();
+    
+    try {
+      const sql = 'DELETE FROM receiver WHERE id = ?';
+      await conn.query(sql, [receiverId]);
+    } catch (error) {
+      await conn.query('ROLLBACK');
+      return { error };
+    } finally {
+      conn.release();
+    }
+  },
 };
 
 module.exports = receiverModel;
