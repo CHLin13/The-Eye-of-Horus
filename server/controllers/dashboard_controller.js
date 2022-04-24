@@ -2,17 +2,15 @@ require('dotenv').config();
 const dashboardModel = require('../models/dashboard_model');
 
 const dashboardController = {
-  getDashboardList: async (req, res) => {
-    return res.render('dashboards');
+  getDashboards: async (req, res) => {
+    const dashboards = await dashboardModel.getDashboards();
+    return res.render('dashboards', { dashboards });
   },
 
-  chartPreview: async (req, res) => {
-    try {
-      const data = await dashboardModel.previewChart(req);
-      return res.status(200).json({ data: data, select: req.body.select });
-    } catch (error) {
-      console.error(`Preview chart error: ${error}`);
-    }
+  deleteDashboard: async (req, res) => {
+    const { dashboardId } = req.params;
+    await dashboardModel.deleteDashboard(dashboardId);
+    return res.redirect('/dashboards');
   },
 
   getDashboardCreate: async (req, res) => {
@@ -25,7 +23,22 @@ const dashboardController = {
     }
   },
 
-  postDashboardCreate: async (req, res) => {
+  chartPreview: async (req, res) => {
+    try {
+      const data = await dashboardModel.previewChart(req);
+      return res.status(200).json({ data: data, select: req.body.select });
+    } catch (error) {
+      console.error(`Preview chart error: ${error}`);
+    }
+  },
+
+  getTypeInstance: async (req, res) => {
+    const { source } = req.body;
+    const result = await dashboardModel.getTypeInstance(source);
+    return res.json(result);
+  },
+
+  postChart: async (req, res) => {
     try {
       await dashboardModel.postChart(req);
       return res.redirect(`/dashboards/${req.params.dashboardId}`);
@@ -34,7 +47,7 @@ const dashboardController = {
     }
   },
 
-  getDashboardDetail: async (req, res) => {
+  getDashboard: async (req, res) => {
     try {
       const dashboardId = req.params.dashboardId;
       const chart = await dashboardModel.getCharts(dashboardId);
@@ -44,7 +57,7 @@ const dashboardController = {
     }
   },
 
-  getChartDetail: async (req, res) => {
+  getChart: async (req, res) => {
     try {
       const { dashboardId, chartId } = req.params;
       const data = await dashboardModel.getChartDetail(dashboardId, chartId);
@@ -53,15 +66,6 @@ const dashboardController = {
       return res.render('create', { data, source, type });
     } catch (error) {
       console.error(`Get chart detail error: ${error}`);
-    }
-  },
-
-  putChart: async (req, res) => {
-    try {
-      await dashboardModel.postChart(req);
-      return res.redirect(`/dashboards/${req.params.dashboardId}`);
-    } catch (error) {
-      console.error(`Put chart error: ${error}`);
     }
   },
 
@@ -77,12 +81,6 @@ const dashboardController = {
 
   getDashboardSetting: async (req, res) => {
     return res.render('dashboard_setting');
-  },
-
-  getTypeInstance: async (req, res) => {
-    const { source } = req.body;
-    const result = await dashboardModel.getTypeInstance(source);
-    return res.json(result);
   },
 };
 

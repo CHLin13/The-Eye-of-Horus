@@ -5,6 +5,26 @@ const Influxdb = require('influx');
 const influx = new Influxdb.InfluxDB(process.env.URL);
 
 const dashboardModel = {
+  getDashboards: async () => {
+    const sql = 'SELECT * FROM dashboard';
+    const [dashboards] = await pool.query(sql);
+    return dashboards;
+  },
+
+  deleteDashboard: async (dashboardId) => {
+    const conn = await pool.getConnection();
+
+    try {
+      const sql = 'DELETE FROM dashboard WHERE id = ?';
+      await conn.query(sql, [dashboardId]);
+    } catch (error) {
+      await conn.query('ROLLBACK');
+      return { error };
+    } finally {
+      conn.release();
+    }
+  },
+
   getSource: async () => {
     const idb = await influx.getDatabaseNames();
     const newDB = idb.slice(1);
@@ -21,6 +41,42 @@ const dashboardModel = {
     }
     source = source.flat();
     return source;
+  },
+
+  getTypeInstance: async (source) => {
+    const database = source.split('/')[0];
+    const measurement = source.split('/')[1];
+    const influxdb = new Influxdb.InfluxDB(process.env.URL + database);
+    const system = await influxdb.query(
+      `SHOW tag values ON ${database} from ${measurement} with key = type_instance`
+    );
+    const typeInstance = [];
+    system.forEach((item) => typeInstance.push(item.value));
+    return typeInstance;
+  },
+
+  previewChart: async (req) => {
+    const { timeRange, source, interval, type, interval_unit, select } =
+      req.body;
+    const database = source.split('/')[0];
+    const measurement = source.split('/')[1];
+    const influxdb = new Influxdb.InfluxDB(process.env.URL + database);
+
+    const intervalN = interval * units.timeUnits[interval_unit];
+    const rangeIntoSec =
+      timeRange.split('-')[0] * units.timeUnits[timeRange.split('-')[1]];
+    const limit = Math.floor(rangeIntoSec / intervalN);
+
+    if (type) {
+      const system = await influxdb.query(
+        `select ${select}(*) from ${measurement} WHERE type_instance = '${type}' GROUP BY time(${interval}${interval_unit}) order by DESC limit ${limit}`
+      );
+      return system;
+    }
+    const system = await influxdb.query(
+      `select ${select}(*) from ${measurement} GROUP BY time(${interval}${interval_unit}) order by DESC limit ${limit}`
+    );
+    return system;
   },
 
   postChart: async (req) => {
@@ -148,42 +204,6 @@ const dashboardModel = {
       chart[i].dashboardId = dashboardId;
     }
     return chart;
-  },
-
-  previewChart: async (req) => {
-    const { timeRange, source, interval, type, interval_unit, select } =
-      req.body;
-    const database = source.split('/')[0];
-    const measurement = source.split('/')[1];
-    const influxdb = new Influxdb.InfluxDB(process.env.URL + database);
-
-    const intervalN = interval * units.timeUnits[interval_unit];
-    const rangeIntoSec =
-      timeRange.split('-')[0] * units.timeUnits[timeRange.split('-')[1]];
-    const limit = Math.floor(rangeIntoSec / intervalN);
-
-    if (type) {
-      const system = await influxdb.query(
-        `select ${select}(*) from ${measurement} WHERE type_instance = '${type}' GROUP BY time(${interval}${interval_unit}) order by DESC limit ${limit}`
-      );
-      return system;
-    }
-    const system = await influxdb.query(
-      `select ${select}(*) from ${measurement} GROUP BY time(${interval}${interval_unit}) order by DESC limit ${limit}`
-    );
-    return system;
-  },
-
-  getTypeInstance: async (source) => {
-    const database = source.split('/')[0];
-    const measurement = source.split('/')[1];
-    const influxdb = new Influxdb.InfluxDB(process.env.URL + database);
-    const system = await influxdb.query(
-      `SHOW tag values ON ${database} from ${measurement} with key = type_instance`
-    );
-    const typeInstance = [];
-    system.forEach((item) => typeInstance.push(item.value));
-    return typeInstance;
   },
 };
 
