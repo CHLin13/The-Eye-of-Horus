@@ -5,9 +5,12 @@ const Influxdb = require('influx');
 const influx = new Influxdb.InfluxDB(process.env.URL);
 
 const dashboardModel = {
-  getDashboards: async () => {
-    const sql = 'SELECT * FROM dashboard';
-    const [dashboards] = await pool.query(sql);
+  getDashboards: async (dashboardId) => {
+    let sql = 'SELECT * FROM dashboard';
+    if (dashboardId) {
+      sql = 'SELECT name FROM dashboard WHERE id = ?';
+    }
+    const [dashboards] = await pool.query(sql, [dashboardId]);
     return dashboards;
   },
 

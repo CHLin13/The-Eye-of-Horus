@@ -50,8 +50,9 @@ const dashboardController = {
   getDashboard: async (req, res) => {
     try {
       const dashboardId = req.params.dashboardId;
+      const [dashboard] = await dashboardModel.getDashboards(dashboardId);
       const chart = await dashboardModel.getCharts(dashboardId);
-      return res.render('dashboard_detail', { chart });
+      return res.render('dashboard_detail', { chart, dashboard });
     } catch (error) {
       console.error(`Get dashboard detail error: ${error}`);
     }
