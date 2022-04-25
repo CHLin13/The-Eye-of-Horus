@@ -4,6 +4,7 @@ const profile = require('./profile_route');
 const login = require('./login_route');
 const alert = require('./alert_route');
 const receiver = require('./receiver_route');
+const apps = require('./app_route');
 
 module.exports = (app) => {
   app.use('/', login);
@@ -12,4 +13,5 @@ module.exports = (app) => {
   app.use('/profile', profile);
   app.use('/alerts', alert);
   app.use('/receivers', receiver);
+  app.use('/app', apps);
 };
