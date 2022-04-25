@@ -24,7 +24,9 @@ DROP TABLE IF EXISTS `alert`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `alert` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `source` varchar(256) NOT NULL,
+  `name` varchar(128) NOT NULL,
+  `source` varchar(128) NOT NULL,
+  `type` varchar(20) DEFAULT NULL,
   `select` varchar(10) NOT NULL,
   `condition` varchar(20) NOT NULL,
   `value` bigint NOT NULL,
@@ -33,10 +35,11 @@ CREATE TABLE `alert` (
   `eval_for_input` varchar(10) NOT NULL,
   `receiver_id` int unsigned NOT NULL,
   `message` varchar(256) NOT NULL,
+  `status` char(1) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `alert_ibfk_1` (`receiver_id`),
   CONSTRAINT `alert_ibfk_1` FOREIGN KEY (`receiver_id`) REFERENCES `receiver` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -45,7 +48,6 @@ CREATE TABLE `alert` (
 
 LOCK TABLES `alert` WRITE;
 /*!40000 ALTER TABLE `alert` DISABLE KEYS */;
-INSERT INTO `alert` VALUES (5,'test/host_name','min','above',12,0,'1m','5m',1,'t1'),(6,'test/host_name','min','above',12,0,'1m','5m',1,'t2'),(7,'test/host_name','min','above',500,0,'1m','5m',1,'tttttt'),(8,'test/host_name','min','above',1,0,'1m','5m',1,'11111'),(9,'test/host_name','min','above',222,0,'1m','5m',1,'2222222'),(10,'test/host_name','min','above',123,0,'1m','5m',1,'adfsaef'),(11,'collectd/disk_io_time','min','above',23,0,'1m','5m',1,'asfsaefsa'),(12,'test/host_name','min','above',123,0,'1m','5m',1,'tttt'),(13,'collectd/disk_io_time','min','above',123,0,'1m','5m',1,'afdsdf'),(14,'collectd/disk_io_time','min','above',123,0,'1m','5m',1,'saf'),(15,'test/host_name','min','1',123,0,'1m','5m',1,'adsfsadf'),(16,'collectd/disk_io_time','min','1',123,0,'1m','5m',1,'asdfsadf'),(17,'test/host_name','min','1',999999,0,'1m','5m',1,'asdfsdfsdf');
 /*!40000 ALTER TABLE `alert` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -58,9 +60,11 @@ DROP TABLE IF EXISTS `chart`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `chart` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(127) DEFAULT NULL,
   `dashboard_id` int unsigned NOT NULL,
   `database` varchar(127) NOT NULL,
   `measurement` varchar(127) NOT NULL,
+  `type` varchar(20) DEFAULT NULL,
   `chart_type` char(20) NOT NULL,
   `time_range` varchar(60) NOT NULL,
   `interval` tinyint unsigned NOT NULL,
@@ -71,7 +75,7 @@ CREATE TABLE `chart` (
   PRIMARY KEY (`id`),
   KEY `chart_ibfk_1` (`dashboard_id`),
   CONSTRAINT `chart_ibfk_1` FOREIGN KEY (`dashboard_id`) REFERENCES `dashboard` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -80,7 +84,7 @@ CREATE TABLE `chart` (
 
 LOCK TABLES `chart` WRITE;
 /*!40000 ALTER TABLE `chart` DISABLE KEYS */;
-INSERT INTO `chart` VALUES (23,1,'collectd','disk_io_time','line','5-m',10,'s','min','{\"title\":\"Server Disk IO\",\"titlefont\":{\"size\":\"20\",\"color\":\"#FFF\"},\"xaxis\":{\"title\":\"Time\",\"titlefont\":{\"size\":\"16\",\"color\":\"#FFF\"},\"tickfont\":{\"size\":\"12\",\"color\":\"#FFF\"}},\"yaxis\":{\"title\":\"IO time\",\"titlefont\":{\"size\":\"16\",\"color\":\"#FFF\"},\"tickfont\":{\"size\":\"12\",\"color\":\"#FFF\"}},\"paper_bgcolor\":\"rgb(52,58,64)\",\"plot_bgcolor\":\"rgba(0,0,0,0)\",\"legend\":{\"font\":{\"color\":\"#FFF\"}}}',10000),(24,1,'collectd','cpu_value','line','5-m',10,'s','min','{\"title\":\"CPU utilization (%)\",\"titlefont\":{\"size\":\"20\",\"color\":\"#FFF\"},\"xaxis\":{\"title\":\"Time\",\"titlefont\":{\"size\":\"16\",\"color\":\"#FFF\"},\"tickfont\":{\"size\":\"12\",\"color\":\"#FFF\"}},\"yaxis\":{\"title\":\"CPU (%)\",\"titlefont\":{\"size\":\"16\",\"color\":\"#FFF\"},\"tickfont\":{\"size\":\"12\",\"color\":\"#FFF\"}},\"paper_bgcolor\":\"rgb(52,58,64)\",\"plot_bgcolor\":\"rgba(0,0,0,0)\",\"legend\":{\"font\":{\"color\":\"#FFF\"}}}',10000),(25,1,'test','host_name','line','5-m',10,'s','min','{\"title\":\"t\",\"titlefont\":{\"size\":\"20\",\"color\":\"#FFF\"},\"xaxis\":{\"title\":\"\",\"titlefont\":{\"size\":\"16\",\"color\":\"#FFF\"},\"tickfont\":{\"size\":\"12\",\"color\":\"#FFF\"}},\"yaxis\":{\"title\":\"\",\"titlefont\":{\"size\":\"16\",\"color\":\"#FFF\"},\"tickfont\":{\"size\":\"12\",\"color\":\"#FFF\"}},\"paper_bgcolor\":\"rgb(52,58,64)\",\"plot_bgcolor\":\"rgba(0,0,0,0)\",\"legend\":{\"font\":{\"color\":\"#FFF\"}}}',10000);
+INSERT INTO `chart` VALUES (14,'ddd',1,'test','host_name',NULL,'line','5-m',10,'s','min','{\"title\":\"ddd\",\"titlefont\":{\"size\":\"20\",\"color\":\"#FFF\"},\"xaxis\":{\"title\":\"\",\"titlefont\":{\"size\":\"16\",\"color\":\"#FFF\"},\"tickfont\":{\"size\":\"12\",\"color\":\"#FFF\"}},\"yaxis\":{\"title\":\"\",\"titlefont\":{\"size\":\"16\",\"color\":\"#FFF\"},\"tickfont\":{\"size\":\"12\",\"color\":\"#FFF\"}},\"paper_bgcolor\":\"rgb(52,58,64)\",\"plot_bgcolor\":\"rgba(0,0,0,0)\",\"legend\":{\"font\":{\"color\":\"#FFF\"}}}',10000);
 /*!40000 ALTER TABLE `chart` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -104,7 +108,7 @@ CREATE TABLE `dashboard` (
 
 LOCK TABLES `dashboard` WRITE;
 /*!40000 ALTER TABLE `dashboard` DISABLE KEYS */;
-INSERT INTO `dashboard` VALUES (1,'test');
+INSERT INTO `dashboard` VALUES (1,'System Insights');
 /*!40000 ALTER TABLE `dashboard` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -171,11 +175,12 @@ DROP TABLE IF EXISTS `receiver`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `receiver` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `title` varchar(128) NOT NULL,
-  `type` varchar(20) NOT NULL,
-  `detail` varchar(256) NOT NULL,
+  `name` varchar(128) NOT NULL,
+  `description` varchar(256) NOT NULL,
+  `type` varchar(10) NOT NULL,
+  `detail` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -184,7 +189,7 @@ CREATE TABLE `receiver` (
 
 LOCK TABLES `receiver` WRITE;
 /*!40000 ALTER TABLE `receiver` DISABLE KEYS */;
-INSERT INTO `receiver` VALUES (1,'test','test','test');
+INSERT INTO `receiver` VALUES (5,'t1','123','Slack','[\"123\"]'),(7,'t3','t3t3t3t3','Email','[\"ttt@ttt.ttt\"]');
 /*!40000 ALTER TABLE `receiver` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -276,4 +281,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-04-21 21:04:56
+-- Dump completed on 2022-04-25 21:16:38
