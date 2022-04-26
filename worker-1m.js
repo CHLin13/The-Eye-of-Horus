@@ -40,104 +40,144 @@ const work = (async function () {
 
     const system = await influxdb.query(influxSql);
     const select = result[i].select + '_value';
-    let count = 0;
 
-    for (let j = 0; j < limit; j++) {
-      switch (Number(result[i].condition)) {
-        case 1:
-          system[j][select] > result[i].value ? count++ : (count += 0);
-          break;
-        case 2:
-          system[j][select] < result[i].value ? count++ : (count += 0);
-          break;
-        case 3:
-          system[j][select] < result[i].value ||
-          system[j][select] > result[i].value_max
-            ? count++
-            : (count += 0);
-          break;
-        case 4:
-          system[j][select] > result[i].value &&
-          system[j][select] < result[i].value_max
-            ? count++
-            : (count += 0);
-          break;
-        case 5:
-          system[j][select] === null ? count++ : (count += 0);
-          break;
+    class checkerMax {
+      constructor(value_max) {
+        this.value_max = value_max;
+      }
+
+      check(threshold) {
+        return threshold > this.value_max ? 1 : 0;
       }
     }
 
+    class checkerMin {
+      constructor(value_min) {
+        this.value_min = value_min;
+      }
+
+      check(threshold) {
+        return threshold < this.value_min;
+      }
+    }
+
+    class checkerOutside {
+      constructor(value_min, value_max) {
+        this.value_min = value_min;
+        this.value_max = value_max;
+      }
+
+      check(threshold) {
+        return threshold < this.value_min || threshold > this.value_max;
+      }
+    }
+
+    class checkerBetween {
+      constructor(value_min, value_max) {
+        this.value_min = value_min;
+        this.value_max = value_max;
+      }
+
+      check(threshold) {
+        return threshold > this.value_min && threshold < this.value_max;
+      }
+    }
+
+    class checkerNoValue {
+      check(threshold) {
+        return threshold === null;
+      }
+    }
+
+    let checker = null;
+    let count = 0;
+    switch (Number(result[i].condition)) {
+      case 1:
+        checker = new checkerMax(result[i].value);
+        break;
+      case 2:
+        checker = new checkerMin(result[i].value);
+        break;
+      case 3:
+        checker = new checkerOutside(result[i].value, result[i].value_max);
+        break;
+      case 4:
+        checker = new checkerBetween(result[i].value, result[i].value_max);
+        break;
+      case 5:
+        checker = new checkerNoValue();
+        break;
+    }
+    for (let j = 0; j < limit; j++) {
+      count += checker.check(system[j][select]);
+    }
+
+    let status = 0;
+    if (count > 0 && count < limit) {
+      status = 1;
+    } else {
+      status = 2;
+    }
+
     const conn = await pool.getConnection();
-    if (count === 0) {
-      try {
-        await conn.query(
-          `UPDATE alert SET status = '0' WHERE id = ${result[i].id}`
-        );
-        return;
-      } catch (error) {
-        await conn.query('ROLLBACK');
-        return { error };
-      } finally {
-        conn.release();
-      }
-    } else if (count !== 0 && count < 5) {
-      try {
-        await conn.query(
-          `UPDATE alert SET status = '2' WHERE id = ${result[i].id}`
-        );
-        return;
-      } catch (error) {
-        await conn.query('ROLLBACK');
-        return { error };
-      } finally {
-        conn.release();
-      }
-    } else if (count === 5) {
-      const detail = JSON.parse(result[i].receiver_detail);
-      const errorMessage = result[i].message;
+    try {
+      await conn.query(`UPDATE alert SET status = ? WHERE id = ?`, [
+        status,
+        result[i].id,
+      ]);
+    } catch (error) {
+      await conn.query('ROLLBACK');
+      return { error };
+    } finally {
+      conn.release();
+    }
 
-      try {
-        await conn.query(
-          `UPDATE alert SET status = '1' WHERE id = ${result[i].id}`
-        );
-      } catch (error) {
-        await conn.query('ROLLBACK');
-        return { error };
-      } finally {
-        conn.release();
-      }
-
-      switch (result[i].receiver_type) {
-        case 'Email':
-          const data = {
-            from: 'The Eye of Horus <TheEyeofHorus@baboo.shop>',
-            to: detail[0],
-            subject: 'Alert from The Eye of Horus',
-            html: `<h1>${errorMessage}</h1>`,
-          };
-          mg.messages().send(data);
-          break;
-        case 'Slack':
-          axios.post(detail[0], {
-            text: errorMessage,
+    const notify = {
+      Email: async function sendEmail(email, message) {
+        const data = {
+          from: 'The Eye of Horus <TheEyeofHorus@baboo.shop>',
+          to: email,
+          subject: 'Alert from The Eye of Horus',
+          html: `<h1>${message}</h1>`,
+        };
+        try {
+          await mg.messages().send(data);
+        } catch (error) {
+          console.log('email error');
+        }
+      },
+      Slack: async function slackNotify(url, message) {
+        try {
+          await axios.post(url, {
+            text: message,
             icon_url: 'https://i.imgur.com/euLn4Te.png',
             username: ' The-Eye-of-Horus',
           });
-          break;
-        case 'Discord':
-          const webhookClient = new WebhookClient({
-            id: detail[0],
-            token: detail[1],
-          });
-
-          webhookClient.send({
-            content: errorMessage,
+        } catch (error) {
+          console.log('slack error');
+        }
+      },
+      Discord: async function discordNotify(id, message, token) {
+        const webhookClient = new WebhookClient({
+          id: id,
+          token: token,
+        });
+        try {
+          await webhookClient.send({
+            content: message,
             username: 'The-Eye-of-Horus',
             avatarURL: 'https://i.imgur.com/euLn4Te.png',
           });
-          break;
-      }
+        } catch (error) {
+          console.log('discord error');
+        }
+      },
+    };
+    const detail = JSON.parse(result[i].receiver_detail);
+    const errorMessage = result[i].message;
+
+    if (count === limit) {
+      notify[result[i].receiver_type](detail[0], errorMessage, detail[1]);
     }
   }
 })();

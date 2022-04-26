@@ -118,9 +118,9 @@
                   <tbody>
                     {{#each alert}}
                       <tr>
-                        {{#ifCond this.status '1'}} <td> <i class="fas fa-circle text-danger"></i>  </td>
+                        {{#ifCond this.status '2'}} <td> <i class="fas fa-circle text-danger"></i>  </td>
                         {{else}}
-                        {{#ifCond this.status '2'}} <td> <i class="fas fa-circle text-warning"></i>  </td>
+                        {{#ifCond this.status '1'}} <td> <i class="fas fa-circle text-warning"></i>  </td>
                         {{else}}
                         <td> <i class="fas fa-circle text-success"></i> </td>{{/ifCond}}{{/ifCond}}
 
