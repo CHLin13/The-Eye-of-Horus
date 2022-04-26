@@ -145,7 +145,7 @@
                   <select class="form-control ml-4" id="type" style="width: 10vw; background: #343A40; color:white" name="type">
                     {{#if data}}
                       {{#each type}}
-                        <option value="{{data.type}}" {{#ifCond this ../data.type }}selected{{/ifCond}}>{{this}}</option>
+                        <option value="{{this}}" {{#ifCond this ../data.type }}selected{{/ifCond}}>{{this}}</option>
                       {{/each}}
                     {{/if}}
                   </select>
@@ -286,7 +286,7 @@
         interval_unit: $('#interval_unit').val(),
         select: $('#select').val()
       });
-
+    
     const chart = $('.chart')[0]
     const result = response.data.data
     const select = response.data.select + '_value'

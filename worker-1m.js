@@ -65,15 +65,38 @@ const work = (async function () {
           system[j][select] === null ? count++ : (count += 0);
           break;
       }
+      const conn = await pool.getConnection();
 
-      if (count === 5) {
+      if (count === 0) {
+        try {
+          await conn.query(
+            `UPDATE alert SET status = '0' WHERE id = ${result[i].id}`
+          );
+        } catch (error) {
+          await conn.query('ROLLBACK');
+          return { error };
+        } finally {
+          conn.release();
+        }
+      } else if (count !== 0 && count < 5) {
+        try {
+          console.log('yellow');
+          await conn.query(
+            `UPDATE alert SET status = '2' WHERE id = ${result[i].id}`
+          );
+        } catch (error) {
+          await conn.query('ROLLBACK');
+          return { error };
+        } finally {
+          conn.release();
+        }
+      } else if (count === 5) {
         const detail = JSON.parse(result[i].receiver_detail);
         const errorMessage = result[i].message;
-        const conn = await pool.getConnection();
 
         try {
           await conn.query(
-            `UPDATE alert SET status = 1 WHERE id = ${result[i].id}`
+            `UPDATE alert SET status = '1' WHERE id = ${result[i].id}`
           );
         } catch (error) {
           await conn.query('ROLLBACK');

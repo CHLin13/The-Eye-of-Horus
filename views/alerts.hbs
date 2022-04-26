@@ -118,9 +118,12 @@
                   <tbody>
                     {{#each alert}}
                       <tr>
-                        {{#ifCond this.status '0'}} <td> <i class="fas fa-circle text-success"></i>  </td>
-                        {{else}} <td> <i class="fas fa-circle text-danger"></i> </td>
-                        {{/ifCond}}
+                        {{#ifCond this.status '1'}} <td> <i class="fas fa-circle text-danger"></i>  </td>
+                        {{else}}
+                        {{#ifCond this.status '2'}} <td> <i class="fas fa-circle text-warning"></i>  </td>
+                        {{else}}
+                        <td> <i class="fas fa-circle text-success"></i> </td>{{/ifCond}}{{/ifCond}}
+
                         <td> {{this.name}}</td>
                         <td class="text-center"><a class="text-secondary" href="/alerts/{{this.id}}"><i class="fas fa-edit"></i></a></td>
                         <td class="d-flex align-items-center justify-content-center"><a data-toggle="modal" data-target="#modal{{this.id}}" style="color:white">X</a></td>
