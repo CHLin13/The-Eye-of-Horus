@@ -72,14 +72,16 @@ const work = (async function () {
         const conn = await pool.getConnection();
 
         try {
-          conn.query(`UPDATE alert SET status = '1' WHERE id = ${result[i].id}`);
+          await conn.query(
+            `UPDATE alert SET status = 1 WHERE id = ${result[i].id}`
+          );
         } catch (error) {
           await conn.query('ROLLBACK');
           return { error };
         } finally {
           conn.release();
         }
-        
+
         switch (result[i].receiver_type) {
           case 'Email':
             const data = {
