@@ -49,6 +49,7 @@ const alertModel = {
       status: 0,
     };
     const redisData = {
+      id: alertId,
       name: name,
       source: source,
       type: type,
@@ -72,6 +73,22 @@ const alertModel = {
         await redis.HSET(eval_every_input, alertId, JSON.stringify(redisData));
       } else {
         const [result] = await conn.query(`INSERT INTO alert SET ?`, [mqlData]);
+        const redisData = {
+          id: result.insertId,
+          name: name,
+          source: source,
+          type: type,
+          select: select,
+          condition: condition,
+          value: Number(value),
+          value_max: Number(value_max),
+          eval_every_input: eval_every_input,
+          eval_for_input: eval_for_input,
+          receiver_id: receiver_id,
+          receiver_type: receiver[0].type,
+          receiver_detail: receiver[0].detail,
+          message: message,
+        };
         redisData.id = result.insertId;
         await redis.HSET(
           eval_every_input,

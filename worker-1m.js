@@ -41,6 +41,7 @@ const work = (async function () {
     const system = await influxdb.query(influxSql);
     const select = result[i].select + '_value';
     let count = 0;
+
     for (let j = 0; j < limit; j++) {
       switch (Number(result[i].condition)) {
         case 1:
@@ -65,76 +66,77 @@ const work = (async function () {
           system[j][select] === null ? count++ : (count += 0);
           break;
       }
-      const conn = await pool.getConnection();
+    }
 
-      if (count === 0) {
-        try {
-          await conn.query(
-            `UPDATE alert SET status = '0' WHERE id = ${result[i].id}`
-          );
-        } catch (error) {
-          await conn.query('ROLLBACK');
-          return { error };
-        } finally {
-          conn.release();
-        }
-      } else if (count !== 0 && count < 5) {
-        try {
-          console.log('yellow');
-          await conn.query(
-            `UPDATE alert SET status = '2' WHERE id = ${result[i].id}`
-          );
-        } catch (error) {
-          await conn.query('ROLLBACK');
-          return { error };
-        } finally {
-          conn.release();
-        }
-      } else if (count === 5) {
-        const detail = JSON.parse(result[i].receiver_detail);
-        const errorMessage = result[i].message;
+    const conn = await pool.getConnection();
+    if (count === 0) {
+      try {
+        await conn.query(
+          `UPDATE alert SET status = '0' WHERE id = ${result[i].id}`
+        );
+        return;
+      } catch (error) {
+        await conn.query('ROLLBACK');
+        return { error };
+      } finally {
+        conn.release();
+      }
+    } else if (count !== 0 && count < 5) {
+      try {
+        await conn.query(
+          `UPDATE alert SET status = '2' WHERE id = ${result[i].id}`
+        );
+        return;
+      } catch (error) {
+        await conn.query('ROLLBACK');
+        return { error };
+      } finally {
+        conn.release();
+      }
+    } else if (count === 5) {
+      const detail = JSON.parse(result[i].receiver_detail);
+      const errorMessage = result[i].message;
 
-        try {
-          await conn.query(
-            `UPDATE alert SET status = '1' WHERE id = ${result[i].id}`
-          );
-        } catch (error) {
-          await conn.query('ROLLBACK');
-          return { error };
-        } finally {
-          conn.release();
-        }
+      try {
+        await conn.query(
+          `UPDATE alert SET status = '1' WHERE id = ${result[i].id}`
+        );
+      } catch (error) {
+        await conn.query('ROLLBACK');
+        return { error };
+      } finally {
+        conn.release();
+      }
 
-        switch (result[i].receiver_type) {
-          case 'Email':
-            const data = {
-              from: 'The Eye of Horus <TheEyeofHorus@baboo.shop>',
-              to: detail[0],
-              subject: 'Alert from The Eye of Horus',
-              html: `<h1>${errorMessage}</h1>`,
-            };
-            mg.messages().send(data);
-            break;
-          case 'Slack':
-            axios.post(detail[0], {
-              text: errorMessage,
-              icon_url: 'https://i.imgur.com/euLn4Te.png',
-              username: ' The-Eye-of-Horus',
-            });
-            break;
-          case 'Discord':
-            const webhookClient = new WebhookClient({
-              id: detail[0],
-              token: detail[1],
-            });
+      switch (result[i].receiver_type) {
+        case 'Email':
+          const data = {
+            from: 'The Eye of Horus <TheEyeofHorus@baboo.shop>',
+            to: detail[0],
+            subject: 'Alert from The Eye of Horus',
+            html: `<h1>${errorMessage}</h1>`,
+          };
+          mg.messages().send(data);
+          break;
+        case 'Slack':
+          axios.post(detail[0], {
+            text: errorMessage,
+            icon_url: 'https://i.imgur.com/euLn4Te.png',
+            username: ' The-Eye-of-Horus',
+          });
+          break;
+        case 'Discord':
+          const webhookClient = new WebhookClient({
+            id: detail[0],
+            token: detail[1],
+          });
 
-            webhookClient.send({
-              content: errorMessage,
-              username: 'The-Eye-of-Horus',
-              avatarURL: 'https://i.imgur.com/euLn4Te.png',
-            });
-            break;
-        }
+          webhookClient.send({
+            content: errorMessage,
+            username: 'The-Eye-of-Horus',
+            avatarURL: 'https://i.imgur.com/euLn4Te.png',
+          });
+          break;
       }
     }
   }
