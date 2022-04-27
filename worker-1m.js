@@ -2,16 +2,15 @@ require('dotenv').config();
 const redis = require('./configs/redisConnect');
 const pool = require('./configs/mysqlConnect');
 const Influxdb = require('influx');
-const axios = require('axios');
-const mailgun = require('mailgun-js');
-const DOMAIN = 'baboo.shop';
 const units = require('./utils/units');
-
-const mg = mailgun({
-  apiKey: process.env.MGAPIKEY,
-  domain: DOMAIN,
-});
-const { WebhookClient } = require('discord.js');
+const notify = require('./utils/notify');
+const {
+  checkerMax,
+  checkerMin,
+  checkerOutside,
+  checkerBetween,
+  checkerNoValue,
+} = require('./utils/checker');
 
 const work = (async function () {
   const response = await redis.hGetAll('1m');
@@ -41,54 +40,6 @@ const work = (async function () {
     const system = await influxdb.query(influxSql);
     const select = result[i].select + '_value';
 
-    class checkerMax {
-      constructor(value_max) {
-        this.value_max = value_max;
-      }
-
-      check(threshold) {
-        return threshold > this.value_max ? 1 : 0;
-      }
-    }
-
-    class checkerMin {
-      constructor(value_min) {
-        this.value_min = value_min;
-      }
-
-      check(threshold) {
-        return threshold < this.value_min;
-      }
-    }
-
-    class checkerOutside {
-      constructor(value_min, value_max) {
-        this.value_min = value_min;
-        this.value_max = value_max;
-      }
-
-      check(threshold) {
-        return threshold < this.value_min || threshold > this.value_max;
-      }
-    }
-
-    class checkerBetween {
-      constructor(value_min, value_max) {
-        this.value_min = value_min;
-        this.value_max = value_max;
-      }
-
-      check(threshold) {
-        return threshold > this.value_min && threshold < this.value_max;
-      }
-    }
-
-    class checkerNoValue {
-      check(threshold) {
-        return threshold === null;
-      }
-    }
-
     let checker = null;
     let count = 0;
     switch (Number(result[i].condition)) {
@@ -108,6 +59,7 @@ const work = (async function () {
         checker = new checkerNoValue();
         break;
     }
+
     for (let j = 0; j < limit; j++) {
       count += checker.check(system[j][select]);
     }
@@ -132,47 +84,6 @@ const work = (async function () {
       conn.release();
     }
 
-    const notify = {
-      Email: async function sendEmail(email, message) {
-        const data = {
-          from: 'The Eye of Horus <TheEyeofHorus@baboo.shop>',
-          to: email,
-          subject: 'Alert from The Eye of Horus',
-          html: `<h1>${message}</h1>`,
-        };
-        try {
-          await mg.messages().send(data);
-        } catch (error) {
-          console.log('email error');
-        }
-      },
-      Slack: async function slackNotify(url, message) {
-        try {
-          await axios.post(url, {
-            text: message,
-            icon_url: 'https://i.imgur.com/euLn4Te.png',
-            username: ' The-Eye-of-Horus',
-          });
-        } catch (error) {
-          console.log('slack error');
-        }
-      },
-      Discord: async function discordNotify(id, message, token) {
-        const webhookClient = new WebhookClient({
-          id: id,
-          token: token,
-        });
-        try {
-          await webhookClient.send({
-            content: message,
-            username: 'The-Eye-of-Horus',
-            avatarURL: 'https://i.imgur.com/euLn4Te.png',
-          });
-        } catch (error) {
-          console.log('discord error');
-        }
-      },
-    };
     const detail = JSON.parse(result[i].receiver_detail);
     const errorMessage = result[i].message;
 
