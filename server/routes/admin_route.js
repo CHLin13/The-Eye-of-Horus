@@ -2,20 +2,21 @@ const express = require('express');
 const router = express.Router();
 
 const roleController = require('../controllers/role_controller');
+const userController = require('../controllers/user_controller');
 
-router.get('/users', async (req, res) => {
-  return res.render('users');
-});
+router.get('/users', userController.getUsers);
+router.get('/users/create', userController.getUserCreate);
 
-router.get('/users/edit/:id', async (req, res) => {
-  return res.render('user_edit');
-});
+router.post('/users', userController.postUser);
+router.get('/users/:userId', userController.getUser);
+router.put('/users/:userId', userController.postUser);
+router.delete('/users/:userId', userController.deleteUser);
 
 router.get('/roles', roleController.getRoles);
 router.get('/roles/create', roleController.getRoleCreate);
 
 router.post('/roles', roleController.postRole);
-router.get('/roles/edit/:roleId', roleController.getRole);
+router.get('/roles/:roleId', roleController.getRole);
 router.put('/roles/:roleId', roleController.postRole);
 router.delete('/roles/:roleId', roleController.deleteRole);
 
