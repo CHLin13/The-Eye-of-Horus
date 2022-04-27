@@ -64,6 +64,13 @@ const work = (async function () {
       count += checker.check(system[j][select]);
     }
 
+    const detail = JSON.parse(result[i].receiver_detail);
+    const errorMessage = result[i].message;
+
+    if (count === limit) {
+      notify[result[i].receiver_type](detail[0], errorMessage, detail[1]);
+    }
+
     let status = 0;
     if (count > 0 && count < limit) {
       status = 1;
@@ -82,13 +89,6 @@ const work = (async function () {
       return { error };
     } finally {
       conn.release();
-    }
-
-    const detail = JSON.parse(result[i].receiver_detail);
-    const errorMessage = result[i].message;
-
-    if (count === limit) {
-      notify[result[i].receiver_type](detail[0], errorMessage, detail[1]);
     }
   }
 })();
