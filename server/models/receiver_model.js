@@ -100,11 +100,20 @@ const receiverModel = {
   },
 
   deleteReceiver: async (receiverId) => {
+    const [alert] = await pool.query(
+      'SELECT distinct alert.id, alert.eval_every_input FROM alert INNER JOIN receiver WHERE alert.receiver_id = ?',
+      [receiverId]
+    );
+
     const conn = await pool.getConnection();
 
     try {
       const sql = 'DELETE FROM receiver WHERE id = ?';
       await conn.query(sql, [receiverId]);
+
+      for (let i = 0; i < alert.length; i++) {
+        await redis.HDEL(alert[i].eval_every_input, alert[i].id);
+      }
     } catch (error) {
       await conn.query('ROLLBACK');
       return { error };
