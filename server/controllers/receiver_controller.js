@@ -1,4 +1,3 @@
-require('dotenv').config();
 const receiverModel = require('../models/receiver_model');
 
 const receiverController = {

@@ -1,4 +1,3 @@
-require('dotenv').config();
 const roleModel = require('../models/role_model');
 
 const roleController = {

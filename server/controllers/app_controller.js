@@ -1,4 +1,3 @@
-require('dotenv').config();
 const appModel = require('../models/app_model');
 
 const appController = {

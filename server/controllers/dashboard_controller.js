@@ -1,4 +1,3 @@
-require('dotenv').config();
 const dashboardModel = require('../models/dashboard_model');
 
 const dashboardController = {
