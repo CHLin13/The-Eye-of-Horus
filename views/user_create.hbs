@@ -90,7 +90,7 @@
           <div class="col-12">
             <div class="card m-auto bg-dark" style="width: 90%;">
               <!-- form start -->
-              <form {{#if user}} action="/admin/users/{{user.id}}?_method=PUT" {{else}} action="/admin/users" {{/if}} method="post">
+              {{!-- <form {{#if user}} action="/admin/users/{{user.id}}?_method=PUT" {{else}} action="/admin/users" {{/if}} method="post"> --}}
                 <div class="card-body">
                    <div class="form-group">
                     <label for="name">Name</label>
@@ -114,12 +114,23 @@
                       <option {{#ifCond user.status '0'}}selected{{/ifCond}} value="0">inactive</option>
                     </select>
                   </div>
+                  <div class="form-group">
+                    <label for="roles">Roles</label>
+                    <div>
+                      {{#each role}}
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="{{this.id}}" value="{{this.name}}">
+                        <label class="form-check-label" for="{{this.id}}">{{this.name}}</label>
+                      </div>
+                      {{/each}}
+                    </div>
+                  </div>
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">
-                  <button type="submit" class="btn btn-primary">Save</button>
+                  <button type="submit" class="btn btn-primary" id="submit">Save</button>
                 </div>
-              </form>
+              {{!-- </form> --}}
             <!-- /.card -->
           </div>
         </div>
@@ -133,4 +144,21 @@
   </footer>
 </div>
 <!-- ./wrapper -->
+
+<script>
+  const submit = $('#submit')
+
+  submit.on('click', async () => {
+    if('{{user}}'){
+    await axios.post('/admin/users/{{user.id}}?_method=PUT',{
+
+    })
+  } else {
+    await axios.post('/admin/users',{
+
+    })
+  }
+  })
+  
+</script>
 </body>

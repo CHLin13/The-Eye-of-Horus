@@ -1,4 +1,5 @@
 const userModel = require('../models/user_model');
+const roleModel = require('../models/role_model');
 const bcrypt = require('bcryptjs');
 const util = require('util');
 
@@ -16,7 +17,8 @@ const userController = {
 
   getUserCreate: async (req, res) => {
     try {
-      return res.render('user_create');
+      const role = await roleModel.getRoles();
+      return res.render('user_create', { role });
     } catch (error) {
       console.error(`Get role create error: ${error}`);
     }
@@ -48,7 +50,8 @@ const userController = {
     try {
       const { userId } = req.params;
       const user = await userModel.getUser(userId);
-      return res.render('user_create', { user });
+      const role = await roleModel.getRoles();
+      return res.render('user_create', { user, role });
     } catch (error) {
       console.error(`Get role error: ${error}`);
     }
