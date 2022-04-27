@@ -401,8 +401,8 @@
   })
   
   sources.change( async () => {
-    const source = sources.val()
-    const response = await axios.post('/dashboards/type_instance',{ source: source })
+    const sourceVal = sources.val()
+    const response = await axios.post('/dashboards/type_instance',{ source: sourceVal })
     let option = ''
     for(let i = 0; i < response.data.length; i++) {
       option += `<option value="${response.data[i]}">${response.data[i]}</option>`
