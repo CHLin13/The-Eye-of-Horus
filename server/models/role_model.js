@@ -39,13 +39,9 @@ const roleModel = {
 
   deleteRole: async (roleId) => {
     const conn = await pool.getConnection();
-
     try {
-      const [[eval_every_input]] = await pool.query(
-        'SELECT eval_every_input FROM alert'
-      );
-      const sql = 'DELETE FROM alert WHERE id = ?';
-      await conn.query(sql, [alertId]);
+      const sql = 'DELETE FROM role WHERE id = ?';
+      await conn.query(sql, [roleId]);
     } catch (error) {
       await conn.query('ROLLBACK');
       return { error };

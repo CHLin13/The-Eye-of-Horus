@@ -44,7 +44,7 @@ const roleController = {
     const { roleId } = req.params;
     try {
       await roleModel.deleteRole(roleId);
-      return res.redirect('/roles');
+      return res.redirect('/admin/roles');
     } catch (error) {
       console.error(`Delete role error: ${error}`);
     }
