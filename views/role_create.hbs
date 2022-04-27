@@ -101,15 +101,15 @@
           <div class="col-12">
             <div class="card m-auto bg-dark " style="width: 90%;">
               <!-- form start -->
-              <form>
+              <form {{#if role}} action="/admin/roles/{{role.id}}?_method=PUT" {{else}} action="/admin/roles" {{/if}} method="post">
                 <div class="card-body">
                   <div class="form-group">
                     <label for="name">Name</label>
-                    <input type="text" class="form-control" id="name" placeholder="Name">
+                    <input type="text" class="form-control" id="name" placeholder="Name" name="name" value="{{role.name}}">
                   </div>
                   <div class="form-group">
                     <label for="description">Description</label>
-                    <input type="text" class="form-control" id="description" placeholder="Description">
+                    <input type="text" class="form-control" id="description" name="description" placeholder="Description" value="{{role.description}}">
                   </div>
                 <!-- /.card-body -->
                 <div class="card-footer">
