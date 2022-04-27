@@ -74,7 +74,7 @@ const work = (async function () {
     let status = 0;
     if (count > 0 && count < limit) {
       status = 1;
-    } else {
+    } else if (count === limit) {
       status = 2;
     }
 
