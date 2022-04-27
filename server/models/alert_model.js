@@ -60,9 +60,9 @@ const alertModel = {
       eval_every_input: eval_every_input,
       eval_for_input: eval_for_input,
       receiver_id: receiver_id,
+      message: message,
       receiver_type: receiver[0].type,
       receiver_detail: receiver[0].detail,
-      message: message,
     };
 
     const conn = await pool.getConnection();
@@ -116,8 +116,12 @@ const alertModel = {
     const conn = await pool.getConnection();
 
     try {
+      const [[eval_every_input]] = await pool.query(
+        'SELECT eval_every_input FROM alert'
+      );
       const sql = 'DELETE FROM alert WHERE id = ?';
       await conn.query(sql, [alertId]);
+      await redis.HDEL(eval_every_input.eval_every_input, alertId);
     } catch (error) {
       await conn.query('ROLLBACK');
       return { error };

@@ -1,4 +1,5 @@
 const pool = require('../../configs/mysqlConnect');
+const redis = require('../../configs/redisConnect');
 
 const receiverModel = {
   getReceiver: async (receiverId) => {
@@ -49,6 +50,11 @@ const receiverModel = {
       detail: JSON.stringify(detail),
     };
 
+    const [alert] = await pool.query(
+      `SELECT * FROM alert WHERE receiver_id = ?`,
+      [receiverId]
+    );
+
     const conn = await pool.getConnection();
 
     try {
@@ -57,6 +63,29 @@ const receiverModel = {
           data,
           receiverId,
         ]);
+        for (let i = 0; i < alert.length; i++) {
+          const redisData = {
+            id: alert[i].id,
+            name: alert[i].name,
+            source: alert[i].source,
+            type: alert[i].type,
+            select: alert[i].select,
+            condition: alert[i].condition,
+            value: Number(alert[i].value),
+            value_max: Number(alert[i].value_max),
+            eval_every_input: alert[i].eval_every_input,
+            eval_for_input: alert[i].eval_for_input,
+            message: alert[i].message,
+            receiver_id: receiverId,
+            receiver_type: type,
+            receiver_detail: detail,
+          };
+          await redis.HSET(
+            alert[i].eval_every_input,
+            alert[i].id,
+            JSON.stringify(redisData)
+          );
+        }
       } else {
         await conn.query(`INSERT INTO receiver SET ?`, [data]);
       }
@@ -72,7 +101,7 @@ const receiverModel = {
 
   deleteReceiver: async (receiverId) => {
     const conn = await pool.getConnection();
-    
+
     try {
       const sql = 'DELETE FROM receiver WHERE id = ?';
       await conn.query(sql, [receiverId]);
