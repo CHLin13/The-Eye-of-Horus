@@ -231,40 +231,60 @@
 <!-- ./wrapper -->
 </body>
 <script>
-  $('#preview').on('click', async (e) => {
-    const response = await axios.post('/dashboards/chart/preview',{ 
-        timeRange: $('#time-range').val(),
-        source: $('#source').val(),
-        type: $('#type').val(),
-        style: '',
-        interval: $('#interval').val(),
-        interval_unit: $('#interval_unit').val(),
-        select: $('#select').val()
-      });
+  const preview = $('#preview')
+  const timeRange = $('#time-range')
+  const source = $('#source')
+  const type = $('#type')
+  const interval = $('#interval')
+  const interval_unit = $('#interval_unit')
+  const selects = $('#select')
+  const charts = $('.chart')
+  const style = $('#style')
+  const title = $('#title')
+  const fontSize = $('#font-size')
+  const xAxisTitle = $('#xAxis-title')
+  const xAxisFontSize = $('#xAxis-font-size')
+  const xAxisTickFontSize = $('#xAxis-tick-font-size')
+  const yAxisTitle = $('#yAxis-title')
+  const yAxisFontSize = $('#yAxis-font-size')
+  const yAxisTickFontSize = $('#yAxis-tick-font-size')
 
-    const chart = $('.chart')[0]
+  preview.on('click', async (e) => {
+    console.log('here')
+    const response = await axios.post('/dashboards/chart/preview',{ 
+        timeRange: timeRange.val(),
+        source: source.val(),
+        type: type.val(),
+        style: '',
+        interval: interval.val(),
+        interval_unit: interval_unit.val(),
+        select: selects.val()
+      });
+    
+    const chart = charts[0]
     const result = response.data.data
     const select = response.data.select + '_value'
 
     const trace = {
       x: result.map(item => item.time),
       y: result.map(item => item[select]),
-      type: $('#style').val(),
+      type: style.val(),
       connectgaps: true
     }
 
+
     var layout = {
-      title:$('#title').val(),
-      titlefont: { size: $('#font-size').val(), color: '#FFF' },
+      title: title.val(),
+      titlefont: { size: fontSize.val(), color: '#FFF' },
         xaxis: {
-          title: $('#xAxis-title').val(),
-          titlefont: { size: $('#xAxis-font-size').val(), color: '#FFF' },
-          tickfont: { size: $('#xAxis-tick-font-size').val(), color: '#FFF'  }
+          title: xAxisTitle.val(),
+          titlefont: { size: xAxisFontSize.val(), color: '#FFF' },
+          tickfont: { size: xAxisTickFontSize.val(), color: '#FFF'  }
         },
         yaxis: {
-          title: $('#yAxis-title').val(),
-          titlefont: { size: $('#yAxis-font-size').val(), color: '#FFF' },
-          tickfont: { size: $('#yAxis-tick-font-size').val(), color: '#FFF' }
+          title: yAxisTitle.val(),
+          titlefont: { size: yAxisFontSize.val(), color: '#FFF' },
+          tickfont: { size: yAxisTickFontSize.val(), color: '#FFF' }
         }, 
       paper_bgcolor: 'rgb(52,58,64)',
       plot_bgcolor: 'rgba(0,0,0,0)',
@@ -274,14 +294,14 @@
     Plotly.newPlot(chart, [trace], layout);
     })
 
-  $('#source').change( async () => {
-    const source = $('#source').val()
-    const response = await axios.post('/dashboards/type_instance',{ source: source })
+  source.change( async () => {
+    const sourceVal = source.val()
+    const response = await axios.post('/dashboards/type_instance',{ source: sourceVal })
     let option = ''
     for(let i = 0; i < response.data.length; i++) {
       option += `<option value="${response.data[i]}">${response.data[i]}</option>`
     }
-    $('#type').html(option)
+    type.html(option)
   })
 
   

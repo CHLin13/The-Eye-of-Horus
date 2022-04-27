@@ -152,50 +152,58 @@
 <!-- ./wrapper -->
 </body>
 <script>
+  const type = $('#type')
+  const email = $('#email')
+  const slack = $('#slack')
+  const discord = $('#discord')
+  const emailValue = $('#emailValue')
+  const webhookURL = $('#webhookURL')
+  const idValue = $('#idValue')
+  const tokenValue = $('#tokenValue')
   
-  if($('#type').val() === 'Email'){
-    $('#email')[0].classList.remove('d-none')
-    $('#slack')[0].classList.add('d-none')
-    $('#discord')[0].classList.add('d-none')
-    $('#webhookURL').val(null)
-    $('#idValue').val(null)
-    $('#tokenValue').val(null)
-  } else if ($('#type').val() === 'Slack'){
-    $('#email')[0].classList.add('d-none')
-    $('#slack')[0].classList.remove('d-none')
-    $('#discord')[0].classList.add('d-none')
-    $('#emailValue').val(null)
-    $('#idValue').val(null)
-    $('#tokenValue').val(null)
-  } else if ($('#type').val() === 'Discord') {
-    $('#email')[0].classList.add('d-none')
-    $('#slack')[0].classList.add('d-none')
-    $('#discord')[0].classList.remove('d-none')
-    $('#emailValue').val(null)
-    $('#webhookURL').val(null)
+  if(type.val() === 'Email'){
+    email[0].classList.remove('d-none')
+    slack[0].classList.add('d-none')
+    discord[0].classList.add('d-none')
+    webhookURL.val(null)
+    idValue.val(null)
+    tokenValue.val(null)
+  } else if (type.val() === 'Slack'){
+    email[0].classList.add('d-none')
+    slack[0].classList.remove('d-none')
+    discord[0].classList.add('d-none')
+    emailValue.val(null)
+    idValue.val(null)
+    tokenValue.val(null)
+  } else if (type.val() === 'Discord') {
+    email[0].classList.add('d-none')
+    slack[0].classList.add('d-none')
+    discord[0].classList.remove('d-none')
+    emailValue.val(null)
+    webhookURL.val(null)
   }
 
-  $('#type').change(()=> {
-    if ($('#type')[0].value === 'Email') {
-      $('#email')[0].classList.remove('d-none')
-      $('#slack')[0].classList.add('d-none')
-      $('#discord')[0].classList.add('d-none')
-      $('#webhookURL').val(null)
-      $('#idValue').val(null)
-      $('#tokenValue').val(null)
-    } else if ($('#type')[0].value === 'Slack') {
-      $('#email')[0].classList.add('d-none')
-      $('#slack')[0].classList.remove('d-none')
-      $('#discord')[0].classList.add('d-none')
-      $('#emailValue').val(null)
-      $('#idValue').val(null)
-      $('#tokenValue').val(null)
-    } else if ($('#type')[0].value === 'Discord') {
-      $('#email')[0].classList.add('d-none')
-      $('#slack')[0].classList.add('d-none')
-      $('#discord')[0].classList.remove('d-none')
-      $('#emailValue').val(null)
-      $('#webhookURL').val(null)
+  type.change(()=> {
+    if (type[0].value === 'Email') {
+      email[0].classList.remove('d-none')
+      slack[0].classList.add('d-none')
+      discord[0].classList.add('d-none')
+      webhookURL.val(null)
+      idValue.val(null)
+      tokenValue.val(null)
+    } else if (type[0].value === 'Slack') {
+      email[0].classList.add('d-none')
+      slack[0].classList.remove('d-none')
+      discord[0].classList.add('d-none')
+      emailValue.val(null)
+      idValue.val(null)
+      tokenValue.val(null)
+    } else if (type[0].value === 'Discord') {
+      email[0].classList.add('d-none')
+      slack[0].classList.add('d-none')
+      discord[0].classList.remove('d-none')
+      emailValue.val(null)
+      webhookURL.val(null)
     }
   })
 </script>
