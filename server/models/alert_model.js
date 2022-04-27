@@ -3,7 +3,8 @@ const redis = require('../../configs/redisConnect');
 
 const alertModel = {
   getAlerts: async () => {
-    const sql = 'SELECT * FROM alert';
+    const sql =
+      'SELECT alert.*, receiver.name AS rName, receiver.type as rType FROM alert inner join receiver ON alert.receiver_id = receiver.id';
     const [alert] = await pool.query(sql);
     return alert;
   },
