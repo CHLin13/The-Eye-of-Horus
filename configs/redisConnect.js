@@ -1,12 +1,31 @@
 require('dotenv').config();
-
 const redis = require('redis');
-const client = redis.createClient({
-  url: `redis://${process.env.REDIS_USER}:${process.env.REDIS_PASSWORD}@${process.env.REDIS_URL}:${process.env.REDIS_PORT}`,
+const { REDIS_USER, REDIS_PASSWORD, REDIS_URL, REDIS_PORT } = process.env;
+
+const redisClient = redis.createClient({
+  url: `redis://${REDIS_USER}:${REDIS_PASSWORD}@${REDIS_URL}:${REDIS_PORT}`,
+  legacyMode: true,
 });
 
-client.on('error', (err) => console.log('Redis Client Error', err));
+redisClient.connect();
 
-client.connect();
+redisClient.ready = false;
 
-module.exports = client;
+redisClient.on('ready', () => {
+  redisClient.ready = true;
+  console.log('Redis is ready');
+});
+
+redisClient.on('error', () => {
+  redisClient.ready = false;
+  if (process.env.NODE_ENV == 'production') {
+    console.log('Error in Redis');
+  }
+});
+
+redisClient.on('end', () => {
+  redisClient.ready = false;
+  console.log('Redis is disconnected');
+});
+
+module.exports = redisClient;
