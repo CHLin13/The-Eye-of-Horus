@@ -27,7 +27,7 @@ const userController = {
   postUser: async (req, res) => {
     try {
       const { userId } = req.params;
-      const { name, email, status, admin } = req.body;
+      const { name, email, admin, status, role } = req.body;
       const passwordDefault = 'aaaa';
       const saltRounds = 10;
       const hashedPassword = await hash(passwordDefault, saltRounds);
@@ -38,6 +38,7 @@ const userController = {
         hashedPassword,
         admin,
         status,
+        role,
         userId
       );
       return res.redirect('/admin/users');

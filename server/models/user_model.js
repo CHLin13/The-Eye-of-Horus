@@ -7,7 +7,8 @@ const userModel = {
     return role;
   },
 
-  postUser: async (name, email, password, admin, status, userId) => {
+  postUser: async (name, email, password, admin, status, role, userId) => {
+    userId = Number(userId);
     const data = {
       name: name,
       email: email,
@@ -28,22 +29,40 @@ const userModel = {
     try {
       if (userId) {
         await conn.query(`UPDATE user SET ? WHERE id = ?`, [update, userId]);
+        await conn.query(`DELETE FROM user_role WHERE user_id = ?`, [userId]);
       } else {
-        await conn.query(`INSERT INTO user SET ?`, [data]);
+        const [user] = await conn.query(`INSERT INTO user SET ?`, [data]);
+        userId = user.insertId;
       }
+
+      const user_role = role.map((role) => {
+        const arr = [];
+        arr.push(userId);
+        arr.push(Number(role));
+        return arr;
+      });
+      if (user_role.length !== 0) {
+        await conn.query(`INSERT INTO user_role (user_id, role_id) VALUES ?`, [
+          user_role,
+        ]);
+      }
+
       await conn.query('COMMIT');
       return true;
     } catch (error) {
       await conn.query('ROLLBACK');
-      return { error };
+      console.log(error);
     } finally {
       conn.release();
     }
   },
 
   getUser: async (userId) => {
-    const sql = 'SELECT * FROM user WHERE id = ?';
+    const sql =
+      'SELECT user.*, user_role.role_id  FROM user LEFT JOIN user_role ON user.id = user_role.user_id WHERE user.id = ?';
     const [data] = await pool.query(sql, [userId]);
+    const role = data.map((data) => data.role_id);
+    data[0].role_id = role;
     return data[0];
   },
 
@@ -54,7 +73,7 @@ const userModel = {
       await conn.query(sql, [userId]);
     } catch (error) {
       await conn.query('ROLLBACK');
-      return { error };
+      console.log(error);
     } finally {
       conn.release();
     }
