@@ -39,7 +39,7 @@ CREATE TABLE `alert` (
   PRIMARY KEY (`id`),
   KEY `alert_ibfk_1` (`receiver_id`),
   CONSTRAINT `alert_ibfk_1` FOREIGN KEY (`receiver_id`) REFERENCES `receiver` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -60,6 +60,7 @@ DROP TABLE IF EXISTS `chart`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `chart` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(127) DEFAULT NULL,
   `dashboard_id` int unsigned NOT NULL,
   `database` varchar(127) NOT NULL,
   `measurement` varchar(127) NOT NULL,
@@ -74,7 +75,7 @@ CREATE TABLE `chart` (
   PRIMARY KEY (`id`),
   KEY `chart_ibfk_1` (`dashboard_id`),
   CONSTRAINT `chart_ibfk_1` FOREIGN KEY (`dashboard_id`) REFERENCES `dashboard` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -83,7 +84,7 @@ CREATE TABLE `chart` (
 
 LOCK TABLES `chart` WRITE;
 /*!40000 ALTER TABLE `chart` DISABLE KEYS */;
-INSERT INTO `chart` VALUES (1,1,'collectd','cpu_value','idle','line','5-m',10,'s','min','{\"title\":\"Idle CPU\",\"titlefont\":{\"size\":\"20\",\"color\":\"#FFF\"},\"xaxis\":{\"title\":\"Time\",\"titlefont\":{\"size\":\"16\",\"color\":\"#FFF\"},\"tickfont\":{\"size\":\"12\",\"color\":\"#FFF\"}},\"yaxis\":{\"title\":\"CPU (%)\",\"titlefont\":{\"size\":\"16\",\"color\":\"#FFF\"},\"tickfont\":{\"size\":\"12\",\"color\":\"#FFF\"}},\"paper_bgcolor\":\"rgb(52,58,64)\",\"plot_bgcolor\":\"rgba(0,0,0,0)\",\"legend\":{\"font\":{\"color\":\"#FFF\"}}}',10000),(2,1,'collectd','memory_value','free','line','30-m',10,'s','min','{\"title\":\"Free memory\",\"titlefont\":{\"size\":\"20\",\"color\":\"#FFF\"},\"xaxis\":{\"title\":\"Time\",\"titlefont\":{\"size\":\"16\",\"color\":\"#FFF\"},\"tickfont\":{\"size\":\"12\",\"color\":\"#FFF\"}},\"yaxis\":{\"title\":\"CPU (%)\",\"titlefont\":{\"size\":\"16\",\"color\":\"#FFF\"},\"tickfont\":{\"size\":\"12\",\"color\":\"#FFF\"}},\"paper_bgcolor\":\"rgb(52,58,64)\",\"plot_bgcolor\":\"rgba(0,0,0,0)\",\"legend\":{\"font\":{\"color\":\"#FFF\"}}}',10000),(3,1,'collectd','disk_read',NULL,'line','5-m',10,'s','min','{\"title\":\"disk_read\",\"titlefont\":{\"size\":\"20\",\"color\":\"#FFF\"},\"xaxis\":{\"title\":\"\",\"titlefont\":{\"size\":\"16\",\"color\":\"#FFF\"},\"tickfont\":{\"size\":\"12\",\"color\":\"#FFF\"}},\"yaxis\":{\"title\":\"\",\"titlefont\":{\"size\":\"16\",\"color\":\"#FFF\"},\"tickfont\":{\"size\":\"12\",\"color\":\"#FFF\"}},\"paper_bgcolor\":\"rgb(52,58,64)\",\"plot_bgcolor\":\"rgba(0,0,0,0)\",\"legend\":{\"font\":{\"color\":\"#FFF\"}}}',10000);
+INSERT INTO `chart` VALUES (14,'cpu',1,'collectd','cpu_value','idle','line','5-m',10,'s','min','{\"title\":\"cpu\",\"titlefont\":{\"size\":\"20\",\"color\":\"#FFF\"},\"xaxis\":{\"title\":\"\",\"titlefont\":{\"size\":\"16\",\"color\":\"#FFF\"},\"tickfont\":{\"size\":\"12\",\"color\":\"#FFF\"}},\"yaxis\":{\"title\":\"\",\"titlefont\":{\"size\":\"16\",\"color\":\"#FFF\"},\"tickfont\":{\"size\":\"12\",\"color\":\"#FFF\"}},\"paper_bgcolor\":\"rgb(52,58,64)\",\"plot_bgcolor\":\"rgba(0,0,0,0)\",\"legend\":{\"font\":{\"color\":\"#FFF\"}}}',10000);
 /*!40000 ALTER TABLE `chart` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -98,7 +99,7 @@ CREATE TABLE `dashboard` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(127) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -107,7 +108,7 @@ CREATE TABLE `dashboard` (
 
 LOCK TABLES `dashboard` WRITE;
 /*!40000 ALTER TABLE `dashboard` DISABLE KEYS */;
-INSERT INTO `dashboard` VALUES (1,'test');
+INSERT INTO `dashboard` VALUES (1,'System Insights'),(2,'test');
 /*!40000 ALTER TABLE `dashboard` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -175,10 +176,11 @@ DROP TABLE IF EXISTS `receiver`;
 CREATE TABLE `receiver` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(128) NOT NULL,
+  `description` varchar(256) NOT NULL,
   `type` varchar(10) NOT NULL,
   `detail` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -187,7 +189,7 @@ CREATE TABLE `receiver` (
 
 LOCK TABLES `receiver` WRITE;
 /*!40000 ALTER TABLE `receiver` DISABLE KEYS */;
-INSERT INTO `receiver` VALUES (5,'CH','Email','[\"lch132502@gmail.com\"]'),(6,'d','Discord','[\"123\",\"aserasdf\"]');
+INSERT INTO `receiver` VALUES (7,'CH','TTTT','Email','[\"ttt@ttt.ttt\"]'),(8,'ttt','ttt','Discord','[\"ttt\",\"tttt\"]');
 /*!40000 ALTER TABLE `receiver` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -203,7 +205,7 @@ CREATE TABLE `role` (
   `name` varchar(255) NOT NULL,
   `description` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -212,6 +214,7 @@ CREATE TABLE `role` (
 
 LOCK TABLES `role` WRITE;
 /*!40000 ALTER TABLE `role` DISABLE KEYS */;
+INSERT INTO `role` VALUES (4,'aa','bbb'),(5,'bbb','bbbb');
 /*!40000 ALTER TABLE `role` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -227,9 +230,10 @@ CREATE TABLE `user` (
   `email` varchar(255) NOT NULL,
   `password` char(60) DEFAULT NULL,
   `name` varchar(127) NOT NULL,
-  `admin` char(1) DEFAULT NULL,
+  `superuser` char(1) DEFAULT NULL,
+  `status` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -238,7 +242,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'aaa@aaa.aaa','aaa','aaa','1');
+INSERT INTO `user` VALUES (19,'a@a.a','$2a$10$himkFfkETjNPRbnoDFAxAOw/o/7YORessuMEspjydQ4PztaV9c9wu','a','1','1'),(21,'t@t.t','$2a$10$HFspHAh6VmYePLBmCf5KjuQ5tMmfiEKe8nU.qhGM3Gkm4zd5RHTKi','t','0','1');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -258,7 +262,7 @@ CREATE TABLE `user_role` (
   KEY `user_role_ibfk_2` (`role_id`),
   CONSTRAINT `user_role_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE,
   CONSTRAINT `user_role_ibfk_2` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -267,6 +271,7 @@ CREATE TABLE `user_role` (
 
 LOCK TABLES `user_role` WRITE;
 /*!40000 ALTER TABLE `user_role` DISABLE KEYS */;
+INSERT INTO `user_role` VALUES (11,19,4),(27,21,5);
 /*!40000 ALTER TABLE `user_role` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -279,4 +284,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-04-24  1:01:45
+-- Dump completed on 2022-04-29 18:30:32
