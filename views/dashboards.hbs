@@ -8,9 +8,9 @@
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
     </ul>
-    <div class="">
+    <div>
       <form action="/logout" method="post">
-        <button type="submit" class="btn btn-info">Log out</button>
+        <button type="submit" class="signout">Sign out</button>
       </form>
     </div>
   </nav>
@@ -63,6 +63,7 @@
               </p>
             </a>
           </li>
+          {{#ifCond localUser.superuser '1'}}
           <li class="nav-item">
             <a href="/admin/users" class="nav-link">
               <i class="nav-icon fa fa-users"></i>
@@ -79,6 +80,7 @@
               </p>
             </a>
           </li>
+          {{/ifCond}}
         </ul>
       </nav>
       <!-- /.sidebar-menu -->
@@ -96,7 +98,7 @@
             <h1 class="text-light">Dashboards</h1>
           </div>
           <div class="d-flex justify-content-end">
-              <a href="/dashboards/setting/1"><button class="btn btn-info" style="background-color: #8C745E; border:none">Add dashboard</button></a>
+              <a href="/dashboards/setting/1"><button class="btn buttons" >Add dashboard</button></a>
           </div>
         </div>
       </div><!-- /.container-fluid -->
@@ -108,15 +110,15 @@
         <!-- /.row -->
         <div class="row">
           <div class="col-12">
-            <div class="card m-auto shadow-lg" style="width: 90%; background-color:rgb(52,58,64)">
+            <div class="card m-auto bg-dark" style="width: 90%;">
               <!-- /.card-header -->
               <div class="card-body table-responsive p-0" style="height: 500px">
-                <table class="table table-head-fixed text-nowrap table table-dark" style="background-color: rgb(52,58,64);">
+                <table class="table table-head-fixed text-nowrap">
                   <thead>
                     <tr>
-                      <th class="col-4" style="background-color: #594842;">Title</th>
-                      <th class="col-2 text-center" style="background-color: #594842;">Setting</th>
-                      <th class="col-1 text-center" style="background-color: #594842;">Delete</th>
+                      <th class="col-4 bg-secondary">Title</th>
+                      <th class="col-2 text-center bg-secondary">Setting</th>
+                      <th class="col-1 text-center bg-secondary">Delete</th>
                     </tr>
                   </thead>
                   <tbody>

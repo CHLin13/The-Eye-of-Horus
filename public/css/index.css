@@ -2,3 +2,16 @@
   background-color:#8C745E;
 }
 
+.signout {
+  color:white;
+  padding: 0;
+  border: none;
+  background: none;
+  margin-right: 1vw;
+}
+
+.buttons {
+  background-color: #8C745E;
+  border:none;
+  color:white
+}
