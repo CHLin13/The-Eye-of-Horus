@@ -107,10 +107,10 @@
                     <input class="form-control" type="email" name="email" id="email" placeholder="example@mail.com" value={{user.email}}>
                   </div>
                   <div class="form-group">
-                    <label for="admin">Admin</label>
-                    <select class="form-control" id="admin" name="admin">
-                      <option {{#ifCond user.admin '0'}}selected{{/ifCond}} value="0">false</option>
-                      <option {{#ifCond user.admin '1'}}selected{{/ifCond}} value="1">true</option>
+                    <label for="superuser">Superuser</label>
+                    <select class="form-control" id="superuser" name="superuser">
+                      <option {{#ifCond user.superuser '0'}}selected{{/ifCond}} value="0">false</option>
+                      <option {{#ifCond user.superuser '1'}}selected{{/ifCond}} value="1">true</option>
                     </select>
                   </div>
                   <div class="form-group">
@@ -154,7 +154,7 @@
   const submit = $('#submit')
   const name = $('#name')
   const email = $('#email')
-  const admin = $('#admin')
+  const superuser = $('#superuser')
   const status = $('#status')
   const check = $('.checkbox')
 
@@ -181,7 +181,7 @@
     await axios.post(URL,{
       name: name.val(), 
       email: email.val(),
-      admin: admin.val(),
+      superuser: superuser.val(),
       status: status.val(),
       role: checked
     })
