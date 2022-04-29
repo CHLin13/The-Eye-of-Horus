@@ -1,14 +1,12 @@
 const express = require('express');
 const router = express.Router();
 
+const profileController = require('../controllers/profile_controller');
 const { authenticated } = require('../../utils/auth');
 
-router.get('/', async (req, res) => {
-  return res.render('profile');
-});
+router.get('/', authenticated, profileController.getProfile);
+router.get('/:userId', authenticated, profileController.getProfileEdit);
 
-router.get('/:id', async (req, res) => {
-  return res.render('profile_edit');
-});
+router.post('/:userId', authenticated, profileController.postProfile);
 
 module.exports = router;

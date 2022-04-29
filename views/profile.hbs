@@ -93,10 +93,25 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <div class="container-fluid">
-        <div class="mx-5 d-flex justify-content-between">
+        <div class="mx-5 d-flex justify-content-between align-items-center">
           <div>
             <h1>Profile</h1>
           </div>
+          {{#if success_messages}}
+            <div class="alert alert-success" role="alert" style="opacity: 0.5;">
+              {{success_messages}}
+            </div>
+          {{/if}}
+          {{#if error_messages}}
+            <div class="alert alert-danger" role="alert" style="opacity: 0.5;">
+              {{error_messages}}
+            </div>
+          {{/if}}
+          {{#if error}}
+            <div class="alert alert-danger" role="alert" style="opacity: 0.5;">
+              {{error}}
+            </div>
+          {{/if}}
           <div class="d-flex justify-content-end">
               <a href="/profile/{{localUser.id}}"><button class="btn buttons">Edit</button></a>
           </div>
