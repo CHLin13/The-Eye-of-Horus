@@ -14,14 +14,13 @@ const loginController = {
   },
 
   login: async (req, res) => {
-    req.flash('success_messages', 'Login success');
     return res.redirect('/dashboards');
   },
 
   logout: (req, res) => {
     req.flash('success_messages', 'Logout success');
     req.logout();
-    return res.redirect('/');
+    return res.redirect('/login');
   },
 };
 
