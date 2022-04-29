@@ -7,20 +7,20 @@ const userModel = {
     return role;
   },
 
-  postUser: async (name, email, password, admin, status, role, userId) => {
+  postUser: async (name, email, password, superuser, status, role, userId) => {
     userId = Number(userId);
     const data = {
       name: name,
       email: email,
       password: password,
-      admin: admin,
+      superuser: superuser,
       status: status,
     };
 
     const update = {
       name: name,
       email: email,
-      admin: admin,
+      superuser: superuser,
       status: status,
     };
 

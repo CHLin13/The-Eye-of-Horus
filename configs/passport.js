@@ -27,7 +27,7 @@ passport.serializeUser((user, done) => {
 });
 
 passport.deserializeUser(async (id, done) => {
-  const sql = `SELECT user.id, user.email, user.name, user.admin ,user.status, role.id as role_id FROM user 
+  const sql = `SELECT user.id, user.email, user.name, user.superuser ,user.status, role.id as role_id FROM user 
     INNER JOIN user_role ON user.id = user_role.user_id
     INNER JOIN role ON user_role.role_id = role.id 
     WHERE user.id = ?`;

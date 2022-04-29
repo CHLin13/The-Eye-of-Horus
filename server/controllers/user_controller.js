@@ -27,7 +27,7 @@ const userController = {
   postUser: async (req, res) => {
     try {
       const { userId } = req.params;
-      const { name, email, admin, status, role } = req.body;
+      const { name, email, superuser, status, role } = req.body;
       const passwordDefault = 'aaaa';
       const saltRounds = 10;
       const hashedPassword = await hash(passwordDefault, saltRounds);
@@ -36,7 +36,7 @@ const userController = {
         name,
         email,
         hashedPassword,
-        admin,
+        superuser,
         status,
         role,
         userId

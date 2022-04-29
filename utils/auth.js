@@ -9,10 +9,10 @@ const auth = {
   authenticatedAdmin: (req, res, next) => {
     if (req.isAuthenticated(req)) {
       const user = JSON.parse(req.user);
-      if (user.admin === '1') {
+      if (user.superuser === '1') {
         return next();
       }
-      return res.redirect('/users');
+      return res.redirect('/dashboards');
     }
     return res.redirect('/');
   },
