@@ -2,14 +2,15 @@ const express = require('express');
 const router = express.Router();
 
 const alertController = require('../controllers/alert_controller');
+const { authenticated } = require('../../utils/auth');
 
-router.get('/', alertController.getAlertList);
+router.get('/', authenticated, alertController.getAlertList);
 
-router.get('/create', alertController.getAlertCreate);
+router.get('/create', authenticated, alertController.getAlertCreate);
 
-router.post('/', alertController.postAlert);
-router.get('/:alertId', alertController.getAlert);
-router.put('/:alertId', alertController.postAlert);
-router.delete('/:alertId', alertController.deleteAlert);
+router.post('/', authenticated, alertController.postAlert);
+router.get('/:alertId', authenticated, alertController.getAlert);
+router.put('/:alertId', authenticated, alertController.postAlert);
+router.delete('/:alertId', authenticated, alertController.deleteAlert);
 
 module.exports = router;
