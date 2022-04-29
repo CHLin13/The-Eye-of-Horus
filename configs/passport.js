@@ -28,18 +28,22 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser(async (id, done) => {
   const sql = `SELECT user.id, user.email, user.name, user.superuser ,user.status, role.id as role_id, role.name as role_name FROM user 
-    INNER JOIN user_role ON user.id = user_role.user_id
-    INNER JOIN role ON user_role.role_id = role.id 
+    LEFT JOIN user_role ON user.id = user_role.user_id
+    LEFT JOIN role ON user_role.role_id = role.id 
     WHERE user.id = ?`;
   const [user] = await pool.query(sql, [id]);
-  const role_id = [];
-  const role_name = [];
-  user.forEach((user) => {
-    role_id.push(user.role_id);
-    role_name.push(user.role_name);
-  });
-  user[0].role_id = role_id;
-  user[0].role_name = role_name;
+  
+  if(user[0].role_id !== null){
+    const role_id = [];
+    const role_name = [];
+    user.forEach((user) => {
+      role_id.push(user.role_id);
+      role_name.push(user.role_name);
+    });
+    user[0].role_id = role_id;
+    user[0].role_name = role_name;
+  }
+
   const userJSON = JSON.stringify(user[0]);
   return done(null, userJSON);
 });
