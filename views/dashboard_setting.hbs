@@ -138,6 +138,17 @@
                     </tr>
                   </thead>
                   <tbody id="tbody">
+                    {{#each permission}}
+                      <tr class='roles {{this.role_id}}'>
+                        <td>{{this.role_name}}</td>
+                        <td class="text-center {{this.permission}}">
+                          {{#ifCond this.permission '1'}}Viewer{{/ifCond}}
+                          {{#ifCond this.permission '2'}}Editor{{/ifCond}}
+                          {{#ifCond this.permission '3'}}Admin{{/ifCond}}
+                        </td>
+                        <td class="d-flex align-items-center justify-content-center"><i class="fas fa-minus-circle text-danger remove"></i></td>
+                    </tr>
+                    {{/each}}
                   </tbody>
                 </table>
               </div>
@@ -192,6 +203,10 @@
   
   save.on('click', async () => {
     const name = $('#name').val()
+    if(!name){
+      toastr.error('Name is required')
+      return
+    }
     const roleIdArr = []
     const permissionArr = []
     for(let i = 0; i < tbody.children().length; i++){
@@ -204,6 +219,8 @@
       URL = `/dashboards/{{dashboardId}}?_method=PUT`
     }
     await axios.post(URL,{name: name ,dashboardId: '{{dashboardId}}', roleId: roleIdArr, permission: permissionArr})
+    location.href = "/"
   })
+
 </script>
 </body>
