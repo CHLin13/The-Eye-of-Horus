@@ -257,6 +257,14 @@ const dashboardModel = {
     }
     return chart;
   },
+
+  getPermission: async (dashboardId) => {
+    const sql = `SELECT dashboard_permission.*, role.name as role_name FROM dashboard_permission 
+    INNER JOIN role ON dashboard_permission.role_id = role.id 
+    WHERE dashboard_permission.dashboard_id = ? `;
+    const [permission] = await pool.query(sql, [dashboardId]);
+    return permission;
+  },
 };
 
 module.exports = dashboardModel;
