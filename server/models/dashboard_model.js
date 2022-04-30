@@ -194,9 +194,9 @@ const dashboardModel = {
     const conn = await pool.getConnection();
     try {
       if (chartId) {
-        conn.query(`UPDATE chart SET ? WHERE id = ?`, [data, chartId]);
+        await conn.query(`UPDATE chart SET ? WHERE id = ?`, [data, chartId]);
       } else {
-        conn.query(`INSERT INTO chart SET ?`, [data]);
+        await conn.query(`INSERT INTO chart SET ?`, [data]);
       }
       await conn.query('COMMIT');
       return true;
@@ -211,7 +211,7 @@ const dashboardModel = {
   deleteChart: async (chartId) => {
     const conn = await pool.getConnection();
     try {
-      conn.query(`DELETE FROM chart WHERE id = ?`, [chartId]);
+      await conn.query(`DELETE FROM chart WHERE id = ?`, [chartId]);
       await conn.query('COMMIT');
       return true;
     } catch (error) {
