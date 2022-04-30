@@ -7,6 +7,8 @@ const { authenticated } = require('../../utils/auth');
 router.get('/', authenticated, dashboardController.getDashboards);
 
 router.get('/create', authenticated, dashboardController.getDashboardSetting);
+router.post('/', authenticated, dashboardController.postDashboard);
+router.put('/:dashboardId', authenticated, dashboardController.postDashboard);
 router.get('/:dashboardId', authenticated, dashboardController.getDashboard);
 router.delete(
   '/:dashboardId',

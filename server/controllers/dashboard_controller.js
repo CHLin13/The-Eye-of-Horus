@@ -115,6 +115,16 @@ const dashboardController = {
       console.error(`Get dashboard create error: ${error}`);
     }
   },
+
+  postDashboard: async (req, res) => {
+    try {
+      const { dashboardId } = req.params;
+      const { name, roleId, permission } = req.body;
+      await dashboardModel.postDashboard(name, roleId, permission, dashboardId);
+      return res.redirect('/dashboards');
+    } catch (error) {
+      console.error(`Post dashboard error: ${error}`);
+    }
   },
 };
 
