@@ -107,10 +107,14 @@ const dashboardController = {
     try {
       const { dashboardId } = req.params;
       const role = await roleModel.getRoles();
-      const [dashboard] = await dashboardModel.getDashboard(dashboardId);
-      // const permission = await dashboardModel.getPermission(dashboardId);
-      // console.log(permission)
-      return res.render('dashboard_setting', { role, dashboard, dashboardId });
+      const [dashboard] = await dashboardModel.getDashboard(dashboardId);   
+      const permission = await dashboardModel.getPermission(dashboardId);
+      return res.render('dashboard_setting', {
+        role,
+        dashboard,
+        dashboardId,
+        permission,
+      });
     } catch (error) {
       console.error(`Get dashboard create error: ${error}`);
     }
