@@ -5,6 +5,8 @@ const dashboardController = require('../controllers/dashboard_controller');
 const { authenticated } = require('../../utils/auth');
 
 router.get('/', authenticated, dashboardController.getDashboards);
+
+router.get('/create', authenticated, dashboardController.getDashboardSetting);
 router.get('/:dashboardId', authenticated, dashboardController.getDashboard);
 router.delete(
   '/:dashboardId',
@@ -22,7 +24,7 @@ router.post(
 router.get(
   '/:dashboardId/create',
   authenticated,
-  dashboardController.getDashboardCreate
+  dashboardController.getChartCreate
 );
 
 router.get(
@@ -47,7 +49,7 @@ router.post(
 );
 
 router.get(
-  '/setting/:id',
+  '/:dashboardId/setting/',
   authenticated,
   dashboardController.getDashboardSetting
 );

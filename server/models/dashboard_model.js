@@ -7,9 +7,12 @@ const influx = new Influxdb.InfluxDB(process.env.URL);
 const dashboardModel = {
   getDashboards: async (dashboardId) => {
     let sql = 'SELECT * FROM dashboard';
-    if (dashboardId) {
-      sql = 'SELECT name FROM dashboard WHERE id = ?';
-    }
+    const [dashboards] = await pool.query(sql);
+    return dashboards;
+  },
+
+  getDashboard: async (dashboardId) => {
+    let sql = 'SELECT name FROM dashboard WHERE id = ?';
     const [dashboards] = await pool.query(sql, [dashboardId]);
     return dashboards;
   },
@@ -201,7 +204,7 @@ const dashboardModel = {
 
   getCharts: async (dashboardId) => {
     const chartQuery =
-      'select * from dashboard inner join chart on chart.dashboard_id = dashboard.id where chart.dashboard_id = ?';
+      'SELECT * FROM dashboard INNER JOIN chart ON chart.dashboard_id = dashboard.id WHERE chart.dashboard_id = ?';
     const [chart] = await pool.query(chartQuery, dashboardId);
     for (let i = 0; i < chart.length; i++) {
       chart[i].dashboardId = dashboardId;

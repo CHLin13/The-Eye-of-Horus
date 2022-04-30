@@ -1,4 +1,5 @@
 const dashboardModel = require('../models/dashboard_model');
+const roleModel = require('../models/role_model');
 
 const dashboardController = {
   getDashboards: async (req, res) => {
@@ -12,7 +13,7 @@ const dashboardController = {
     return res.redirect('/dashboards');
   },
 
-  getDashboardCreate: async (req, res) => {
+  getChartCreate: async (req, res) => {
     try {
       const dashboardId = req.params.dashboardId;
       const source = await dashboardModel.getSource();
@@ -80,7 +81,17 @@ const dashboardController = {
   },
 
   getDashboardSetting: async (req, res) => {
-    return res.render('dashboard_setting');
+    try {
+      const { dashboardId } = req.params;
+      const role = await roleModel.getRoles();
+      const [dashboard] = await dashboardModel.getDashboard(dashboardId);
+      // const permission = await dashboardModel.getPermission(dashboardId);
+      // console.log(permission)
+      return res.render('dashboard_setting', { role, dashboard, dashboardId });
+    } catch (error) {
+      console.error(`Get dashboard create error: ${error}`);
+    }
+  },
   },
 };
 
