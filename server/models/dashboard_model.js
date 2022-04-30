@@ -12,9 +12,55 @@ const dashboardModel = {
   },
 
   getDashboard: async (dashboardId) => {
-    let sql = 'SELECT name FROM dashboard WHERE id = ?';
-    const [dashboards] = await pool.query(sql, [dashboardId]);
-    return dashboards;
+    let sql =
+      'SELECT dashboard.* , dashboard_permission.role_id,dashboard_permission.permission FROM dashboard INNER JOIN dashboard_permission ON dashboard.id = dashboard_permission.dashboard_id WHERE dashboard.id = ?';
+    const [dashboard] = await pool.query(sql, [dashboardId]);
+    if (dashboard.length > 0) {
+      dashboard[0].role_id = dashboard.map((dashboard) => dashboard.role_id);
+      dashboard[0].permission = dashboard.map(
+        (dashboard) => dashboard.permission
+      );
+    }
+    return dashboard;
+  },
+
+  postDashboard: async (name, roleId, permission, dashboardId) => {
+    const conn = await pool.getConnection();
+    try {
+      if (dashboardId) {
+        await conn.query(`UPDATE dashboard SET ? WHERE id = ?`, [
+          { name: name },
+          dashboardId,
+        ]);
+        await conn.query(
+          `DELETE FROM dashboard_permission WHERE dashboard_id = ?`,
+          [dashboardId]
+        );
+      } else {
+        const [dashboard] = await conn.query(`INSERT INTO dashboard SET ?`, [
+          { name: name },
+        ]);
+        dashboardId = dashboard.insertId;
+      }
+
+      roleId = roleId.map((id) => [Number(id)]);
+      for (let i = 0; i, i < roleId.length; i++) {
+        roleId[i].unshift(dashboardId);
+        roleId[i].push(permission[i]);
+      }
+
+      await conn.query(
+        `INSERT INTO dashboard_permission(dashboard_id, role_id, permission) VALUES ?`,
+        [roleId]
+      );
+      await conn.query('COMMIT');
+      return true;
+    } catch (error) {
+      await conn.query('ROLLBACK');
+      return { error };
+    } finally {
+      conn.release();
+    }
   },
 
   deleteDashboard: async (dashboardId) => {
