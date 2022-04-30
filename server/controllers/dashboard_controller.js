@@ -3,8 +3,12 @@ const roleModel = require('../models/role_model');
 
 const dashboardController = {
   getDashboards: async (req, res) => {
-    const dashboards = await dashboardModel.getDashboards();
-    return res.render('dashboards', { dashboards });
+    try {
+      const dashboards = await dashboardModel.getDashboards();
+      return res.render('dashboards', { dashboards });
+    } catch (error) {
+      console.error(`Get dashboards error: ${error}`);
+    }
   },
 
   deleteDashboard: async (req, res) => {
