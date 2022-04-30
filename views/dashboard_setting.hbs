@@ -93,17 +93,9 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <div class="container-fluid">
-        <div class="mx-5 d-flex justify-content-between">
-          <div class="d-flex align-items-center">
-            {{!-- {{#if name}} --}}
-              <form action="/dashboard/edit/:id" method="post" class="d-flex align-items-center">
-                <input class="form-control" type="text" placeholder="dashboard" name="dashboard" value="dashboard_A">
-                <button type="submit" class="btn btn-outline-info btn-sm ml-3" style="border: none;"><i class="fas fa-save"></i></button>
-              </form>
-            {{!-- {{else}}
-              <h1>New dashboard</h1><a class="text-info ml-3" href="/dashboards/setting/1"><i class="fas fa-edit"></i></a>
-            {{/if}} --}}
-          </div>
+        <div class="mx-5 d-flex justify-content-between">     
+            <input class="form-control" type="text" name="name" id="name" placeholder="New Dashboard" value="{{dashboard.name}}" style="background: #343A40; color:white; width:20vw" required>
+            <button id="save" class="btn btn-info">SAVE</button>    
         </div>
       </div><!-- /.container-fluid -->
     </section>
@@ -114,46 +106,26 @@
         <!-- /.row -->
         <div class="row">
           <div class="col-12">
-            {{#if role}}
-              <form action="/role/create" method="POST" class="ml-5" >
-                <div class="row m-3">
+                <div class="row my-4  ml-5">
                   <div class="col-4">
-                    <div class="form-control" type="text" placeholder="role" name="role" value="{{role.name}}"></div>
+                    <select class="form-control" type="text" placeholder="role" id="role" name="role" style="background: #343A40; color:white">
+                      {{#each role}}
+                      <option value="{{this.id}}">{{this.name}}</option>
+                      {{/each}}
+                    </select>
                   </div>
                   <div class="col-4">
-                  <select class="form-control" id="permission">
-                    <option>Viewer</option>
-                    <option>Editor</option>
-                    <option>Admin</option>
+                  <select class="form-control" id="permission" style="background: #343A40; color:white">
+                    <option value="1">Viewer</option>
+                    <option value="2">Editor</option>
+                    <option value="3">Admin</option>
                   </select>
                   </div>
                   <div class="col-4">
-                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="submit" class="btn btn-primary" id="add">Add</button>
                   </div>
                 </div>
-              </form>
-            {{else}}
-              <form action="/role/create" method="POST" class="ml-5">
-                          <div class="row m-3">
-                            <div class="col-4">
-                              <select class="form-control" id="role">
-                                <option>role_A</option>
-                                <option>role_B</option>
-                              </select>
-                            </div>
-                            <div class="col-4">
-                            <select class="form-control" id="permission">
-                              <option>Viewer</option>
-                              <option>Editor</option>
-                              <option>Admin</option>
-                            </select>
-                            </div>
-                            <div class="col-4">
-                              <button type="submit" class="btn btn-primary">Add</button>
-                            </div>
-                          </div>
-              </form>
-            {{/if}}
+            
             <div class="card m-auto" style="width: 90%;">
               <!-- /.card-header -->
               <div class="card-body table-responsive p-0 bg-dark" style="height: 400px">
@@ -162,18 +134,10 @@
                     <tr>
                       <th class="col-3 bg-secondary">Role</th>
                       <th class="col-3 text-center bg-secondary">Permission</th>
-                      <th class="col-2 text-center bg-secondary">Edit</th>
                       <th class="col-2 text-center bg-secondary">Delete</th>
                     </tr>
                   </thead>
-                  <tbody>
-                     <tr>
-                        <td>role_A</td>
-                        <td class="text-center">Viewer</td>
-                        <td class="text-center"><a class="text-success" href="/dashboard/:id/role/edit"><i class="fas fa-edit"></i></a></td>
-                        <td class="d-flex align-items-center justify-content-center"><a href="/" class="text-danger font-weight-bold"> <i class="fas fa-minus-circle"></i></a>
-                        </td>
-                    </tr>
+                  <tbody id="tbody">
                   </tbody>
                 </table>
               </div>
@@ -192,4 +156,54 @@
   </footer>
 </div>
 <!-- ./wrapper -->
+
+<script>
+  const tbody = $('#tbody')
+  const add = $('#add')
+  const remove = $('.remove')
+  const save = $('#save')
+
+  add.on('click',() => {
+    const permission = $('#permission')
+    const roleId = $('#role').val()
+    const roles = $('.roles')
+    const roleName = $('#role option:selected').text()
+    const permissionText = $('#permission option:selected').text()
+
+    for(let i = 0; i < roles.length; i++){
+      if(roles[i].classList[1] === roleId) {
+        toastr.error('Role already exist')
+        return
+      } 
+    }
+    tbody.append(`<tr class='roles ${roleId}'>
+                  <td>${roleName}</td>
+                  <td class="text-center ${permission.val()}">${permissionText}</td>
+                  <td class="d-flex align-items-center justify-content-center"><i class="fas fa-minus-circle text-danger remove"></i></td>
+              </tr>`)
+    toastr.success('Add successfully')
+  })
+
+  tbody.on('click',(e) => {
+    if(e.target.classList[3] === 'remove'){
+      e.target.parentElement.parentElement.remove() 
+    }
+  })
+  
+  save.on('click', async () => {
+    const name = $('#name').val()
+    const roleIdArr = []
+    const permissionArr = []
+    for(let i = 0; i < tbody.children().length; i++){
+      roleIdArr.push(tbody.children()[i].classList[1])
+      permissionArr.push(tbody.children()[i].childNodes[3].classList[1])
+    }
+
+    let URL = '/dashboards'
+    if('{{dashboardId}}'){
+      URL = `/dashboards/{{dashboardId}}?_method=PUT`
+    }
+    await axios.post(URL,{name: name ,dashboardId: '{{dashboardId}}', roleId: roleIdArr, permission: permissionArr})
+  })
+</script>
 </body>
