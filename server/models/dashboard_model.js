@@ -5,10 +5,23 @@ const Influxdb = require('influx');
 const influx = new Influxdb.InfluxDB(process.env.URL);
 
 const dashboardModel = {
-  getDashboards: async (dashboardId) => {
-    let sql = 'SELECT * FROM dashboard';
+  getDashboards: async () => {
+    let sql =
+      'SELECT DISTINCT dashboard.* , dashboard_permission.role_id, dashboard_permission.permission FROM dashboard LEFT JOIN dashboard_permission ON dashboard.id = dashboard_permission.dashboard_id';
     const [dashboards] = await pool.query(sql);
-    return dashboards;
+    let dashboardsArr = dashboards.reduce((accu, curr) => {
+      if (!accu[curr.id]) {
+        accu[curr.id] = curr;
+        accu[curr.id].role_id = [curr.role_id];
+        accu[curr.id].permission = [curr.permission];
+      } else {
+        accu[curr.id].role_id.push(curr.role_id);
+        accu[curr.id].permission.push(curr.permission);
+      }
+      return accu;
+    }, []);
+    dashboardsArr = dashboardsArr.filter(item => {return item !== null})
+    return dashboardsArr;
   },
 
   getDashboard: async (dashboardId) => {
