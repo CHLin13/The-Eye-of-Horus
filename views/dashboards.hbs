@@ -98,7 +98,9 @@
             <h1 class="text-light">Dashboards</h1>
           </div>
           <div class="d-flex justify-content-end">
+            {{#ifCond localUser.superuser '1'}}
               <a href="/dashboards/create"><button class="btn buttons" >Add dashboard</button></a>
+              {{/ifCond}}
           </div>
         </div>
       </div><!-- /.container-fluid -->
