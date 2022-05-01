@@ -107,32 +107,32 @@
                     <label for="description">Description</label>
                     <input class="form-control" type="text" name="description" placeholder="Description" value={{receiver.description}}>
                   </div>
-                  <div class="form-group mb-5">
+                  <div class="form-group mb-3 mt-5">
                     <label for="status">Type</label>
                     <select class="form-control" id="type" name="type">
-                      <option value="Email" {{#ifCond receiver.type 'Email'}}selected{{/ifCond}}>Email</option>
-                      <option value="Slack" {{#ifCond receiver.type 'Slack'}}selected{{/ifCond}}>Slack</option>
                       <option value="Discord" {{#ifCond receiver.type 'Discord'}}selected{{/ifCond}}>Discord</option>
+                      <option value="Slack" {{#ifCond receiver.type 'Slack'}}selected{{/ifCond}}>Slack</option>
+                      <option value="Email" {{#ifCond receiver.type 'Email'}}selected{{/ifCond}}>Email</option>
                     </select>
                   </div>
                   <div class="form-group row" id="email">
-                    <label for="emailValue" class="col-sm-2 col-form-label">Email</label>
+                    <label for="emailValue" class="col-sm-2 col-form-label text-center">Email</label>
                     <div class="col-sm-10">
                       <input type="email" class="form-control" id="emailValue" name="emailValue" placeholder="email@example.com" value="{{receiver.d0}}" >
                     </div>
                   </div>
                   <div class="form-group row d-none" id="slack">
-                    <label for="webhookURL" class="col-sm-2 col-form-label">webhookURL</label>
+                    <label for="webhookURL" class="col-sm-2 col-form-label text-center">webhookURL</label>
                     <div class="col-sm-10">
                       <input type="text" class="form-control" id="webhookURL" name="webhookURL" placeholder="https://hooks.slack.com/services/TT3AGEYIK2D/Y63KL5ATFR8/BtVtp3SDGCVSersdjliE" value="{{receiver.d0}}">
                     </div>
                   </div>
                   <div class="form-group row d-none" id="discord">
-                      <label for="idValue" class="col-sm-2 col-form-label mb-3">ID</label>
+                      <label for="idValue" class="col-sm-2 col-form-label mb-3 text-center">ID</label>
                       <div class="col-sm-10">
                         <input type="text" class="form-control" id="idValue" name="idValue" placeholder="123456789012345678" value="{{receiver.d0}}">
                       </div>
-                      <label for="tokenValue" class="col-sm-2 col-form-label">Token</label>
+                      <label for="tokenValue" class="col-sm-2 col-form-label text-center">Token</label>
                       <div class="col-sm-10">
                         <input type="text" class="form-control" id="tokenValue" name="tokenValue" placeholder="fHcPlAKpqNpd_LlqrfxHdksegWAdfwdgersda4PB5ANU9ssfrgarxxhRWg7X" value="{{receiver.d1}}">
                       </div>
