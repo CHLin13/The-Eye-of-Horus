@@ -39,7 +39,7 @@ CREATE TABLE `alert` (
   PRIMARY KEY (`id`),
   KEY `alert_ibfk_1` (`receiver_id`),
   CONSTRAINT `alert_ibfk_1` FOREIGN KEY (`receiver_id`) REFERENCES `receiver` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -75,7 +75,7 @@ CREATE TABLE `chart` (
   PRIMARY KEY (`id`),
   KEY `chart_ibfk_1` (`dashboard_id`),
   CONSTRAINT `chart_ibfk_1` FOREIGN KEY (`dashboard_id`) REFERENCES `dashboard` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -84,7 +84,7 @@ CREATE TABLE `chart` (
 
 LOCK TABLES `chart` WRITE;
 /*!40000 ALTER TABLE `chart` DISABLE KEYS */;
-INSERT INTO `chart` VALUES (14,'ddd',1,'test','host_name',NULL,'line','5-m',10,'s','min','{\"title\":\"ddd\",\"titlefont\":{\"size\":\"20\",\"color\":\"#FFF\"},\"xaxis\":{\"title\":\"\",\"titlefont\":{\"size\":\"16\",\"color\":\"#FFF\"},\"tickfont\":{\"size\":\"12\",\"color\":\"#FFF\"}},\"yaxis\":{\"title\":\"\",\"titlefont\":{\"size\":\"16\",\"color\":\"#FFF\"},\"tickfont\":{\"size\":\"12\",\"color\":\"#FFF\"}},\"paper_bgcolor\":\"rgb(52,58,64)\",\"plot_bgcolor\":\"rgba(0,0,0,0)\",\"legend\":{\"font\":{\"color\":\"#FFF\"}}}',10000);
+INSERT INTO `chart` VALUES (17,'User CPU',1,'collectd','cpu_value','user','line','5-m',10,'s','min','{\"title\":\"User CPU\",\"titlefont\":{\"size\":\"20\",\"color\":\"#FFF\"},\"xaxis\":{\"title\":\"\",\"titlefont\":{\"size\":\"16\",\"color\":\"#FFF\"},\"tickfont\":{\"size\":\"12\",\"color\":\"#FFF\"}},\"yaxis\":{\"title\":\"\",\"titlefont\":{\"size\":\"16\",\"color\":\"#FFF\"},\"tickfont\":{\"size\":\"12\",\"color\":\"#FFF\"}},\"paper_bgcolor\":\"rgb(52,58,64)\",\"plot_bgcolor\":\"rgba(0,0,0,0)\",\"legend\":{\"font\":{\"color\":\"#FFF\"}}}',10000),(18,'t2',24,'test','host_name',NULL,'line','5-m',10,'s','min','{\"title\":\"t2\",\"titlefont\":{\"size\":\"20\",\"color\":\"#FFF\"},\"xaxis\":{\"title\":\"\",\"titlefont\":{\"size\":\"16\",\"color\":\"#FFF\"},\"tickfont\":{\"size\":\"12\",\"color\":\"#FFF\"}},\"yaxis\":{\"title\":\"\",\"titlefont\":{\"size\":\"16\",\"color\":\"#FFF\"},\"tickfont\":{\"size\":\"12\",\"color\":\"#FFF\"}},\"paper_bgcolor\":\"rgb(52,58,64)\",\"plot_bgcolor\":\"rgba(0,0,0,0)\",\"legend\":{\"font\":{\"color\":\"#FFF\"}}}',10000),(19,'t1',26,'test','host_name',NULL,'line','5-m',10,'s','min','{\"title\":\"t1\",\"titlefont\":{\"size\":\"20\",\"color\":\"#FFF\"},\"xaxis\":{\"title\":\"\",\"titlefont\":{\"size\":\"16\",\"color\":\"#FFF\"},\"tickfont\":{\"size\":\"12\",\"color\":\"#FFF\"}},\"yaxis\":{\"title\":\"\",\"titlefont\":{\"size\":\"16\",\"color\":\"#FFF\"},\"tickfont\":{\"size\":\"12\",\"color\":\"#FFF\"}},\"paper_bgcolor\":\"rgb(52,58,64)\",\"plot_bgcolor\":\"rgba(0,0,0,0)\",\"legend\":{\"font\":{\"color\":\"#FFF\"}}}',10000),(20,'t33',25,'test','host_name',NULL,'line','5-m',10,'s','min','{\"title\":\"t33\",\"titlefont\":{\"size\":\"20\",\"color\":\"#FFF\"},\"xaxis\":{\"title\":\"\",\"titlefont\":{\"size\":\"16\",\"color\":\"#FFF\"},\"tickfont\":{\"size\":\"12\",\"color\":\"#FFF\"}},\"yaxis\":{\"title\":\"\",\"titlefont\":{\"size\":\"16\",\"color\":\"#FFF\"},\"tickfont\":{\"size\":\"12\",\"color\":\"#FFF\"}},\"paper_bgcolor\":\"rgb(52,58,64)\",\"plot_bgcolor\":\"rgba(0,0,0,0)\",\"legend\":{\"font\":{\"color\":\"#FFF\"}}}',10000);
 /*!40000 ALTER TABLE `chart` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -99,7 +99,7 @@ CREATE TABLE `dashboard` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(127) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -108,7 +108,7 @@ CREATE TABLE `dashboard` (
 
 LOCK TABLES `dashboard` WRITE;
 /*!40000 ALTER TABLE `dashboard` DISABLE KEYS */;
-INSERT INTO `dashboard` VALUES (1,'System Insights');
+INSERT INTO `dashboard` VALUES (1,'System Insights'),(24,'test2'),(25,'t3'),(26,'t4');
 /*!40000 ALTER TABLE `dashboard` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -123,15 +123,13 @@ CREATE TABLE `dashboard_permission` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `dashboard_id` int unsigned NOT NULL,
   `role_id` smallint unsigned NOT NULL,
-  `permission_id` smallint unsigned NOT NULL,
+  `permission` char(1) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `dashboard_permission_ibfk_1` (`dashboard_id`),
   KEY `dashboard_permission_ibfk_2` (`role_id`),
-  KEY `dashboard_permission_ibfk_3` (`permission_id`),
   CONSTRAINT `dashboard_permission_ibfk_1` FOREIGN KEY (`dashboard_id`) REFERENCES `dashboard` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `dashboard_permission_ibfk_2` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `dashboard_permission_ibfk_3` FOREIGN KEY (`permission_id`) REFERENCES `permission` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  CONSTRAINT `dashboard_permission_ibfk_2` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -140,30 +138,8 @@ CREATE TABLE `dashboard_permission` (
 
 LOCK TABLES `dashboard_permission` WRITE;
 /*!40000 ALTER TABLE `dashboard_permission` DISABLE KEYS */;
+INSERT INTO `dashboard_permission` VALUES (23,24,5,'1'),(24,24,4,'3'),(25,1,5,'2'),(26,1,4,'3'),(54,26,4,'1');
 /*!40000 ALTER TABLE `dashboard_permission` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `permission`
---
-
-DROP TABLE IF EXISTS `permission`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `permission` (
-  `id` smallint unsigned NOT NULL AUTO_INCREMENT,
-  `permission` varchar(127) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `permission`
---
-
-LOCK TABLES `permission` WRITE;
-/*!40000 ALTER TABLE `permission` DISABLE KEYS */;
-/*!40000 ALTER TABLE `permission` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -180,7 +156,7 @@ CREATE TABLE `receiver` (
   `type` varchar(10) NOT NULL,
   `detail` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -189,7 +165,7 @@ CREATE TABLE `receiver` (
 
 LOCK TABLES `receiver` WRITE;
 /*!40000 ALTER TABLE `receiver` DISABLE KEYS */;
-INSERT INTO `receiver` VALUES (5,'t1','123','Slack','[\"123\"]'),(7,'t3','t3t3t3t3','Email','[\"ttt@ttt.ttt\"]');
+INSERT INTO `receiver` VALUES (7,'CH','TTTT','Email','[\"ttt@ttt.ttt\"]'),(8,'ttt','ttt','Discord','[\"ttt\",\"tttt\"]');
 /*!40000 ALTER TABLE `receiver` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -205,7 +181,7 @@ CREATE TABLE `role` (
   `name` varchar(255) NOT NULL,
   `description` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -214,6 +190,7 @@ CREATE TABLE `role` (
 
 LOCK TABLES `role` WRITE;
 /*!40000 ALTER TABLE `role` DISABLE KEYS */;
+INSERT INTO `role` VALUES (4,'aa','bbb'),(5,'bbb','bbbb');
 /*!40000 ALTER TABLE `role` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -229,9 +206,10 @@ CREATE TABLE `user` (
   `email` varchar(255) NOT NULL,
   `password` char(60) DEFAULT NULL,
   `name` varchar(127) NOT NULL,
-  `admin` char(1) DEFAULT NULL,
+  `superuser` char(1) DEFAULT NULL,
+  `status` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -240,7 +218,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'aaa@aaa.aaa','aaa','aaa','1');
+INSERT INTO `user` VALUES (19,'a@a.a','$2a$10$I6M.Sb8bsJnvRgoEG3HuD.vlSmIA4cacvO8quy1/x12tQvWufifeG','aaa','1','1'),(21,'t@t.t','$2a$10$HFspHAh6VmYePLBmCf5KjuQ5tMmfiEKe8nU.qhGM3Gkm4zd5RHTKi','t','0','1');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -260,7 +238,7 @@ CREATE TABLE `user_role` (
   KEY `user_role_ibfk_2` (`role_id`),
   CONSTRAINT `user_role_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE,
   CONSTRAINT `user_role_ibfk_2` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=67 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -269,6 +247,7 @@ CREATE TABLE `user_role` (
 
 LOCK TABLES `user_role` WRITE;
 /*!40000 ALTER TABLE `user_role` DISABLE KEYS */;
+INSERT INTO `user_role` VALUES (61,19,4),(62,19,5),(65,21,4),(66,21,5);
 /*!40000 ALTER TABLE `user_role` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -281,4 +260,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-04-25 21:16:38
+-- Dump completed on 2022-05-01 10:17:07
