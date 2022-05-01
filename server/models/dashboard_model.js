@@ -26,14 +26,14 @@ const dashboardModel = {
 
   getDashboard: async (dashboardId) => {
     let sql =
-      'SELECT dashboard.* , dashboard_permission.role_id,dashboard_permission.permission FROM dashboard INNER JOIN dashboard_permission ON dashboard.id = dashboard_permission.dashboard_id WHERE dashboard.id = ?';
+      'SELECT dashboard.* , dashboard_permission.role_id,dashboard_permission.permission FROM dashboard LEFT JOIN dashboard_permission ON dashboard.id = dashboard_permission.dashboard_id WHERE dashboard.id = ?';
     const [dashboard] = await pool.query(sql, [dashboardId]);
     if (dashboard.length > 0) {
       dashboard[0].role_id = dashboard.map((dashboard) => dashboard.role_id);
       dashboard[0].permission = dashboard.map(
         (dashboard) => dashboard.permission
       );
-    }
+    } 
     return dashboard;
   },
 

@@ -5,6 +5,24 @@ const dashboardController = {
   getDashboards: async (req, res) => {
     try {
       const dashboards = await dashboardModel.getDashboards();
+
+      for (let i = 0; i < dashboards.length; i++) {
+        const obj = {};
+
+        for (let j = 0; j < dashboards[i].role_id.length; j++) {
+          obj[dashboards[i].role_id[j]] = dashboards[i].permission[j];
+        }
+
+        const userRole = res.locals.localUser.role_id;
+        for (let k = 0; k < userRole.length; k++) {
+          if (obj[userRole[k]] === '3') {
+            dashboards[i].adminPermission = true;
+            dashboards[i].viewPermission = true;
+          } else if (obj[userRole[k]] === '1' || obj[userRole[k]] === '2') {
+            dashboards[i].viewPermission = true;
+          }
+        }
+      }
       return res.render('dashboards', { dashboards });
     } catch (error) {
       console.error(`Get dashboards error: ${error}`);
@@ -111,7 +129,7 @@ const dashboardController = {
     try {
       const { dashboardId } = req.params;
       const role = await roleModel.getRoles();
-      const [dashboard] = await dashboardModel.getDashboard(dashboardId);   
+      const [dashboard] = await dashboardModel.getDashboard(dashboardId);
       const permission = await dashboardModel.getPermission(dashboardId);
       return res.render('dashboard_setting', {
         role,
