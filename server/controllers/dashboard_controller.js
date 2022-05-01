@@ -14,12 +14,14 @@ const dashboardController = {
         }
 
         const userRole = res.locals.localUser.role_id;
-        for (let k = 0; k < userRole.length; k++) {
-          if (obj[userRole[k]] === '3') {
-            dashboards[i].adminPermission = true;
-            dashboards[i].viewPermission = true;
-          } else if (obj[userRole[k]] === '1' || obj[userRole[k]] === '2') {
-            dashboards[i].viewPermission = true;
+        if (userRole){
+          for (let k = 0; k < userRole.length; k++) {
+            if (obj[userRole[k]] === '3') {
+              dashboards[i].adminPermission = true;
+              dashboards[i].viewPermission = true;
+            } else if (obj[userRole[k]] === '1' || obj[userRole[k]] === '2') {
+              dashboards[i].viewPermission = true;
+            }
           }
         }
       }
