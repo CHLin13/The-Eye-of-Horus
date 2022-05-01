@@ -17,7 +17,7 @@
   <!-- /.navbar -->
 
   <!-- Main Sidebar Container -->
-  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+  <aside class="main-sidebar sidebar-dark-primary elevation-2">
     <!-- Brand Logo -->
     <a href="/" class="brand-link">
       <img src="https://i.imgur.com/euLn4Te.png" alt=" Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
@@ -133,7 +133,7 @@
                         <td> <i class="fas fa-circle text-success"></i> </td>{{/ifCond}}{{/ifCond}}
 
                         <td> {{this.name}}</td>
-                        <td> {{this.rName}}/{{this.rType}}</td>
+                        <td> {{this.rName}} / {{this.rType}}</td>
                         <td class="text-center"><a class="text-secondary" href="/alerts/{{this.id}}"><i class="fas fa-edit"></i></a></td>
                         <td class="text-center"><a data-toggle="modal" data-target="#modal{{this.id}}" style="color:white">X</a></td>
                         <div class="modal fade" id="modal{{this.id}}">

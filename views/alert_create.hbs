@@ -17,7 +17,7 @@
   <!-- /.navbar -->
 
   <!-- Main Sidebar Container -->
-  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+  <aside class="main-sidebar sidebar-dark-primary elevation-2">
     <!-- Brand Logo -->
     <a href="/" class="brand-link">
       <img src="https://i.imgur.com/euLn4Te.png" alt=" Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
@@ -252,11 +252,11 @@
                     <select class="form-control" id="receiver_id" style="width: 20vw; background: #343A40; color:white;" name="receiver_id">
                     {{#if data}}
                       {{#each receiver}}
-                        <option value="{{this.id}}" {{#ifCond this.id ../data.receiver_id }}selected{{/ifCond}}>{{this.name}}/{{this.type}}</option>
+                        <option value="{{this.id}}" {{#ifCond this.id ../data.receiver_id }}selected{{/ifCond}}>{{this.name}} / {{this.type}}</option>
                       {{/each}}
                     {{else}}
                       {{#each receiver}}
-                        <option value="{{this.id}}">{{this.name}}/{{this.type}}</option>
+                        <option value="{{this.id}}">{{this.name}} / {{this.type}}</option>
                       {{/each}}
                     {{/if}}
                   </select>
