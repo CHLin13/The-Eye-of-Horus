@@ -14,7 +14,7 @@ const dashboardController = {
         }
 
         const userRole = res.locals.localUser.role_id;
-        if (userRole){
+        if (userRole) {
           for (let k = 0; k < userRole.length; k++) {
             if (obj[userRole[k]] === '3') {
               dashboards[i].adminPermission = true;
@@ -81,19 +81,20 @@ const dashboardController = {
       const userRole = res.locals.localUser.role_id;
       const obj = {};
 
-      for (let i = 0; i < dashboard.role_id.length; i++) {
-        obj[dashboard.role_id[i]] = dashboard.permission[i];
-      }
+      if (userRole) {
+        for (let i = 0; i < dashboard.role_id.length; i++) {
+          obj[dashboard.role_id[i]] = dashboard.permission[i];
+        }
 
-      for (let i = 0; i < userRole.length; i++) {
-        if (obj[userRole[i]] === '3') {
-          editPermission = true;
-          adminPermission = true;
-        } else if (obj[userRole[i]] === '2') {
-          editPermission = true;
+        for (let i = 0; i < userRole.length; i++) {
+          if (obj[userRole[i]] === '3') {
+            editPermission = true;
+            adminPermission = true;
+          } else if (obj[userRole[i]] === '2') {
+            editPermission = true;
+          }
         }
       }
-
       return res.render('dashboard_detail', {
         chart,
         dashboard,
