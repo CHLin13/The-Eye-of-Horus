@@ -100,7 +100,7 @@
           <div class="d-flex justify-content-end">
             {{#ifCond localUser.superuser '1'}}
               <a href="/dashboards/create"><button class="btn buttons" >Add dashboard</button></a>
-              {{/ifCond}}
+            {{/ifCond}}
           </div>
         </div>
       </div><!-- /.container-fluid -->
@@ -124,33 +124,71 @@
                     </tr>
                   </thead>
                   <tbody>
-                    {{#each dashboards}}
-                    <tr>
-                      <td> <a href="/dashboards/{{this.id}}" style="color: #C2C7D0">{{this.name}}</a> </td>
-                      <td class="text-center"><a class="text-secondary" href="/dashboards/{{this.id}}/setting"><i class="fas fa-cog"></i></a></td>
-                      <td class="d-flex align-items-center justify-content-center text-danger"><a data-toggle="modal" data-target="#modal{{this.id}}"><i class="fas fa-minus-circle"></i></a></td>
-                        <div class="modal fade" id="modal{{this.id}}">
-                          <div class="modal-dialog">
-                          <div class="modal-content bg-light">
-                            <div class="modal-header">
-                              <h4 class="modal-title">Delete Message</h4>
-                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                              </button>
+                    {{#ifCond localUser.superuser '1'}}
+                     {{#each dashboards}}
+                        <tr>
+                          <td> <a href="/dashboards/{{this.id}}" style="color: #C2C7D0">{{this.name}}</a> </td>
+                          <td class="text-center"><a class="text-secondary" href="/dashboards/{{this.id}}/setting"><i class="fas fa-cog"></i></a></td>
+                          <td class="d-flex align-items-center justify-content-center text-danger"><a data-toggle="modal" data-target="#modal{{this.id}}"><i class="fas fa-minus-circle"></i></a></td>
+                            <div class="modal fade" id="modal{{this.id}}">
+                              <div class="modal-dialog">
+                              <div class="modal-content bg-light">
+                                <div class="modal-header">
+                                  <h4 class="modal-title">Delete Message</h4>
+                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                  </button>
+                                </div>
+                                <div class="modal-body">
+                                  <p>You are going to delete {{this.name}}</p>
+                                </div>
+                                <div class="modal-footer justify-content-between">
+                                  <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
+                                  <form action="/dashboards/{{this.id}}?_method=DELETE" method="post" style="position:absolute; right: 5%">
+                                    <button type="submit" class="btn btn-outline-light" >Confirm</button>
+                                  </form>
+                                </div>
                             </div>
-                            <div class="modal-body">
-                              <p>You are going to delete {{this.name}}</p>
                             </div>
-                            <div class="modal-footer justify-content-between">
-                              <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
-                              <form action="/dashboards/{{this.id}}?_method=DELETE" method="post" style="position:absolute; right: 5%">
-                                <button type="submit" class="btn btn-outline-light" >Confirm</button>
-                              </form>
-                            </div>
-                        </div>
-                        </div>
-                    </tr>
-                    {{/each}}
+                        </tr>
+                      {{/each}}
+                    {{else}}
+                      {{#each dashboards}}
+                        {{#if this.viewPermission}}
+                          <tr>
+                            <td> <a href="/dashboards/{{this.id}}" style="color: #C2C7D0">{{this.name}}</a> </td>
+                            {{#if this.adminPermission}}
+                            <td class="text-center"><a class="text-secondary" href="/dashboards/{{this.id}}/setting"><i class="fas fa-cog"></i></a></td>
+                            <td class="d-flex align-items-center justify-content-center text-danger"><a data-toggle="modal" data-target="#modal{{this.id}}"><i class="fas fa-minus-circle"></i></a></td>
+                              <div class="modal fade" id="modal{{this.id}}">
+                                <div class="modal-dialog">
+                                <div class="modal-content bg-light">
+                                  <div class="modal-header">
+                                    <h4 class="modal-title">Delete Message</h4>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                      <span aria-hidden="true">&times;</span>
+                                    </button>
+                                  </div>
+                                  <div class="modal-body">
+                                    <p>You are going to delete {{this.name}}</p>
+                                  </div>
+                                  <div class="modal-footer justify-content-between">
+                                    <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
+                                    <form action="/dashboards/{{this.id}}?_method=DELETE" method="post" style="position:absolute; right: 5%">
+                                      <button type="submit" class="btn btn-outline-light" >Confirm</button>
+                                    </form>
+                                  </div>
+                              </div>
+                              </div>
+                              {{else}}
+                            <td></td>
+                            <td></td>
+                            {{/if}}
+                        {{/if}}
+                      {{/each}}
+                            
+                          </tr>
+                    {{/ifCond}}
                   </tbody>
                 </table>
               </div>
