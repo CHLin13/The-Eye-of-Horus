@@ -4,14 +4,34 @@
 
 .signout {
   color:white;
-  padding: 0;
+  padding: 0 10px;
   border: none;
   background: none;
   margin-right: 1vw;
+  color:rgba(240, 239, 239, 0.908);
+  border: 1px solid rgba(211, 211, 211, 0.708);
+  border-radius:10px;
 }
 
 .buttons {
   background-color: #8C745E;
   border:none;
   color:white
+}
+
+#profile {
+  text-decoration: none;
+  color:rgba(240, 239, 239, 0.908);
+  border: 1px solid rgba(211, 211, 211, 0.708);
+  border-radius:10px;
+  height:25px;
+  margin-right: 15px;
+  padding: 0px 15px 10px 15px;
+}
+
+.hi {
+  color: white;
+  font-size:1.2rem;
+  padding-bottom:5px;
+  margin-right: 15px;
 }
