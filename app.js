@@ -8,7 +8,8 @@ const RedisStore = require('connect-redis')(session);
 const handlebarsHelpers = require('./utils/handlebars-helpers');
 const redisClient = require('./configs/redisConnect');
 const passport = require('./configs/passport');
-const port = process.env.PORT;
+const redis = require('./configs/redisConnect')
+const { PORT, SESSION_SECRET, NODE_ENV } = process.env;
 
 const app = express();
 
@@ -27,11 +28,12 @@ app.use(flash());
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 
+//session
 try {
   app.use(
     session({
       store: new RedisStore({ client: redisClient }),
-      secret: process.env.SESSION_SECRET,
+      secret: SESSION_SECRET,
       resave: false,
       saveUninitialized: false,
       cookie: {
@@ -45,6 +47,7 @@ try {
   console.log(error);
 }
 
+//passport
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -52,15 +55,31 @@ app.use((req, res, next) => {
   if (req.user) {
     res.locals.localUser = JSON.parse(req.user);
   }
-
   res.locals.success_messages = req.flash('success_messages');
   res.locals.error_messages = req.flash('error_messages');
   res.locals.error = req.flash('error');
   next();
 });
 
+//routes
 require('./server/routes/index_route')(app);
 
-app.listen(port, () => {
-  console.log(`App is running on port ${port}`);
+// Page not found
+app.use(function (req, res, next) {
+  res.status(404).render('404');
 });
+
+// Error handling
+app.use(function (err, req, res, next) {
+  console.log(err);
+  res.status(500).send('Internal Server Error');
+});
+
+if (NODE_ENV != 'production') {
+  app.listen(PORT, async () => {
+    redis.connect().catch(() => {
+      console.log('redis connect fail');
+    });
+    console.log(`Listening on port: ${PORT}`);
+  });
+}

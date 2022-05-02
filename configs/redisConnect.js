@@ -7,8 +7,6 @@ const redisClient = redis.createClient({
   legacyMode: true,
 });
 
-redisClient.connect();
-
 redisClient.ready = false;
 
 redisClient.on('ready', () => {
