@@ -81,6 +81,10 @@ const dashboardController = {
       const userRole = res.locals.localUser.role_id;
       const obj = {};
 
+      if (!dashboard) {
+        return res.status(301).redirect('/dashboards');
+      }
+
       if (userRole) {
         for (let i = 0; i < dashboard.role_id.length; i++) {
           obj[dashboard.role_id[i]] = dashboard.permission[i];

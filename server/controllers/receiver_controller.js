@@ -31,7 +31,11 @@ const receiverController = {
     try {
       const { receiverId } = req.params;
       const [receiver] = await receiverModel.getReceiver(receiverId);
-      return res.render('receiver_create', { receiver });
+      console.log(receiver);
+      if (!receiver) {
+        return res.status(301).redirect('/receivers');
+      }
+      return res.status(200).render('receiver_create', { receiver });
     } catch (error) {
       console.error(`Get receiver error: ${error}`);
     }

@@ -33,7 +33,10 @@ const roleController = {
     try {
       const { roleId } = req.params;
       const role = await roleModel.getRole(roleId);
-      return res.render('role_create', { role });
+      if (!role) {
+        return res.status(301).redirect('/admin/roles');
+      }
+      return res.status(200).render('role_create', { role });
     } catch (error) {
       console.error(`Get role error: ${error}`);
     }

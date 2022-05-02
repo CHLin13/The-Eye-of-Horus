@@ -16,7 +16,7 @@ const profileController = {
 
   postProfile: async (req, res) => {
     try {
-      const { userId } = req.params;
+      const userId = JSON.parse(req.user).id;
       const { name, email, password, newPassword } = req.body;
       let tempPassword = password;
       if (newPassword) {
