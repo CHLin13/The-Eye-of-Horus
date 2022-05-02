@@ -8,6 +8,7 @@ const alertController = {
       return res.status(200).render('alerts', { alert });
     } catch (error) {
       console.error(`Get alert list error: ${error}`);
+      return res.status(500).send('Internal Server Error');
     }
   },
 
@@ -18,6 +19,7 @@ const alertController = {
       return res.status(200).render('alert_create', { source, receiver });
     } catch (error) {
       console.error(`Get alert create error: ${error}`);
+      return res.status(500).send('Internal Server Error');
     }
   },
 
@@ -27,6 +29,7 @@ const alertController = {
       return res.status(301).redirect(`/alerts`);
     } catch (error) {
       console.error(`Post alert create error: ${error}`);
+      return res.status(500).send('Internal Server Error');
     }
   },
 
@@ -42,6 +45,7 @@ const alertController = {
         .render('alert_create', { data, source, receiver, type });
     } catch (error) {
       console.error(`Get alert error: ${error}`);
+      return res.status(500).send('Internal Server Error');
     }
   },
 
@@ -52,6 +56,7 @@ const alertController = {
       return res.status(301).redirect(`/alerts`);
     } catch (error) {
       console.error(`Delete alert error: ${error}`);
+      return res.status(500).send('Internal Server Error');
     }
   },
 };

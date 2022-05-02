@@ -7,6 +7,7 @@ const roleController = {
       return res.status(200).render('roles', { role });
     } catch (error) {
       console.error(`Get role list error: ${error}`);
+      return res.status(500).send('Internal Server Error');
     }
   },
 
@@ -15,6 +16,7 @@ const roleController = {
       return res.status(200).render('role_create');
     } catch (error) {
       console.error(`Get role create error: ${error}`);
+      return res.status(500).send('Internal Server Error');
     }
   },
 
@@ -26,6 +28,7 @@ const roleController = {
       return res.status(301).redirect('/admin/roles');
     } catch (error) {
       console.error(`Post role error: ${error}`);
+      return res.status(500).send('Internal Server Error');
     }
   },
 
@@ -39,6 +42,7 @@ const roleController = {
       return res.status(200).render('role_create', { role });
     } catch (error) {
       console.error(`Get role error: ${error}`);
+      return res.status(500).send('Internal Server Error');
     }
   },
 
@@ -49,6 +53,7 @@ const roleController = {
       return res.status(301).redirect('/admin/roles');
     } catch (error) {
       console.error(`Delete role error: ${error}`);
+      return res.status(500).send('Internal Server Error');
     }
   },
 };

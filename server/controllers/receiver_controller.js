@@ -7,6 +7,7 @@ const receiverController = {
       return res.status(200).render('receivers', { receiver });
     } catch (error) {
       console.error(`Get receiver list error: ${error}`);
+      return res.status(500).send('Internal Server Error');
     }
   },
 
@@ -15,6 +16,7 @@ const receiverController = {
       return res.status(200).render('receiver_create');
     } catch (error) {
       console.error(`Get receiver create error: ${error}`);
+      return res.status(500).send('Internal Server Error');
     }
   },
 
@@ -24,6 +26,7 @@ const receiverController = {
       return res.status(301).redirect('/receivers');
     } catch (error) {
       console.error(`Post receiver error: ${error}`);
+      return res.status(500).send('Internal Server Error');
     }
   },
 
@@ -38,6 +41,7 @@ const receiverController = {
       return res.status(200).render('receiver_create', { receiver });
     } catch (error) {
       console.error(`Get receiver error: ${error}`);
+      return res.status(500).send('Internal Server Error');
     }
   },
 
@@ -48,6 +52,7 @@ const receiverController = {
       return res.status(301).redirect('/receivers');
     } catch (error) {
       console.error(`Delete receiver error: ${error}`);
+      return res.status(500).send('Internal Server Error');
     }
   },
 };

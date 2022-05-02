@@ -66,13 +66,13 @@ require('./server/routes/index_route')(app);
 
 // Page not found
 app.use(function (req, res, next) {
-  res.status(404).render('404');
+  return res.status(404).render('404');
 });
 
 // Error handling
 app.use(function (err, req, res, next) {
   console.log(err);
-  res.status(500).send('Internal Server Error');
+  return res.status(500).send('Internal Server Error');
 });
 
 if (NODE_ENV != 'production') {

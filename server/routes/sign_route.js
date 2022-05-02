@@ -6,7 +6,7 @@ const loginController = require('../controllers/sign_controller');
 
 router.get('/', loginController.indexPage);
 
-router.get('/login', loginController.loginPage);
+router.get('/login', loginController.signinPage);
 
 router.post(
   '/login',
@@ -14,9 +14,9 @@ router.post(
     failureRedirect: '/login',
     failureFlash: true,
   }),
-  loginController.login
+  loginController.signin
 );
 
-router.post('/logout', loginController.logout);
+router.post('/logout', loginController.signout);
 
 module.exports = router;

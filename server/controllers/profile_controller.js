@@ -7,11 +7,21 @@ const compare = util.promisify(bcrypt.compare);
 
 const profileController = {
   getProfile: async (req, res) => {
-    return res.status(200).render('profile');
+    try {
+      return res.status(200).render('profile');
+    } catch (error) {
+      console.error(`Get profile error: ${error}`);
+      return res.status(500).send('Internal Server Error');
+    }
   },
 
   getProfileEdit: async (req, res) => {
-    return res.status(200).render('profile_edit');
+    try {
+      return res.status(200).render('profile_edit');
+    } catch (error) {
+      console.error(`Get profile edit error: ${error}`);
+      return res.status(500).send('Internal Server Error');
+    }
   },
 
   postProfile: async (req, res) => {
@@ -39,6 +49,7 @@ const profileController = {
       }
     } catch (error) {
       console.error(`Post profile error: ${error}`);
+      return res.status(500).send('Internal Server Error');
     }
   },
 };

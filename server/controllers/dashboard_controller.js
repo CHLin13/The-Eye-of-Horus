@@ -28,13 +28,19 @@ const dashboardController = {
       return res.status(200).render('dashboards', { dashboards });
     } catch (error) {
       console.error(`Get dashboards error: ${error}`);
+      return res.status(500).send('Internal Server Error');
     }
   },
 
   deleteDashboard: async (req, res) => {
-    const { dashboardId } = req.params;
-    await dashboardModel.deleteDashboard(dashboardId);
-    return res.status(301).redirect('/dashboards');
+    try {
+      const { dashboardId } = req.params;
+      await dashboardModel.deleteDashboard(dashboardId);
+      return res.status(301).redirect('/dashboards');
+    } catch (error) {
+      console.error(`Delete dashboard error: ${error}`);
+      return res.status(500).send('Internal Server Error');
+    }
   },
 
   getChartCreate: async (req, res) => {
@@ -44,6 +50,7 @@ const dashboardController = {
       return res.status(200).render('create', { source, dashboardId });
     } catch (error) {
       console.error(`Get dashboard create error: ${error}`);
+      return res.status(500).send('Internal Server Error');
     }
   },
 
@@ -53,13 +60,19 @@ const dashboardController = {
       return res.status(200).json({ data: data, select: req.body.select });
     } catch (error) {
       console.error(`Preview chart error: ${error}`);
+      return res.status(500).send('Internal Server Error');
     }
   },
 
   getTypeInstance: async (req, res) => {
-    const { source } = req.body;
-    const result = await dashboardModel.getTypeInstance(source);
-    return res.status(200).json(result);
+    try {
+      const { source } = req.body;
+      const result = await dashboardModel.getTypeInstance(source);
+      return res.status(200).json(result);
+    } catch (error) {
+      console.error(`Get typeInstance error: ${error}`);
+      return res.status(500).send('Internal Server Error');
+    }
   },
 
   postChart: async (req, res) => {
@@ -68,6 +81,7 @@ const dashboardController = {
       return res.status(301).redirect(`/dashboards/${req.params.dashboardId}`);
     } catch (error) {
       console.error(`Post dashboard create error: ${error}`);
+      return res.status(500).send('Internal Server Error');
     }
   },
 
@@ -108,6 +122,7 @@ const dashboardController = {
       });
     } catch (error) {
       console.error(`Get dashboard detail error: ${error}`);
+      return res.status(500).send('Internal Server Error');
     }
   },
 
@@ -121,6 +136,7 @@ const dashboardController = {
       return res.status(200).render('create', { data, source, type });
     } catch (error) {
       console.error(`Get chart detail error: ${error}`);
+      return res.status(500).send('Internal Server Error');
     }
   },
 
@@ -131,6 +147,7 @@ const dashboardController = {
       return res.status(301).redirect(`/dashboards/${dashboardId}`);
     } catch (error) {
       console.error(`Delete chart error: ${error}`);
+      return res.status(500).send('Internal Server Error');
     }
   },
 
@@ -148,6 +165,7 @@ const dashboardController = {
       });
     } catch (error) {
       console.error(`Get dashboard create error: ${error}`);
+      return res.status(500).send('Internal Server Error');
     }
   },
 
@@ -159,6 +177,7 @@ const dashboardController = {
       return res.status(301).redirect('/dashboards');
     } catch (error) {
       console.error(`Post dashboard error: ${error}`);
+      return res.status(500).send('Internal Server Error');
     }
   },
 };
