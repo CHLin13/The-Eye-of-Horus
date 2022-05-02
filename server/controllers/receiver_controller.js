@@ -4,7 +4,7 @@ const receiverController = {
   getReceivers: async (req, res) => {
     try {
       const receiver = await receiverModel.getReceiver();
-      return res.render('receivers', { receiver });
+      return res.status(200).render('receivers', { receiver });
     } catch (error) {
       console.error(`Get receiver list error: ${error}`);
     }
@@ -12,7 +12,7 @@ const receiverController = {
 
   getReceiverCreate: async (req, res) => {
     try {
-      return res.render('receiver_create');
+      return res.status(200).render('receiver_create');
     } catch (error) {
       console.error(`Get receiver create error: ${error}`);
     }
@@ -21,7 +21,7 @@ const receiverController = {
   postReceiver: async (req, res) => {
     try {
       await receiverModel.postReceiver(req);
-      return res.redirect('/receivers');
+      return res.status(301).redirect('/receivers');
     } catch (error) {
       console.error(`Post receiver error: ${error}`);
     }
@@ -41,7 +41,7 @@ const receiverController = {
     const { receiverId } = req.params;
     try {
       await receiverModel.deleteReceiver(receiverId);
-      return res.redirect('/receivers');
+      return res.status(301).redirect('/receivers');
     } catch (error) {
       console.error(`Delete receiver error: ${error}`);
     }

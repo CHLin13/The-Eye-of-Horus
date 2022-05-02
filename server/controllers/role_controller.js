@@ -4,7 +4,7 @@ const roleController = {
   getRoles: async (req, res) => {
     try {
       const role = await roleModel.getRoles();
-      return res.render('roles', { role });
+      return res.status(200).render('roles', { role });
     } catch (error) {
       console.error(`Get role list error: ${error}`);
     }
@@ -12,7 +12,7 @@ const roleController = {
 
   getRoleCreate: async (req, res) => {
     try {
-      return res.render('role_create');
+      return res.status(200).render('role_create');
     } catch (error) {
       console.error(`Get role create error: ${error}`);
     }
@@ -23,7 +23,7 @@ const roleController = {
       const { roleId } = req.params;
       const { name, description } = req.body;
       await roleModel.postRole(roleId, name, description);
-      return res.redirect('/admin/roles');
+      return res.status(301).redirect('/admin/roles');
     } catch (error) {
       console.error(`Post role error: ${error}`);
     }
@@ -43,7 +43,7 @@ const roleController = {
     const { roleId } = req.params;
     try {
       await roleModel.deleteRole(roleId);
-      return res.redirect('/admin/roles');
+      return res.status(301).redirect('/admin/roles');
     } catch (error) {
       console.error(`Delete role error: ${error}`);
     }

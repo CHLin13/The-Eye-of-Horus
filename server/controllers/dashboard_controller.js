@@ -25,7 +25,7 @@ const dashboardController = {
           }
         }
       }
-      return res.render('dashboards', { dashboards });
+      return res.status(200).render('dashboards', { dashboards });
     } catch (error) {
       console.error(`Get dashboards error: ${error}`);
     }
@@ -34,14 +34,14 @@ const dashboardController = {
   deleteDashboard: async (req, res) => {
     const { dashboardId } = req.params;
     await dashboardModel.deleteDashboard(dashboardId);
-    return res.redirect('/dashboards');
+    return res.status(301).redirect('/dashboards');
   },
 
   getChartCreate: async (req, res) => {
     try {
       const dashboardId = req.params.dashboardId;
       const source = await dashboardModel.getSource();
-      return res.render('create', { source, dashboardId });
+      return res.status(200).render('create', { source, dashboardId });
     } catch (error) {
       console.error(`Get dashboard create error: ${error}`);
     }
@@ -59,13 +59,13 @@ const dashboardController = {
   getTypeInstance: async (req, res) => {
     const { source } = req.body;
     const result = await dashboardModel.getTypeInstance(source);
-    return res.json(result);
+    return res.status(200).json(result);
   },
 
   postChart: async (req, res) => {
     try {
       await dashboardModel.postChart(req);
-      return res.redirect(`/dashboards/${req.params.dashboardId}`);
+      return res.status(301).redirect(`/dashboards/${req.params.dashboardId}`);
     } catch (error) {
       console.error(`Post dashboard create error: ${error}`);
     }
@@ -95,7 +95,8 @@ const dashboardController = {
           }
         }
       }
-      return res.render('dashboard_detail', {
+      
+      return res.status(200).render('dashboard_detail', {
         chart,
         dashboard,
         editPermission,
@@ -112,7 +113,8 @@ const dashboardController = {
       const data = await dashboardModel.getChartDetail(dashboardId, chartId);
       const source = await dashboardModel.getSource();
       const type = await dashboardModel.getTypeInstance(data.source);
-      return res.render('create', { data, source, type });
+
+      return res.status(200).render('create', { data, source, type });
     } catch (error) {
       console.error(`Get chart detail error: ${error}`);
     }
@@ -122,7 +124,7 @@ const dashboardController = {
     try {
       const { chartId, dashboardId } = req.params;
       await dashboardModel.deleteChart(chartId);
-      return res.redirect(`/dashboards/${dashboardId}`);
+      return res.status(301).redirect(`/dashboards/${dashboardId}`);
     } catch (error) {
       console.error(`Delete chart error: ${error}`);
     }
@@ -134,7 +136,7 @@ const dashboardController = {
       const role = await roleModel.getRoles();
       const [dashboard] = await dashboardModel.getDashboard(dashboardId);
       const permission = await dashboardModel.getPermission(dashboardId);
-      return res.render('dashboard_setting', {
+      return res.status(200).render('dashboard_setting', {
         role,
         dashboard,
         dashboardId,
@@ -150,7 +152,7 @@ const dashboardController = {
       const { dashboardId } = req.params;
       const { name, roleId, permission } = req.body;
       await dashboardModel.postDashboard(name, roleId, permission, dashboardId);
-      return res.redirect('/dashboards');
+      return res.status(301).redirect('/dashboards');
     } catch (error) {
       console.error(`Post dashboard error: ${error}`);
     }

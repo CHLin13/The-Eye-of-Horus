@@ -9,7 +9,7 @@ const userController = {
   getUsers: async (req, res) => {
     try {
       const user = await userModel.getUsers();
-      return res.render('users', { user });
+      return res.status(200).render('users', { user });
     } catch (error) {
       console.error(`Get role list error: ${error}`);
     }
@@ -18,7 +18,7 @@ const userController = {
   getUserCreate: async (req, res) => {
     try {
       const role = await roleModel.getRoles();
-      return res.render('user_create', { role });
+      return res.status(200).render('user_create', { role });
     } catch (error) {
       console.error(`Get role create error: ${error}`);
     }
@@ -42,7 +42,7 @@ const userController = {
         role,
         userId
       );
-      return res.redirect('/admin/users');
+      return res.status(301).redirect('/admin/users');
     } catch (error) {
       console.error(`Post role error: ${error}`);
     }
@@ -53,9 +53,9 @@ const userController = {
       const { userId } = req.params;
       const user = await userModel.getUser(userId);
       const role = await roleModel.getRoles();
-      return res.render('user_create', { user, role });
+      return res.status(200).render('user_create', { user, role });
     } catch (error) {
-      console.error(`Get role error: ${error}`);
+      console.error(`Get user error: ${error}`);
     }
   },
 
@@ -63,7 +63,7 @@ const userController = {
     const { userId } = req.params;
     try {
       await userModel.deleteUser(userId);
-      return res.redirect('/admin/users');
+      return res.status(301).redirect('/admin/users');
     } catch (error) {
       console.error(`Delete role error: ${error}`);
     }

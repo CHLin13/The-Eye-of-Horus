@@ -7,11 +7,11 @@ const compare = util.promisify(bcrypt.compare);
 
 const profileController = {
   getProfile: async (req, res) => {
-    return res.render('profile');
+    return res.status(200).render('profile');
   },
 
   getProfileEdit: async (req, res) => {
-    return res.render('profile_edit');
+    return res.status(200).render('profile_edit');
   },
 
   postProfile: async (req, res) => {
@@ -32,10 +32,10 @@ const profileController = {
 
         await profileModel.postProfile(name, email, hashedPassword, userId);
         req.flash('success_messages', 'Update success');
-        return res.redirect('/profile');
+        return res.status(301).redirect('/profile');
       } else {
         req.flash('error_messages', 'Incorrect password');
-        return res.redirect(`/profile/${userId}`);
+        return res.status(301).redirect(`/profile/${userId}`);
       }
     } catch (error) {
       console.error(`Post profile error: ${error}`);

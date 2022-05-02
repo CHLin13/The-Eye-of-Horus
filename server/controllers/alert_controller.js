@@ -5,7 +5,7 @@ const alertController = {
   getAlertList: async (req, res) => {
     try {
       const alert = await alertModel.getAlerts();
-      return res.render('alerts', { alert });
+      return res.status(200).render('alerts', { alert });
     } catch (error) {
       console.error(`Get alert list error: ${error}`);
     }
@@ -15,7 +15,7 @@ const alertController = {
     try {
       const source = await dashboardModel.getSource();
       const receiver = await alertModel.getReceiver();
-      return res.render('alert_create', { source, receiver });
+      return res.status(200).render('alert_create', { source, receiver });
     } catch (error) {
       console.error(`Get alert create error: ${error}`);
     }
@@ -24,7 +24,7 @@ const alertController = {
   postAlert: async (req, res) => {
     try {
       await alertModel.postAlert(req);
-      return res.redirect(`/alerts`);
+      return res.status(301).redirect(`/alerts`);
     } catch (error) {
       console.error(`Post alert create error: ${error}`);
     }
@@ -37,7 +37,9 @@ const alertController = {
       const receiver = await alertModel.getReceiver();
       const data = await alertModel.getAlert(alertId);
       const type = await dashboardModel.getTypeInstance(data.source);
-      return res.render('alert_create', { data, source, receiver, type });
+      return res
+        .status(200)
+        .render('alert_create', { data, source, receiver, type });
     } catch (error) {
       console.error(`Get alert error: ${error}`);
     }
@@ -47,7 +49,7 @@ const alertController = {
     try {
       const alertId = req.params.alertId;
       await alertModel.deleteAlert(alertId);
-      return res.redirect(`/alerts`);
+      return res.status(301).redirect(`/alerts`);
     } catch (error) {
       console.error(`Delete alert error: ${error}`);
     }
