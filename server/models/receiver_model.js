@@ -31,6 +31,19 @@ const receiverModel = {
       tokenValue,
     } = req.body;
 
+    if (
+      (type === 'Email' && emailValue === '') ||
+      (type === 'Slack' && webhookURL === '') ||
+      (type === 'Discord' && idValue === '' && tokenValue === '')
+    ) {
+      req.flash('error_messages', 'All fields are required');
+      if (receiverId) {
+        return `/receivers/${receiverId}`;
+      } else {
+        return `/receivers/create`;
+      }
+    }
+
     const detail = [];
     if (emailValue !== '') {
       detail.push(emailValue);
@@ -90,7 +103,7 @@ const receiverModel = {
         await conn.query(`INSERT INTO receiver SET ?`, [data]);
       }
       await conn.query('COMMIT');
-      return true;
+      return '/receivers';
     } catch (error) {
       await conn.query('ROLLBACK');
       return { error };

@@ -6,7 +6,6 @@ const receiverController = require('../controllers/receiver_controller');
 const { authenticated } = require('../../utils/auth');
 
 router.get('/', authenticated, receiverController.getReceivers);
-
 router.get('/create', authenticated, receiverController.getReceiverCreate);
 
 router.post('/', authenticated, receiverController.postReceiver);

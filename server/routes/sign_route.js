@@ -6,8 +6,8 @@ const loginController = require('../controllers/sign_controller');
 
 router.get('/', loginController.indexPage);
 
+//sign in
 router.get('/login', loginController.signinPage);
-
 router.post(
   '/login',
   passport.authenticate('local', {
@@ -17,6 +17,7 @@ router.post(
   loginController.signin
 );
 
+//sign out
 router.post('/logout', loginController.signout);
 
 module.exports = router;

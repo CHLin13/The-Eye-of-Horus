@@ -92,10 +92,22 @@
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper bg-dark">
-    <section class="content pt-5">
+    <section class="content">
       <div class="container-fluid">
         <!-- /.row -->
         <div class="row">
+          <div class="col-3 mx-auto my-3">
+            {{#if error_messages}}
+            <div class="alert alert-danger" role="alert" style="opacity: 0.5; margin:0;">
+              {{error_messages}}
+            </div>
+            {{/if}}
+            {{#if error}}
+              <div class="alert alert-danger" role="alert" style="opacity: 0.5; margin:0;">
+                {{error}}
+              </div>
+            {{/if}}
+            </div>
           <div class="col-12">
             <div class="card m-auto bg-dark" style="width: 90%;">
               <!-- form start -->
@@ -103,11 +115,11 @@
                 <div class="card-body">
                   <div class="form-group">
                     <label for="name">Name</label>
-                    <input class="form-control" type="text" name="name" placeholder="Name" value={{receiver.name}}>
+                    <input class="form-control" type="text" name="name" placeholder="Name" value="{{receiver.name}}" required>
                   </div>
                   <div class="form-group">
                     <label for="description">Description</label>
-                    <input class="form-control" type="text" name="description" placeholder="Description" value={{receiver.description}}>
+                    <input class="form-control" type="text" name="description" placeholder="Description" value="{{receiver.description}}" required>
                   </div>
                   
                   <div class="form-group mb-3 mt-5">

@@ -22,8 +22,8 @@ const receiverController = {
 
   postReceiver: async (req, res) => {
     try {
-      await receiverModel.postReceiver(req);
-      return res.status(301).redirect('/receivers');
+      const url = await receiverModel.postReceiver(req);
+      return res.status(301).redirect(url);
     } catch (error) {
       console.error(`Post receiver error: ${error}`);
       return res.status(500).send('Internal Server Error');
@@ -34,7 +34,6 @@ const receiverController = {
     try {
       const { receiverId } = req.params;
       const [receiver] = await receiverModel.getReceiver(receiverId);
-      console.log(receiver);
       if (!receiver) {
         return res.status(301).redirect('/receivers');
       }

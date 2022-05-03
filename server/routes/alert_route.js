@@ -5,7 +5,6 @@ const alertController = require('../controllers/alert_controller');
 const { authenticated } = require('../../utils/auth');
 
 router.get('/', authenticated, alertController.getAlertList);
-
 router.get('/create', authenticated, alertController.getAlertCreate);
 
 router.post('/', authenticated, alertController.postAlert);

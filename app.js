@@ -8,7 +8,7 @@ const RedisStore = require('connect-redis')(session);
 const handlebarsHelpers = require('./utils/handlebars-helpers');
 const redisClient = require('./configs/redisConnect');
 const passport = require('./configs/passport');
-const redis = require('./configs/redisConnect')
+const redis = require('./configs/redisConnect');
 const { PORT, SESSION_SECRET, NODE_ENV } = process.env;
 
 const app = express();
@@ -77,7 +77,7 @@ app.use(function (err, req, res, next) {
 
 if (NODE_ENV != 'production') {
   app.listen(PORT, async () => {
-    redis.connect().catch(() => {
+    await redis.connect().catch(() => {
       console.log('redis connect fail');
     });
     console.log(`Listening on port: ${PORT}`);
