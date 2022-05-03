@@ -27,10 +27,23 @@ const profileController = {
   postProfile: async (req, res) => {
     try {
       const userId = JSON.parse(req.user).id;
-      const { name, email, password, newPassword } = req.body;
+      const { name, email, password, newPassword, passwordConfirm } = req.body;
       let tempPassword = password;
       if (newPassword) {
-        tempPassword = newPassword;
+        if (newPassword.length < 8) {
+          req.flash(
+            'error_messages',
+            'Password length should over than 8 characters'
+          );
+          return res.status(301).redirect(`/profile/${userId}`);
+        } else if (newPassword !== passwordConfirm) {
+          req.flash(
+            'error_messages',
+            'New Password is not match Password Confirm'
+          );
+          return res.status(301).redirect(`/profile/${userId}`);
+          tempPassword = newPassword;
+        }
       }
 
       const hashedPassword = await profileModel.getPassword(userId);

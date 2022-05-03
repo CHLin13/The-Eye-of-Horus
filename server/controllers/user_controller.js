@@ -31,7 +31,7 @@ const userController = {
       const { userId } = req.params;
       const { name, email, superuser, status, role } = req.body;
 
-      const passwordDefault = 'aaaa';
+      const passwordDefault = 'aaaaaaaa';
       const saltRounds = 10;
       const hashedPassword = await hash(passwordDefault, saltRounds);
 
