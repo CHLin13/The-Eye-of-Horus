@@ -259,8 +259,7 @@
   const yAxisTickFontSize = $('#yAxis-tick-font-size')
 
   preview.on('click', async (e) => {
-    const dashboardId = '{{dashboardId}}'
-    const response = await axios.post(`/dashboards/${dashboardId}/chart/preview`,{ 
+    const response = await axios.post(`/dashboards/chart/preview`,{ 
         timeRange: timeRange.val(),
         source: source.val(),
         type: type.val(),

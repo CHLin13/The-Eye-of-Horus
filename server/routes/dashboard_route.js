@@ -53,10 +53,8 @@ router.delete(
 
 //source
 router.post(
-  '/:dashboardId/chart/preview',
+  '/chart/preview',
   authenticated,
-  getPermission,
-  viewerRole,
   dashboardController.chartPreview
 );
 router.post(

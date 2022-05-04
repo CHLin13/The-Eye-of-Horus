@@ -66,7 +66,8 @@ const work = (async function () {
         count += checker.check(system[j][select]);
       }
 
-      const detail = JSON.parse(result[i].receiver_detail);
+      const detail = result[i].receiver_detail;
+
       const errorMessage = result[i].message;
 
       if (count === limit) {

@@ -1,5 +1,6 @@
 const pool = require('../../configs/mysqlConnect');
 const redis = require('../../configs/redisConnect');
+const { conditions } = require('../../utils/units');
 
 const alertModel = {
   getAlerts: async () => {
@@ -35,6 +36,15 @@ const alertModel = {
       receiver_id,
     ]);
 
+    let alertMessage = `Warning from ${source} 
+condition: ${conditions[condition]} ${value} 
+message: ${message}`;
+    if (value_max) {
+      alertMessage = `Warning from ${source} 
+condition: ${conditions[condition]} ${value} & ${value_max} 
+message: ${message}`;
+    }
+
     const mqlData = {
       name: name,
       source: source,
@@ -46,7 +56,7 @@ const alertModel = {
       eval_every_input: eval_every_input,
       eval_for_input: eval_for_input,
       receiver_id: receiver_id,
-      message: message,
+      message: alertMessage,
       status: 0,
     };
     const redisData = {
@@ -61,7 +71,7 @@ const alertModel = {
       eval_every_input: eval_every_input,
       eval_for_input: eval_for_input,
       receiver_id: receiver_id,
-      message: message,
+      message: alertMessage,
       receiver_type: receiver[0].type,
       receiver_detail: receiver[0].detail,
     };
@@ -88,7 +98,7 @@ const alertModel = {
           receiver_id: receiver_id,
           receiver_type: receiver[0].type,
           receiver_detail: receiver[0].detail,
-          message: message,
+          message: alertMessage,
         };
         redisData.id = result.insertId;
         await redis.HSET(
