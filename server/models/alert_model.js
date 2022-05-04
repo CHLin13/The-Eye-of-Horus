@@ -35,13 +35,18 @@ const alertModel = {
     const [receiver] = await pool.query(`SELECT * FROM receiver WHERE id = ?`, [
       receiver_id,
     ]);
+    
+    let msgType = '';
+    if(type){
+      msgType = type;
+    }
 
-    let alertMessage = `Warning from ${source} 
-condition: ${conditions[condition]} ${value} 
+    let alertMessage = `Warning from ${source} ${msgType}
+condition: ${select} ${conditions[condition]} ${value} 
 message: ${message}`;
     if (value_max) {
-      alertMessage = `Warning from ${source} 
-condition: ${conditions[condition]} ${value} & ${value_max} 
+      alertMessage = `Warning from ${source} ${msgType}
+condition: ${select} ${conditions[condition]} ${value} & ${value_max} 
 message: ${message}`;
     }
 
@@ -56,7 +61,7 @@ message: ${message}`;
       eval_every_input: eval_every_input,
       eval_for_input: eval_for_input,
       receiver_id: receiver_id,
-      message: alertMessage,
+      message: message,
       status: 0,
     };
     const redisData = {

@@ -61,12 +61,12 @@ const work = (async function () {
           checker = new checkerNoValue();
           break;
       }
-
+      
       for (let j = 0; j < limit; j++) {
         count += checker.check(system[j][select]);
       }
 
-      const detail = result[i].receiver_detail;
+      const detail = JSON.parse(result[i].receiver_detail);
 
       const errorMessage = result[i].message;
 

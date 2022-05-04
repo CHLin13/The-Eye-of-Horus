@@ -31,6 +31,7 @@ module.exports = {
         username: ' The-Eye-of-Horus',
       });
     } catch (error) {
+      console.log({ error: error });
       console.log('slack error');
     }
   },
@@ -46,7 +47,7 @@ module.exports = {
         avatarURL: 'https://i.imgur.com/euLn4Te.png',
       });
     } catch (error) {
-      // console.log({ error: error });
+      console.log({ error: error });
       console.log('discord error');
     }
   },
