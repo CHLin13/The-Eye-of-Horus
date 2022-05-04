@@ -2,7 +2,11 @@ const express = require('express');
 const router = express.Router();
 
 const dashboardController = require('../controllers/dashboard_controller');
-const { authenticated, getPermission } = require('../../utils/auth');
+const {
+  authenticated,
+  authenticatedSuper,
+  getPermission,
+} = require('../../utils/auth');
 const { adminRole, editorRole, viewerRole } = require('../../utils/role');
 
 //dashboard
@@ -53,8 +57,10 @@ router.delete(
 
 //source
 router.post(
-  '/chart/preview',
+  '/:dashboardId/chart/preview',
   authenticated,
+  getPermission,
+  viewerRole,
   dashboardController.chartPreview
 );
 router.post(
@@ -100,7 +106,5 @@ router.post(
   editorRole,
   dashboardController.postChart
 );
-
-
 
 module.exports = router;

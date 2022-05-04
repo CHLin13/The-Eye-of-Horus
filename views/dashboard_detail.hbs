@@ -10,7 +10,7 @@
         };
     async function chart(id, time_range, database, measurement, type, chart_type, interval, interval_unit, selects, layout, chart_type , dashboardId) {
 
-    const response = await axios.post(`/dashboards/chart/preview`,{
+    const response = await axios.post(`/dashboards/${dashboardId}/chart/preview`,{
       timeRange: time_range,
       source: database + '/' + measurement,
       type: type,

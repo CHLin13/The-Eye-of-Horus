@@ -301,7 +301,7 @@
 
 
   preview.on('click', async (e) => {
-    const response = await axios.post('/dashboards/chart/preview',{ 
+    const response = await axios.post('/alerts/chart/preview',{ 
         timeRange: timeRange.val(),
         source: source.val(),
         type: type.val(),

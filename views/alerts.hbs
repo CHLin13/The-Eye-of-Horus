@@ -100,7 +100,7 @@
             <h1 class="text-light">Alert</h1>
           </div>
           <div class="d-flex justify-content-end">
-              <a href="/alerts/create"><button class="btn buttons">Add alert</button></a>
+              {{#ifCond localUser.superuser '1'}}<a href="/alerts/create"><button class="btn buttons">Add alert</button></a>{{/ifCond}}
           </div>
         </div>
       </div><!-- /.container-fluid -->
@@ -136,6 +136,7 @@
 
                         <td> {{this.name}}</td>
                         <td> {{this.rName}} / {{this.rType}}</td>
+                        {{#ifCond ../localUser.superuser '1'}} 
                         <td class="text-center"><a class="text-secondary" href="/alerts/{{this.id}}"><i class="fas fa-edit"></i></a></td>
                         <td class="text-center"><a data-toggle="modal" data-target="#modal{{this.id}}" style="color:white">X</a></td>
                         <div class="modal fade" id="modal{{this.id}}">
@@ -158,6 +159,10 @@
                             </div>
                         </div>
                         </div>
+                        {{else}}
+                        <td></td>
+                        <td></td>
+                        {{/ifCond}}
                       </tr>
                     {{/each}}
                   </tbody>
