@@ -56,8 +56,8 @@ const profileController = {
             'New Password is not match Password Confirm'
           );
           return res.status(301).redirect(`/profile/${userId}`);
-          tempPassword = newPassword;
         }
+        tempPassword = newPassword;
       }
 
       const hashedPassword = await profileModel.getPassword(userId);
