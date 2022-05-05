@@ -1,3 +1,5 @@
+const { validationResult } = require('express-validator');
+
 const loginController = {
   indexPage: async (req, res) => {
     try {
@@ -25,6 +27,11 @@ const loginController = {
 
   signin: async (req, res) => {
     try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        req.flash('error_messages', 'All fields are required');
+        return res.status(301).redirect(`/login`);
+      }
       return res.status(301).redirect('/dashboards');
     } catch (error) {
       console.error(`Login url error: ${error}`);
