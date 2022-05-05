@@ -16,7 +16,7 @@ router.post(
   authenticatedSuper,
   [
     body('name').not().isEmpty(),
-    body('email').not().isEmpty(),
+    body('email').isEmail(),
     body('superuser').not().isEmpty(),
     body('status').not().isEmpty(),
   ],
@@ -28,7 +28,7 @@ router.put(
   authenticatedSuper,
   [
     body('name').not().isEmpty(),
-    body('email').not().isEmpty(),
+    body('email').isEmail(),
     body('superuser').not().isEmpty(),
     body('status').not().isEmpty(),
   ],

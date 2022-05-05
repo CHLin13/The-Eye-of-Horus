@@ -189,14 +189,20 @@
       checked.push(checkbox[i].id)
     }
 
-    await axios.post(URL,{
-      name: name.val(), 
-      email: email.val(),
-      superuser: superuser.val(),
-      status: status.val(),
-      role: checked
-    })
-    location.href = "/admin/users";
+    try{
+        await axios.post(URL,{
+        name: name.val(), 
+        email: email.val(),
+        superuser: superuser.val(),
+        status: status.val(),
+        role: checked
+      })
+      location.href = "/admin/users";
+    }catch(error){
+      toastr.error('Email format is incorrect')
+    }
+    
+    
   })
 </script>
 </body>

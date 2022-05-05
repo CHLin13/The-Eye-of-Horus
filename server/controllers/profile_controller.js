@@ -32,7 +32,13 @@ const profileController = {
 
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        req.flash('error_messages', 'Name, email, password are required');
+        if (errors.errors[0].param === 'email') {
+          req.flash('error_messages', 'Email format is incorrect');
+        } else if (errors.errors[0].param === 'password') {
+          req.flash('error_messages', 'Password should over than 8 characters');
+        } else {
+          req.flash('error_messages', 'Name is required');
+        }
         return res.status(301).redirect(`/profile/${userId}`);
       }
 

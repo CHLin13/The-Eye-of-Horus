@@ -13,8 +13,8 @@ router.post(
   authenticated,
   [
     body('name').not().isEmpty(),
-    body('email').not().isEmpty(),
-    body('password').not().isEmpty(),
+    body('email').isEmail(),
+    body('password').isLength({ min: 8 }),
   ],
   profileController.postProfile
 );

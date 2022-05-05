@@ -29,7 +29,11 @@ const loginController = {
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        req.flash('error_messages', 'All fields are required');
+        if (errors.errors[0].param === 'email') {
+          req.flash('error_messages', 'Email format is incorrect');
+        } else if (errors.errors[0].param === 'password') {
+          req.flash('error_messages', 'Password should over than 8 characters');
+        }
         return res.status(301).redirect(`/login`);
       }
       return res.status(301).redirect('/dashboards');

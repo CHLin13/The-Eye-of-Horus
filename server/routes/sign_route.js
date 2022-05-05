@@ -11,7 +11,10 @@ router.get('/', loginController.indexPage);
 router.get('/login', loginController.signinPage);
 router.post(
   '/login',
-  [body('email').not().isEmpty(), body('password').not().isEmpty()],
+  [
+    body('email').isEmail(),
+    body('password').isLength({ min: 8 }),
+  ],
   passport.authenticate('local', {
     failureRedirect: '/login',
     failureFlash: true,

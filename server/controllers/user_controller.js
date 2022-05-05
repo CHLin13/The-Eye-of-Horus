@@ -38,11 +38,16 @@ const userController = {
 
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        req.flash('error_messages', 'All fields are required');
-        if (userId) {
-          return res.status(301).redirect(`/admin/users/${userId}`);
+        if (errors.errors[0].param === 'email') {
+          req.flash('error_messages', 'Email format is incorrect');
+        } else {
+          req.flash('error_messages', 'All fields are required');
         }
-        return res.status(301).redirect(`/admin/users/create`);
+        return res
+          .status(401)
+          .json({
+            message: 'Email format is incorrect or all fields are required',
+          });
       }
 
       await userModel.postUser(
