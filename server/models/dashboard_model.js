@@ -114,7 +114,9 @@ const dashboardModel = {
   getTypeInstance: async (source) => {
     const database = source.split('/')[0];
     const measurement = source.split('/')[1];
-    const influxdb = new Influxdb.InfluxDB(process.env.URL + database);
+    const influxdb = new Influxdb.InfluxDB(
+      `${INFLUX_URL}:${INFLUX_PORT}/${database}`
+    );
     const system = await influxdb.query(
       `SHOW tag values ON ${database} from ${measurement} with key = type_instance`
     );
@@ -128,7 +130,9 @@ const dashboardModel = {
       req.body;
     const database = source.split('/')[0];
     const measurement = source.split('/')[1];
-    const influxdb = new Influxdb.InfluxDB(process.env.URL + database);
+    const influxdb = new Influxdb.InfluxDB(
+      `${INFLUX_URL}:${INFLUX_PORT}/${database}`
+    );
 
     const intervalN = interval * units.timeUnits[interval_unit];
     const rangeIntoSec =

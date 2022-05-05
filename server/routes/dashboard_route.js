@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
+const { body } = require('express-validator');
 
 const dashboardController = require('../controllers/dashboard_controller');
 const {
   authenticated,
-  authenticatedSuper,
   getPermission,
 } = require('../../utils/auth');
 const { adminRole, editorRole, viewerRole } = require('../../utils/role');
@@ -31,13 +31,24 @@ router.post(
   authenticated,
   getPermission,
   adminRole,
+  [
+    body('name').not().isEmpty(),
+    body('roleId').not().isEmpty(),
+    body('permission').not().isEmpty(),
+  ],
   dashboardController.postDashboard
 );
+
 router.put(
   '/:dashboardId',
   authenticated,
   getPermission,
   adminRole,
+  [
+    body('name').not().isEmpty(),
+    body('roleId').not().isEmpty(),
+    body('permission').not().isEmpty(),
+  ],
   dashboardController.postDashboard
 );
 router.get(
@@ -61,11 +72,21 @@ router.post(
   authenticated,
   getPermission,
   viewerRole,
+  [
+    body('timeRange').not().isEmpty(),
+    body('source').not().isEmpty(),
+    body('interval').not().isEmpty(),
+    body('interval_unit').not().isEmpty(),
+    body('select').not().isEmpty(),
+  ],
   dashboardController.chartPreview
 );
 router.post(
   '/type_instance',
   authenticated,
+  [
+    body('source').not().isEmpty(),
+  ],
   dashboardController.getTypeInstance
 );
 
@@ -90,6 +111,16 @@ router.put(
   authenticated,
   getPermission,
   editorRole,
+  [
+    body('timeRange').not().isEmpty(),
+    body('source').not().isEmpty(),
+    body('style').not().isEmpty(),
+    body('interval').not().isEmpty(),
+    body('interval_unit').not().isEmpty(),
+    body('select').not().isEmpty(),
+    body('title').not().isEmpty(),
+    body('fontSize').not().isEmpty(),
+  ],
   dashboardController.postChart
 );
 router.delete(
@@ -104,6 +135,16 @@ router.post(
   authenticated,
   getPermission,
   editorRole,
+  [
+    body('timeRange').not().isEmpty(),
+    body('source').not().isEmpty(),
+    body('style').not().isEmpty(),
+    body('interval').not().isEmpty(),
+    body('interval_unit').not().isEmpty(),
+    body('select').not().isEmpty(),
+    body('title').not().isEmpty(),
+    body('fontSize').not().isEmpty(),
+  ],
   dashboardController.postChart
 );
 
