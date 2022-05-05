@@ -22,6 +22,15 @@ const receiverController = {
 
   postReceiver: async (req, res) => {
     try {
+      const { receiverId } = req.params;
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        req.flash('error_messages', 'All fields are required');
+        if (receiverId) {
+          return res.status(301).redirect(`/receivers/${receiverId}`);
+        }
+        return res.status(301).redirect(`/receivers/create`);
+      }
       const url = await receiverModel.postReceiver(req);
       return res.status(301).redirect(url);
     } catch (error) {
