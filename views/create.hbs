@@ -262,9 +262,14 @@
   const yAxisTitle = $('#yAxis-title')
   const yAxisFontSize = $('#yAxis-font-size')
   const yAxisTickFontSize = $('#yAxis-tick-font-size')
+const dashboardId = {{dashboardId}}
 
   preview.on('click', async (e) => {
-    const dashboardId = '{{data.dashboardId}}'
+    let dashboardId = '{{dashboardId}}'
+    if('{{data.dashboardId}}'){
+      dashboardId = '{{data.dashboardId}}'
+    }
+
     const response = await axios.post(`/dashboards/${dashboardId}/chart/preview`,{ 
         timeRange: timeRange.val(),
         source: source.val(),

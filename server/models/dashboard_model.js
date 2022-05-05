@@ -113,10 +113,13 @@ const dashboardModel = {
 
   getTypeInstance: async (source) => {
     const database = source.split('/')[0];
-    const measurement = source.split('/')[1];
+    let measurement = source.split('/')[1];
     const influxdb = new Influxdb.InfluxDB(
       `${INFLUX_URL}:${INFLUX_PORT}/${database}`
     );
+    if(database === 'App'){
+      measurement = `"${measurement}"`
+    }
     const system = await influxdb.query(
       `SHOW tag values ON ${database} from ${measurement} with key = type_instance`
     );
