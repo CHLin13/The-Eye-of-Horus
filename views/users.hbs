@@ -109,6 +109,11 @@
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
+        {{#if error_messages}}
+        <div class="alert alert-danger" role="alert" style="opacity: 0.5;">
+        {{error_messages}}
+        </div>
+        {{/if}}
         <!-- /.row -->
         <div class="row">
           <div class="col-12">
@@ -134,7 +139,10 @@
                       <td>{{#ifCond this.superuser '1'}}true{{else}}false{{/ifCond}}</td>
                       <td>{{#ifCond this.status '1'}}active{{else}}inactive{{/ifCond}}</td>
                       <td class="text-center"><a class="text-success" href="/admin/users/{{this.id}}"><i class="fas fa-edit"></i></a></td>
-                       <td class="text-center"><a data-toggle="modal" data-target="#modal{{this.id}}"><i class="fas fa-minus-circle text-danger"></i></a></td>
+                       {{#ifCond this.id ../localUser.id}}
+                        <td></td>
+                        {{else}}
+                        <td class="text-center"><a data-toggle="modal" data-target="#modal{{this.id}}"><i class="fas fa-minus-circle text-danger"></i></a></td>
                         <div class="modal fade" id="modal{{this.id}}">
                           <div class="modal-dialog">
                           <div class="modal-content bg-light">
@@ -155,6 +163,7 @@
                             </div>
                         </div>
                         </div>
+                        {{/ifCond}}
                     </tr>
                     {{/each}}
                   </tbody>

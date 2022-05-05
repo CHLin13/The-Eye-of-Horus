@@ -81,6 +81,13 @@ const userController = {
   deleteUser: async (req, res) => {
     const { userId } = req.params;
     try {
+      if (Number(userId) === res.locals.localUser.id){
+        req.flash(
+          'error_messages',
+          'Can not delete yourself'
+        );
+        return res.status(301).redirect('/admin/users');
+      } 
       await userModel.deleteUser(userId);
       return res.status(301).redirect('/admin/users');
     } catch (error) {
