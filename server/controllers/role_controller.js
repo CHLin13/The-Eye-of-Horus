@@ -1,3 +1,4 @@
+const { validationResult } = require('express-validator');
 const roleModel = require('../models/role_model');
 
 const roleController = {

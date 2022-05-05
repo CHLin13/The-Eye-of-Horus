@@ -1,3 +1,4 @@
+const { validationResult } = require('express-validator');
 const profileModel = require('../models/profile_model');
 const bcrypt = require('bcryptjs');
 const util = require('util');

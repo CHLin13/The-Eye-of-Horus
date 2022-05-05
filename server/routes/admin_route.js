@@ -19,7 +19,6 @@ router.post(
     body('email').not().isEmpty(),
     body('superuser').not().isEmpty(),
     body('status').not().isEmpty(),
-    body('role').not().isEmpty(),
   ],
   userController.postUser
 );
@@ -32,7 +31,6 @@ router.put(
     body('email').not().isEmpty(),
     body('superuser').not().isEmpty(),
     body('status').not().isEmpty(),
-    body('role').not().isEmpty(),
   ],
   userController.postUser
 );

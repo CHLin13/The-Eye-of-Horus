@@ -194,6 +194,7 @@ const dashboardController = {
       const { dashboardId } = req.params;
       const { name, roleId, permission } = req.body;
 
+      const errors = validationResult(req);
       if (!errors.isEmpty()) {
         req.flash('error_messages', 'All fields are required');
         if (dashboardId) {
