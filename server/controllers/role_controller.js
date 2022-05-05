@@ -24,6 +24,14 @@ const roleController = {
     try {
       const { roleId } = req.params;
       const { name, description } = req.body;
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        req.flash('error_messages', 'All fields are required');
+        if (roleId) {
+          return res.status(301).redirect(`/admin/roles/${roleId}`);
+        }
+        return res.status(301).redirect(`/admin/roles/create`);
+      }
       await roleModel.postRole(roleId, name, description);
       return res.status(301).redirect('/admin/roles');
     } catch (error) {

@@ -35,6 +35,15 @@ const userController = {
       const saltRounds = 10;
       const hashedPassword = await hash(passwordDefault, saltRounds);
 
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        req.flash('error_messages', 'All fields are required');
+        if (userId) {
+          return res.status(301).redirect(`/admin/users/${userId}`);
+        }
+        return res.status(301).redirect(`/admin/users/create`);
+      }
+
       await userModel.postUser(
         name,
         email,
