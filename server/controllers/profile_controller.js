@@ -28,6 +28,13 @@ const profileController = {
     try {
       const userId = JSON.parse(req.user).id;
       const { name, email, password, newPassword, passwordConfirm } = req.body;
+
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        req.flash('error_messages', 'Name, email, password are required');
+        return res.status(301).redirect(`/profile/${userId}`);
+      }
+
       let tempPassword = password;
       if (newPassword) {
         if (newPassword.length < 8) {

@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const { body } = require('express-validator');
 
 const profileController = require('../controllers/profile_controller');
 const { authenticated } = require('../../utils/auth');
@@ -7,6 +8,14 @@ const { authenticated } = require('../../utils/auth');
 router.get('/', authenticated, profileController.getProfile);
 router.get('/:userId', authenticated, profileController.getProfileEdit);
 
-router.post('/:userId', authenticated, profileController.postProfile);
-
+router.post(
+  '/:userId',
+  authenticated,
+  [
+    body('name').not().isEmpty(),
+    body('email').not().isEmpty(),
+    body('password').not().isEmpty(),
+  ],
+  profileController.postProfile
+);
 module.exports = router;
