@@ -1,11 +1,15 @@
 require('dotenv').config();
 const Influxdb = require('influx');
 const database = 'App';
-const influx = new Influxdb.InfluxDB(process.env.URL + database);
+const { INFLUX_URL, INFLUX_PORT } = process.env;
+const influx = new Influxdb.InfluxDB(
+  `${INFLUX_URL}:${INFLUX_PORT}/${database}`
+);
 
 const appModel = {
   postData: async (req) => {
-    const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress || null;
+    const ip =
+      req.headers['x-forwarded-for'] || req.socket.remoteAddress || null;
     const { timestamp, host, name, value } = req.body;
     const measurement = `${name}(${ip.slice(7)})`;
     const database = await influx.query('SHOW DATABASES');
@@ -15,7 +19,7 @@ const appModel = {
 
     try {
       if (!databaseApp) {
-         await influx.query('CREATE DATABASE App');
+        await influx.query('CREATE DATABASE App');
       }
       await influx.writePoints([
         {

@@ -2,7 +2,8 @@ require('dotenv').config();
 const pool = require('../../configs/mysqlConnect');
 const units = require('../../utils/units');
 const Influxdb = require('influx');
-const influx = new Influxdb.InfluxDB(process.env.URL);
+const { INFLUX_URL, INFLUX_PORT } = process.env;
+const influx = new Influxdb.InfluxDB(`${INFLUX_URL}:${INFLUX_PORT}/`);
 
 const dashboardModel = {
   getDashboards: async () => {
@@ -20,7 +21,9 @@ const dashboardModel = {
       }
       return accu;
     }, []);
-    dashboardsArr = dashboardsArr.filter(item => {return item !== null})
+    dashboardsArr = dashboardsArr.filter((item) => {
+      return item !== null;
+    });
     return dashboardsArr;
   },
 
@@ -33,7 +36,7 @@ const dashboardModel = {
       dashboard[0].permission = dashboard.map(
         (dashboard) => dashboard.permission
       );
-    } 
+    }
     return dashboard;
   },
 
