@@ -12,12 +12,12 @@ const {
   checkerNoValue,
 } = require('./utils/checker');
 
-const { interval, INFLUX_URL, INFLUX_PORT } = process.env;
+const { INTERVAL, INFLUX_URL, INFLUX_PORT } = process.env;
 
 const work = (async function () {
   try {
     await redis.connect();
-    const response = await redis.hGetAll(interval);
+    const response = await redis.hGetAll(INTERVAL);
     const result = Object.values(response).map((response) =>
       JSON.parse(response)
     );
@@ -103,4 +103,4 @@ const work = (async function () {
   }
 })();
 
-console.log(`${interval}-working`);
+console.log(`${INTERVAL}-working`);
