@@ -12,10 +12,12 @@ const {
   checkerNoValue,
 } = require('./utils/checker');
 
+const { interval, INFLUX_URL, INFLUX_PORT } = process.env;
+
 const work = (async function () {
   try {
     await redis.connect();
-    const response = await redis.hGetAll('1m');
+    const response = await redis.hGetAll(interval);
     const result = Object.values(response).map((response) =>
       JSON.parse(response)
     );
@@ -23,7 +25,9 @@ const work = (async function () {
     for (let i = 0; i < result.length; i++) {
       const database = result[i].source.split('/')[0];
       const measurement = result[i].source.split('/')[1];
-      const influxdb = new Influxdb.InfluxDB(process.env.URL + database);
+      const influxdb = new Influxdb.InfluxDB(
+        `${INFLUX_URL}:${INFLUX_PORT}/${database}`
+      );
 
       const everyArr = result[i].eval_every_input.match(/[a-zA-Z]+|[0-9]+/g);
       const forArr = result[i].eval_for_input.match(/[a-zA-Z]+|[0-9]+/g);
@@ -67,6 +71,7 @@ const work = (async function () {
       }
 
       const detail = JSON.parse(result[i].receiver_detail);
+
       const errorMessage = result[i].message;
 
       if (count === limit) {
@@ -98,4 +103,4 @@ const work = (async function () {
   }
 })();
 
-console.log('1m-working');
+console.log(`${interval}-working`);
