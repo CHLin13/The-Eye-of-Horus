@@ -98,6 +98,7 @@ const work = (async function () {
         conn.release();
       }
     }
+    redis.disconnect();
   } catch (error) {
     console.error(error);
   }
