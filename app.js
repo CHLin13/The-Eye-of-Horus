@@ -5,11 +5,12 @@ const methodOverride = require('method-override');
 const session = require('express-session');
 const flash = require('connect-flash');
 const RedisStore = require('connect-redis')(session);
+const Influxdb = require('influx');
 const handlebarsHelpers = require('./utils/handlebars-helpers');
 const redisClient = require('./configs/redisConnect');
 const passport = require('./configs/passport');
-const redis = require('./configs/redisConnect')
-const { PORT, SESSION_SECRET, NODE_ENV } = process.env;
+const redis = require('./configs/redisConnect');
+const { PORT, SESSION_SECRET, NODE_ENV, INFLUX_URL, INFLUX_PORT } = process.env;
 
 const app = express();
 
@@ -65,8 +66,31 @@ app.use((req, res, next) => {
 require('./server/routes/index_route')(app);
 
 // Page not found
-app.use(function (req, res, next) {
-  return res.status(404).render('404');
+app.use(async function (req, res, next) {
+  const database = 'DB404';
+  const influx = new Influxdb.InfluxDB(
+    `${INFLUX_URL}:${INFLUX_PORT}/${database}`
+  );
+  const databaseList = await influx.query('SHOW DATABASES');
+  const database404 = databaseList
+    .map((database) => database.name)
+    .find((name) => name === 'DB404');
+  try {
+    if (!database404) {
+      await influx.query('CREATE DATABASE DB404');
+    }
+    await influx.writePoints([
+      {
+        timestamp: Date.now() * 1000000,
+        measurement: 'error404',
+        fields: { value: 1 },
+      },
+    ]);
+    return res.status(404).render('404');
+  } catch (error) {
+    console.error(error);
+    return res.status(404).render('404');
+  }
 });
 
 // Error handling
@@ -77,7 +101,7 @@ app.use(function (err, req, res, next) {
 
 if (NODE_ENV != 'production') {
   app.listen(PORT, async () => {
-    redis.connect().catch(() => {
+    await redis.connect().catch(() => {
       console.log('redis connect fail');
     });
     console.log(`Listening on port: ${PORT}`);

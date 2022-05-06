@@ -2,7 +2,8 @@ require('dotenv').config();
 const pool = require('../../configs/mysqlConnect');
 const units = require('../../utils/units');
 const Influxdb = require('influx');
-const influx = new Influxdb.InfluxDB(process.env.URL);
+const { INFLUX_URL, INFLUX_PORT } = process.env;
+const influx = new Influxdb.InfluxDB(`${INFLUX_URL}:${INFLUX_PORT}/`);
 
 const dashboardModel = {
   getDashboards: async () => {
@@ -20,7 +21,9 @@ const dashboardModel = {
       }
       return accu;
     }, []);
-    dashboardsArr = dashboardsArr.filter(item => {return item !== null})
+    dashboardsArr = dashboardsArr.filter((item) => {
+      return item !== null;
+    });
     return dashboardsArr;
   },
 
@@ -33,7 +36,7 @@ const dashboardModel = {
       dashboard[0].permission = dashboard.map(
         (dashboard) => dashboard.permission
       );
-    } 
+    }
     return dashboard;
   },
 
@@ -110,8 +113,13 @@ const dashboardModel = {
 
   getTypeInstance: async (source) => {
     const database = source.split('/')[0];
-    const measurement = source.split('/')[1];
-    const influxdb = new Influxdb.InfluxDB(process.env.URL + database);
+    let measurement = source.split('/')[1];
+    const influxdb = new Influxdb.InfluxDB(
+      `${INFLUX_URL}:${INFLUX_PORT}/${database}`
+    );
+    if(database === 'App'){
+      measurement = `"${measurement}"`
+    }
     const system = await influxdb.query(
       `SHOW tag values ON ${database} from ${measurement} with key = type_instance`
     );
@@ -125,7 +133,9 @@ const dashboardModel = {
       req.body;
     const database = source.split('/')[0];
     const measurement = source.split('/')[1];
-    const influxdb = new Influxdb.InfluxDB(process.env.URL + database);
+    const influxdb = new Influxdb.InfluxDB(
+      `${INFLUX_URL}:${INFLUX_PORT}/${database}`
+    );
 
     const intervalN = interval * units.timeUnits[interval_unit];
     const rangeIntoSec =

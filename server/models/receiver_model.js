@@ -1,5 +1,6 @@
 const pool = require('../../configs/mysqlConnect');
 const redis = require('../../configs/redisConnect');
+const { conditions } = require('../../utils/units');
 
 const receiverModel = {
   getReceiver: async (receiverId) => {
@@ -30,6 +31,19 @@ const receiverModel = {
       idValue,
       tokenValue,
     } = req.body;
+
+    if (
+      (type === 'Email' && emailValue === '') ||
+      (type === 'Slack' && webhookURL === '') ||
+      (type === 'Discord' && idValue === '' && tokenValue === '')
+    ) {
+      req.flash('error_messages', 'All fields are required');
+      if (receiverId) {
+        return `/receivers/${receiverId}`;
+      } else {
+        return `/receivers/create`;
+      }
+    }
 
     const detail = [];
     if (emailValue !== '') {
@@ -64,6 +78,25 @@ const receiverModel = {
           receiverId,
         ]);
         for (let i = 0; i < alert.length; i++) {
+          let msgType = alert[i].type;
+          console.log(alert[i].type);
+          if (!alert[i].type || alert[i].type === null) {
+            msgType = ' ';
+          }
+
+          let alertMessage = `Warning from ${alert[i].source} ${msgType}
+condition: ${alert[i].select} ${conditions[alert[i].condition]} ${alert[i].value} 
+message: ${alert[i].message}`;
+          if (alert[i].condition === '3' || alert[i].value === '4') {
+            alertMessage = `Warning from ${alert[i].source} ${msgType}
+condition: ${alert[i].select} ${conditions[alert[i].condition]} ${alert[i].value} & ${alert[i].value_max} 
+message: ${alert[i].message}`;
+          } else if (alert[i].condition === '5') {
+            alertMessage = `Warning from ${alert[i].source} ${msgType}
+condition: ${alert[i].select} ${conditions[alert[i].condition]}
+message: ${alert[i].message}`;
+          }
+          
           const redisData = {
             id: alert[i].id,
             name: alert[i].name,
@@ -75,10 +108,10 @@ const receiverModel = {
             value_max: Number(alert[i].value_max),
             eval_every_input: alert[i].eval_every_input,
             eval_for_input: alert[i].eval_for_input,
-            message: alert[i].message,
             receiver_id: receiverId,
             receiver_type: type,
-            receiver_detail: detail,
+            receiver_detail: JSON.stringify(detail),
+            message: alertMessage,
           };
           await redis.HSET(
             alert[i].eval_every_input,
@@ -90,7 +123,7 @@ const receiverModel = {
         await conn.query(`INSERT INTO receiver SET ?`, [data]);
       }
       await conn.query('COMMIT');
-      return true;
+      return '/receivers';
     } catch (error) {
       await conn.query('ROLLBACK');
       return { error };

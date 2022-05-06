@@ -1,3 +1,4 @@
+const { validationResult } = require('express-validator');
 const receiverModel = require('../models/receiver_model');
 
 const receiverController = {
@@ -22,8 +23,17 @@ const receiverController = {
 
   postReceiver: async (req, res) => {
     try {
-      await receiverModel.postReceiver(req);
-      return res.status(301).redirect('/receivers');
+      const { receiverId } = req.params;
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        req.flash('error_messages', 'All fields are required');
+        if (receiverId) {
+          return res.status(301).redirect(`/receivers/${receiverId}`);
+        }
+        return res.status(301).redirect(`/receivers/create`);
+      }
+      const url = await receiverModel.postReceiver(req);
+      return res.status(301).redirect(url);
     } catch (error) {
       console.error(`Post receiver error: ${error}`);
       return res.status(500).send('Internal Server Error');
@@ -34,7 +44,6 @@ const receiverController = {
     try {
       const { receiverId } = req.params;
       const [receiver] = await receiverModel.getReceiver(receiverId);
-      console.log(receiver);
       if (!receiver) {
         return res.status(301).redirect('/receivers');
       }

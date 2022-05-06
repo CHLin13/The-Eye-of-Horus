@@ -95,6 +95,11 @@
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
+        {{#if error_messages}}
+        <div class="alert alert-danger" role="alert" style="opacity: 0.5;">
+          {{error_messages}}
+        </div>
+        {{/if}}
         <form {{#if data}} action="/alerts/{{data.id}}?_method=PUT" {{else}} action="/alerts" {{/if}} method="post">
           <div class="row">
             <div class="col-12 mt-2 mb-5">
@@ -301,7 +306,7 @@
 
 
   preview.on('click', async (e) => {
-    const response = await axios.post('/dashboards/chart/preview',{ 
+    const response = await axios.post('/alerts/chart/preview',{ 
         timeRange: timeRange.val(),
         source: source.val(),
         type: type.val(),
@@ -346,8 +351,11 @@
 
   if (condition.val() === '5'){
     value[0].classList.add('d-none')
-  } else if (condition.val() === '1'){
+  } else if (condition.val() === '1' || condition.val() === '2') {
      value_min.prop('required',true)
+  } else if (condition.val() === '3' || condition.val() === '4') {
+    value_min.prop('required',true)
+    value_max.prop('required',true)
   }
 
   condition.change((e) => {

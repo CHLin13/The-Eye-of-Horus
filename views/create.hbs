@@ -95,6 +95,11 @@
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
+        {{#if error_messages}}
+        <div class="alert alert-danger" role="alert" style="opacity: 0.5;">
+        {{error_messages}}
+        </div>
+        {{/if}}
         <form {{#if data}} action="/dashboards/{{data.dashboardId}}/chart/{{data.chartId}}?_method=PUT" {{else}} action="/dashboards/{{dashboardId}}/chart" {{/if}} method="post">
           <div class="row">
             <div class="col-12 mt-2 mb-5">
@@ -257,9 +262,15 @@
   const yAxisTitle = $('#yAxis-title')
   const yAxisFontSize = $('#yAxis-font-size')
   const yAxisTickFontSize = $('#yAxis-tick-font-size')
+const dashboardId = {{dashboardId}}
 
   preview.on('click', async (e) => {
-    const response = await axios.post('/dashboards/chart/preview',{ 
+    let dashboardId = '{{dashboardId}}'
+    if('{{data.dashboardId}}'){
+      dashboardId = '{{data.dashboardId}}'
+    }
+
+    const response = await axios.post(`/dashboards/${dashboardId}/chart/preview`,{ 
         timeRange: timeRange.val(),
         source: source.val(),
         type: type.val(),

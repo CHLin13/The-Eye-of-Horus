@@ -1,3 +1,4 @@
+const { validationResult } = require('express-validator');
 const dashboardModel = require('../models/dashboard_model');
 const roleModel = require('../models/role_model');
 
@@ -56,6 +57,10 @@ const dashboardController = {
 
   chartPreview: async (req, res) => {
     try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(401).json({ error: 'All fields are required' });
+      }
       const data = await dashboardModel.previewChart(req);
       return res.status(200).json({ data: data, select: req.body.select });
     } catch (error) {
@@ -67,6 +72,10 @@ const dashboardController = {
   getTypeInstance: async (req, res) => {
     try {
       const { source } = req.body;
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(401).json({ error: 'Source is required' });
+      }
       const result = await dashboardModel.getTypeInstance(source);
       return res.status(200).json(result);
     } catch (error) {
@@ -77,8 +86,19 @@ const dashboardController = {
 
   postChart: async (req, res) => {
     try {
+      const { dashboardId, chartId } = req.params;
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        req.flash('error_messages', 'All fields are required');
+        if (chartId) {
+          return res
+            .status(301)
+            .redirect(`/dashboards/${dashboardId}/chart/${chartId}`);
+        }
+        return res.status(301).redirect(`/dashboards/${dashboardId}/create`);
+      }
       await dashboardModel.postChart(req);
-      return res.status(301).redirect(`/dashboards/${req.params.dashboardId}`);
+      return res.status(301).redirect(`/dashboards/${dashboardId}`);
     } catch (error) {
       console.error(`Post dashboard create error: ${error}`);
       return res.status(500).send('Internal Server Error');
@@ -113,7 +133,7 @@ const dashboardController = {
           }
         }
       }
-      
+
       return res.status(200).render('dashboard_detail', {
         chart,
         dashboard,
@@ -173,6 +193,16 @@ const dashboardController = {
     try {
       const { dashboardId } = req.params;
       const { name, roleId, permission } = req.body;
+
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        req.flash('error_messages', 'All fields are required');
+        if (dashboardId) {
+          return res.status(301).redirect(`/dashboards/${dashboardId}`);
+        }
+        return res.status(301).redirect(`/dashboards/create`);
+      }
+
       await dashboardModel.postDashboard(name, roleId, permission, dashboardId);
       return res.status(301).redirect('/dashboards');
     } catch (error) {

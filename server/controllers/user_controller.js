@@ -1,3 +1,4 @@
+const { validationResult } = require('express-validator');
 const userModel = require('../models/user_model');
 const roleModel = require('../models/role_model');
 const bcrypt = require('bcryptjs');
@@ -31,9 +32,23 @@ const userController = {
       const { userId } = req.params;
       const { name, email, superuser, status, role } = req.body;
 
-      const passwordDefault = 'aaaa';
+      const passwordDefault = 'aaaaaaaa';
       const saltRounds = 10;
       const hashedPassword = await hash(passwordDefault, saltRounds);
+
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        if (errors.errors[0].param === 'email') {
+          req.flash('error_messages', 'Email format is incorrect');
+        } else {
+          req.flash('error_messages', 'All fields are required');
+        }
+        return res
+          .status(401)
+          .json({
+            message: 'Email format is incorrect or all fields are required',
+          });
+      }
 
       await userModel.postUser(
         name,
@@ -66,6 +81,13 @@ const userController = {
   deleteUser: async (req, res) => {
     const { userId } = req.params;
     try {
+      if (Number(userId) === res.locals.localUser.id){
+        req.flash(
+          'error_messages',
+          'Can not delete yourself'
+        );
+        return res.status(301).redirect('/admin/users');
+      } 
       await userModel.deleteUser(userId);
       return res.status(301).redirect('/admin/users');
     } catch (error) {

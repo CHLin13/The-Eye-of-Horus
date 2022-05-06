@@ -1,3 +1,4 @@
+const { validationResult } = require('express-validator');
 const dashboardModel = require('../models/dashboard_model');
 const alertModel = require('../models/alert_model');
 
@@ -25,6 +26,15 @@ const alertController = {
 
   postAlert: async (req, res) => {
     try {
+      const { alertId } = req.params;
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        req.flash('error_messages', 'All fields are required');
+        if (alertId) {
+          return res.status(301).redirect(`/alerts/${alertId}`);
+        }
+        return res.status(301).redirect(`/alerts/create`);
+      }
       await alertModel.postAlert(req);
       return res.status(301).redirect(`/alerts`);
     } catch (error) {
