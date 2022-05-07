@@ -3,10 +3,7 @@ const router = express.Router();
 const { body } = require('express-validator');
 
 const dashboardController = require('../controllers/dashboard_controller');
-const {
-  authenticated,
-  getPermission,
-} = require('../../utils/auth');
+const { authenticated, getPermission } = require('../../utils/auth');
 const { adminRole, editorRole, viewerRole } = require('../../utils/role');
 
 //dashboard
@@ -31,9 +28,7 @@ router.post(
   authenticated,
   getPermission,
   adminRole,
-  [
-    body('name').not().isEmpty(),
-  ],
+  [body('name').not().isEmpty()],
   dashboardController.postDashboard
 );
 
@@ -42,9 +37,7 @@ router.put(
   authenticated,
   getPermission,
   adminRole,
-  [
-    body('name').not().isEmpty(),
-  ],
+  [body('name').not().isEmpty()],
   dashboardController.postDashboard
 );
 router.get(
@@ -80,9 +73,7 @@ router.post(
 router.post(
   '/type_instance',
   authenticated,
-  [
-    body('source').not().isEmpty(),
-  ],
+  [body('source').not().isEmpty()],
   dashboardController.getTypeInstance
 );
 
