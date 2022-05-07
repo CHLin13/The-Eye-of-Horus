@@ -33,8 +33,6 @@ router.post(
   adminRole,
   [
     body('name').not().isEmpty(),
-    body('roleId').not().isEmpty(),
-    body('permission').not().isEmpty(),
   ],
   dashboardController.postDashboard
 );
@@ -46,8 +44,6 @@ router.put(
   adminRole,
   [
     body('name').not().isEmpty(),
-    body('roleId').not().isEmpty(),
-    body('permission').not().isEmpty(),
   ],
   dashboardController.postDashboard
 );
