@@ -183,6 +183,11 @@
     const roleName = $('#role option:selected').text()
     const permissionText = $('#permission option:selected').text()
 
+    if(!roleId){
+      toastr.error('Role and permission are required')
+      return
+    }
+
     for(let i = 0; i < roles.length; i++){
       if(roles[i].classList[1] === roleId) {
         toastr.error('Role already exist')
