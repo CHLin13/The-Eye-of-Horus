@@ -1,3 +1,5 @@
+CREATE DATABASE IF NOT EXISTS eye;
+USE eye;
 -- MySQL dump 10.13  Distrib 8.0.28, for Win64 (x86_64)
 --
 -- Host: localhost    Database: eye
