@@ -100,53 +100,62 @@
         {{error_messages}}
         </div>
         {{/if}}
-        <form {{#if data}} action="/dashboards/{{data.dashboardId}}/chart/{{data.chartId}}?_method=PUT" {{else}} action="/dashboards/{{dashboardId}}/chart" {{/if}} method="post">
-          <div class="row">
-            <div class="col-12 mt-2 mb-5">
-              <div class="d-flex justify-content-between mr-5 mb-3">
-                  <div class="d-flex ml-5 pl-3">
-                    <label for="title" class="d-flex justify-content-center align-items-center m-0 mr-3">Title</label>
-                    <input class="form-control" type="text" id="title" name="title" placeholder="Chart-1"style="background: #343A40; color:white" value="{{data.title}}" required>
-                  </div>
-                  <div class="d-flex ml-5 pl-3">
-                    <label for="font-size" class="d-flex justify-content-center align-items-center m-0 mr-3">Title font size</label>
-                    <input class="form-control" style="width: 100px; background: #343A40; color:white" type="number" min="0" id="font-size" name="fontSize" {{#if data}}value="{{data.titleFontSize}}" {{else}} value="20" {{/if}} required>
-                  </div>
-                  <div class="d-flex mx-5">
-                    <label for="time-range" class="d-flex justify-content-center align-items-center m-0 mr-3">Time range</label>
-                    <select class="form-control" id="time-range" style="width: 15vw; background: #343A40; color:white" name="timeRange">
-                      <option value="5-m" {{#ifCond data.timeRange '5-m'}}selected{{/ifCond}}>Last 5 minutes</option>
-                      <option value="15-m"{{#ifCond data.timeRange '15-m'}}selected{{/ifCond}}>Last 15 minutes</option>
-                      <option value="30-m"{{#ifCond data.timeRange '30-m'}}selected{{/ifCond}}>Last 30 minutes</option>
-                      <option value="1-h" {{#ifCond data.timeRange '1-h'}}selected{{/ifCond}}>Last 1 hour</option>
-                      <option value="3-h" {{#ifCond data.timeRange '3-h'}}selected{{/ifCond}}>Last 3 hour</option>
-                      <option value="6-h" {{#ifCond data.timeRange '6-h'}}selected{{/ifCond}}>Last 6 hour</option>
-                      <option value="12-h" {{#ifCond data.timeRange '12-h'}}selected{{/ifCond}}>Last 12 hour</option>
-                      <option value="24-h" {{#ifCond data.timeRange '24-h'}}selected{{/ifCond}}>Last 24 hour</option>
-                      <option value="2-d" {{#ifCond data.timeRange '2-d'}}selected{{/ifCond}}>Last 2 days</option>
-                      <option value="7-d" {{#ifCond data.timeRange '7-d'}}selected{{/ifCond}}>Last 7 days</option>
-                      <option value="30-d" {{#ifCond data.timeRange '30-d'}}selected{{/ifCond}}>Last 30 days</option>
-                      <option value="90-d" {{#ifCond data.timeRange '90-d'}}selected{{/ifCond}}>Last 90 days</option>
-                      <option value="6-M" {{#ifCond data.timeRange '6-M'}}selected{{/ifCond}}>Last 6 months</option>
-                      <option value="1-y" {{#ifCond data.timeRange '1-y'}}selected{{/ifCond}}>Last 1 year</option>
-                      <option value="2-y" {{#ifCond data.timeRange '2-y'}}selected{{/ifCond}}>Last 2 years</option>
-                      <option value="5-y"{{#ifCond data.timeRange '5-y'}}selected{{/ifCond}}>Last 5 years</option>
-                    </select>
-                  <button type="submit" class="btn mr-3 ml-5" style="background-color: #8C745E; color:#C2C7D0">SAVE</button>
-                  </div>
-                  
-              </div>
-              <div class="card m-auto" style="width: 90%; background: #343A40">
-                <!-- /.card-header -->
-                <div class="card-body table-responsive p-1 d-flex justify-content-center" style="height: 50vh;">
-                  <div class="chart"></div>
+        <form {{#if data}} action="/dashboards/{{data.dashboardId}}/chart/{{data.chartId}}?_method=PUT" {{else}} action="/dashboards/{{dashboardId}}/chart" {{/if}} method="post" class="pb-5">
+          <div style="margin: 0; padding: 0;">
+              <div class="row pt-3 ml-5">
+                <div class="col-1 p-0">
+                  <label for="title" class="d-flex align-items-center">Title</label>
                 </div>
-                <!-- /.card-body -->
+                <div class="col-2 p-0 mr-5">
+                  <input class="form-control" type="text" id="title" name="title" placeholder="Chart-1"style="background: #343A40; color:white" value="{{data.title}}" required>
+                </div>
+                <div class="col-2 p-0">
+                  <label for="font-size" class="d-flex align-items-center">Title font size</label>
+                </div>
+                <div class="col-2 p-0 mr-5" style="margin-left: -30px;">
+                  <input class="form-control" style="background: #343A40; color:white" type="number" min="0" id="font-size" name="fontSize" {{#if data}}value="{{data.titleFontSize}}" {{else}} value="20" {{/if}} required>
+                </div>
+                <div class="col-2 p-0">
+                  <label for="time-range" class="d-flex align-items-center">Time range</label>
+                </div>
+                <div class="col-2 p-0" style="margin-left: -30px;">
+                  <select class="form-control" id="time-range" style="background: #343A40; color:white" name="timeRange">
+                    <option value="5-m" {{#ifCond data.timeRange '5-m'}}selected{{/ifCond}}>Last 5 minutes</option>
+                    <option value="15-m"{{#ifCond data.timeRange '15-m'}}selected{{/ifCond}}>Last 15 minutes</option>
+                    <option value="30-m"{{#ifCond data.timeRange '30-m'}}selected{{/ifCond}}>Last 30 minutes</option>
+                    <option value="1-h" {{#ifCond data.timeRange '1-h'}}selected{{/ifCond}}>Last 1 hour</option>
+                    <option value="3-h" {{#ifCond data.timeRange '3-h'}}selected{{/ifCond}}>Last 3 hour</option>
+                    <option value="6-h" {{#ifCond data.timeRange '6-h'}}selected{{/ifCond}}>Last 6 hour</option>
+                    <option value="12-h" {{#ifCond data.timeRange '12-h'}}selected{{/ifCond}}>Last 12 hour</option>
+                    <option value="24-h" {{#ifCond data.timeRange '24-h'}}selected{{/ifCond}}>Last 24 hour</option>
+                    <option value="2-d" {{#ifCond data.timeRange '2-d'}}selected{{/ifCond}}>Last 2 days</option>
+                    <option value="7-d" {{#ifCond data.timeRange '7-d'}}selected{{/ifCond}}>Last 7 days</option>
+                    <option value="30-d" {{#ifCond data.timeRange '30-d'}}selected{{/ifCond}}>Last 30 days</option>
+                    <option value="90-d" {{#ifCond data.timeRange '90-d'}}selected{{/ifCond}}>Last 90 days</option>
+                    <option value="6-M" {{#ifCond data.timeRange '6-M'}}selected{{/ifCond}}>Last 6 months</option>
+                    <option value="1-y" {{#ifCond data.timeRange '1-y'}}selected{{/ifCond}}>Last 1 year</option>
+                    <option value="2-y" {{#ifCond data.timeRange '2-y'}}selected{{/ifCond}}>Last 2 years</option>
+                    <option value="5-y"{{#ifCond data.timeRange '5-y'}}selected{{/ifCond}}>Last 5 years</option>
+                  </select>
+                </div>
               </div>
-              <div class="d-flex mt-3 mr-5 ml-3 justify-content-around">
-                <div class="d-flex">
-                  <label for="source" class="d-flex justify-content-center align-items-center m-0 mx-5" style="width:3vw">Source</label>
-                  <select class="form-control ml-4" id="source" style="width: 15vw; background: #343A40; color:white" name="source">                 
+
+              <div class="row">
+                <div class="col-12 card m-auto" style="width: 90%; background: #343A40">
+                  <!-- /.card-header -->
+                  <div class="card-body table-responsive p-1 d-flex justify-content-center" style="height: 50vh;">
+                    <div class="chart"></div>
+                  </div>
+                  <!-- /.card-body -->
+                </div>
+              </div>
+              
+              <div class="row mt-3 ml-5">
+                <div class="col-1 p-0">
+                  <label for="source" class="d-flex align-items-center">Source</label>
+                </div>
+                <div class="col-2 p-0 mr-5">
+                  <select class="form-control" id="source" style="background: #343A40; color:white" name="source">                 
                     {{#if data}}
                       {{#each source}}
                       <option value="{{this}}" {{#ifCond this ../data.source }}selected{{/ifCond}}>{{this}}</option>
@@ -158,9 +167,11 @@
                     {{/if}}
                   </select>
                 </div>
-                <div class="d-flex mr-5" style="width: 33vw;">
-                  <label for="type" class="d-flex justify-content-center align-items-center m-0 mx-3" style="width:10vw">Type instance</label>
-                  <select class="form-control ml-4" id="type" style="width: 10vw; background: #343A40; color:white" name="type">
+                <div class="col-2 p-0">
+                  <label for="type" class="d-flex align-items-center">Type instance</label>
+                </div>
+                <div class="col-2 p-0" style="margin-left: -30px; margin-right: 230px;">
+                  <select class="form-control" id="type" style="background: #343A40; color:white" name="type">
                     {{#if data}}
                       {{#each type}}
                         <option value="{{this}}" {{#ifCond this ../data.type }}selected{{/ifCond}}>{{this}}</option>
@@ -168,22 +179,30 @@
                     {{/if}}
                   </select>
                 </div>
-                <div>
-                  <div class="btn mr-2" style="background-color:#59573C; color:#C2C7D0" id="preview">Preview chart</div>
+                <div class="col-2 p-0">
+                  <div class="btn" style="background-color:#59573C; color:#C2C7D0" id="preview">Preview chart</div>
+                  <button type="submit" class="btn" style="background-color: #8C745E; color:#C2C7D0">SAVE</button>
                 </div>
               </div>
-              <div class="d-flex justify-content-around mr-5">
-                <div class="d-flex mt-3 ml-3">
-                  <label for="style" class="d-flex justify-content-center align-items-center m-0 mx-5" style="width:3vw">Style</label>
-                  <select class="form-control ml-4" id="style" style="width: 15vw; background: #343A40; color:white" name="style">
+
+              <div class="row mt-3 ml-5">  
+                <div class="col-1 p-0">
+                  <label for="style" class="d-flex align-items-center">Style</label>
+                </div>
+                <div class="col-2 p-0 mr-5">
+                  <select class="form-control" id="style" style="background: #343A40; color:white" name="style">
                     <option value="line" {{#ifCond data.style 'line'}}selected{{/ifCond}}>line chart</option>
                     <option value="bar" {{#ifCond data.style 'bar'}}selected{{/ifCond}}>bar chart</option>
                   </select>
                 </div>
-                <div class="d-flex mt-3 ml-3">
-                  <label for="interval" class="d-flex justify-content-center align-items-center m-0 mx-5" style="width:3vw">Interval</label>
-                  <input class="form-control" type="number" min="1" style="width: 75px; background: #343A40; color:white" name="interval" id="interval" {{#if data}}value="{{data.interval}}" {{else}} value="10" {{/if}}>
-                  <select class="form-control ml-2" style="width: 8vw; background: #343A40; color:white" name="interval_unit" id="interval_unit">
+                <div class="col-2 p-0">
+                  <label for="interval" class="d-flex align-items-center">Interval</label>
+                </div>
+                <div class="col-1 p-0" style="margin-left: -30px;" >
+                  <input class="form-control" type="number" min="1" style="background: #343A40; color:white; width:80px" name="interval" id="interval" {{#if data}}value="{{data.interval}}" {{else}} value="10" {{/if}}>
+                </div>
+                <div class="col-1 p-0 mr-5">
+                  <select class="form-control" style="background: #343A40; color:white" name="interval_unit" id="interval_unit">
                     <option value="s" {{#ifCond data.interval_unit 's'}}selected{{/ifCond}}>second</option>
                     <option value="m" {{#ifCond data.interval_unit 'm'}}selected{{/ifCond}}>minute</option>
                     <option value="h" {{#ifCond data.interval_unit 'h'}}selected{{/ifCond}}>hour</option>
@@ -191,9 +210,11 @@
                     <option value="w" {{#ifCond data.interval_unit 'w'}}selected{{/ifCond}}>week</option>
                   </select>
                 </div>
-                <div class="d-flex mt-3 ml-3">
-                  <label for="select" class="d-flex justify-content-center align-items-center m-0 mx-5" style="width:3vw">Select</label>
-                  <select class="form-control" id="select" style="width: 10vw; background: #343A40; color:white" name="select" id="select">
+                <div class="col-2 p-0">
+                  <label for="select" class="d-flex align-items-center">Select</label>
+                </div>
+                <div class="col-2 p-0" style="margin-left: -30px;">
+                  <select class="form-control" id="select" style="background: #343A40; color:white" name="select" id="select">
                     <option value="min" {{#ifCond data.select 'min'}}selected{{/ifCond}}>min</option>
                     <option value="max" {{#ifCond data.select 'max'}}selected{{/ifCond}}>max</option>
                     <option value="mean" {{#ifCond data.select 'mean'}}selected{{/ifCond}}>mean</option>
@@ -202,35 +223,48 @@
                   </select>
                 </div>
               </div>
-              <div class="d-flex justify-content-around mr-5">
-                <div class="d-flex mt-3 ml-3">
-                  <label for="xAxis-title" class="d-flex justify-content-center align-items-center m-0 mx-3" style="width:10vw">x-Axis title</label>
-                  <input class="form-control" type="text" style="width: 200px; background: #343A40; color:white" name="xAxisTitle" id="xAxis-title" placeholder="xAxis" {{#if data}}value="{{data.xAxisTitle}}"{{/if}}>
+
+              <div class="row mt-3 ml-5">
+                <div class="col-1 p-0">
+                  <label for="xAxis-title" class="d-flex align-items-center">x-Axis title</label>
                 </div>
-                <div class="d-flex mt-3 ml-3">
-                  <label for="xAxis-font-size" class="d-flex justify-content-center align-items-center m-0 mx-5" style="width:10vw">x-Axis title font size</label>
-                  <input class="form-control" type="number" min="1" style="width: 75px; background: #343A40; color:white" name="xAxisFontSize" id="xAxis-font-size" {{#if data}} value="{{data.xAxisFontSize}}" {{else}} value="16" {{/if}}>
+                <div class="col-2 p-0 mr-5">
+                  <input class="form-control" type="text" style="background: #343A40; color:white" name="xAxisTitle" id="xAxis-title" placeholder="xAxis" {{#if data}}value="{{data.xAxisTitle}}"{{/if}}>
                 </div>
-                <div class="d-flex mt-3 ml-3">
-                  <label for="xAxis-tick-font-size" class="d-flex justify-content-center align-items-center m-0 mx-5" style="width:10vw">x-Axis tick font size</label>
-                  <input class="form-control" type="number" min="1" style="width: 75px; background: #343A40; color:white" name="xAxisTickFontSize" id="xAxis-tick-font-size" {{#if data}} value="{{data.xAxisTickFontSize}}" {{else}} value="12" {{/if}}>
+                <div class="col-2 p-0">
+                  <label for="xAxis-font-size" class="d-flex align-items-center">x-Axis title font size</label>
                 </div>
-              </div>
-              <div class="d-flex justify-content-around mr-5">
-                <div class="d-flex mt-3 ml-3">
-                  <label for="yAxis-title" class="d-flex justify-content-center align-items-center m-0 mx-3" style="width:10vw">y-Axis title</label>
-                  <input class="form-control" type="text" style="width: 200px; background: #343A40; color:white" name="yAxisTitle" id="yAxis-title" placeholder="yAxis" {{#if data}}value="{{data.yAxisTitle}}"{{/if}}>
+                <div class="col-2 p-0 mr-5" style="margin-left: -30px;">
+                  <input class="form-control" type="number" min="1" style="background: #343A40; color:white" name="xAxisFontSize" id="xAxis-font-size" {{#if data}} value="{{data.xAxisFontSize}}" {{else}} value="16" {{/if}}>
                 </div>
-                <div class="d-flex mt-3 ml-3">
-                  <label for="yAxis-font-size" class="d-flex justify-content-center align-items-center m-0 mx-5" style="width:10vw">y-Axis title font size</label>
-                  <input class="form-control" type="number" min="1" style="width: 75px; background: #343A40; color:white" name="yAxisFontSize" id="yAxis-font-size" {{#if data}} value="{{data.yAxisFontSize}}" {{else}} value="16" {{/if}}>
+                <div class="col-2 p-0">
+                  <label for="xAxis-tick-font-size" class="d-flex align-items-center">x-Axis tick font size</label>
                 </div>
-                <div class="d-flex mt-3 ml-3">
-                  <label for="yAxis-tick-font-size" class="d-flex justify-content-center align-items-center m-0 mx-5" style="width:10vw;">y-Axis tick font size</label>
-                  <input class="form-control" type="number" min="1" style="width: 75px; background: #343A40; color:white" name="yAxisTickFontSize" id="yAxis-tick-font-size" {{#if data}} value="{{data.yAxisTickFontSize}}" {{else}} value="12" {{/if}}>
+                <div class="col-2 p-0" style="margin-left: -30px;">
+                  <input class="form-control" type="number" min="1" style="background: #343A40; color:white" name="xAxisTickFontSize" id="xAxis-tick-font-size" {{#if data}} value="{{data.xAxisTickFontSize}}" {{else}} value="12" {{/if}}>
                 </div>
               </div>
-            </div>
+              
+              <div class="row mt-3 ml-5">
+                <div class="col-1 p-0">
+                  <label for="yAxis-title" class="d-flex align-items-center">y-Axis title</label>
+                </div>
+                <div class="col-2 p-0 mr-5">
+                  <input class="form-control" type="text" style="background: #343A40; color:white" name="yAxisTitle" id="yAxis-title" placeholder="yAxis" {{#if data}}value="{{data.yAxisTitle}}"{{/if}}>
+                </div>
+                <div class="col-2 p-0">
+                  <label for="yAxis-font-size" class="d-flex align-items-center">y-Axis title font size</label>
+                </div>
+                <div class="col-2 p-0 mr-5" style="margin-left: -30px;">
+                  <input class="form-control" type="number" min="1" style="background: #343A40; color:white" name="yAxisFontSize" id="yAxis-font-size" {{#if data}} value="{{data.yAxisFontSize}}" {{else}} value="16" {{/if}}>
+                </div>
+                <div class="col-2 p-0">
+                  <label for="yAxis-tick-font-size" class="d-flex align-items-center">y-Axis tick font size</label>
+                </div>
+                <div class="col-2 p-0" style="margin-left: -30px;">
+                  <input class="form-control" type="number" min="1" style="background: #343A40; color:white" name="yAxisTickFontSize" id="yAxis-tick-font-size" {{#if data}} value="{{data.yAxisTickFontSize}}" {{else}} value="12" {{/if}}>
+                </div>
+              </div>
           </div>
         </form>
       </div>
