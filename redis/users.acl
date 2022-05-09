@@ -1,2 +1,0 @@
-user default on sanitize-payload #bd29915af6ceb4877dc23929efe590250e116d66c2d549c340975cceab9f986a ~* &* +@all
-user user1 on #2f378f30bbf63d61889492ec38ba7d6716c48357e07a623be8beb67f2a7bf21b ~* &* +@all
