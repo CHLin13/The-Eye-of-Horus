@@ -137,8 +137,8 @@
                         <td> {{this.name}}</td>
                         <td> {{this.rName}} / {{this.rType}}</td>
                         {{#ifCond ../localUser.superuser '1'}} 
-                        <td class="text-center"><a class="text-secondary" href="/alerts/{{this.id}}"><i class="fas fa-edit"></i></a></td>
-                        <td class="text-center"><a data-toggle="modal" data-target="#modal{{this.id}}" style="color:white">X</a></td>
+                        <td class="text-center"><a href="/alerts/{{this.id}}"><i class="fas fa-edit" style="color:#C2C7D0"></i></a></td>
+                        <td class="text-center text-danger"><a data-toggle="modal" data-target="#modal{{this.id}}"><i class="fas fa-minus-circle pointer"></a></td>
                         <div class="modal fade" id="modal{{this.id}}">
                           <div class="modal-dialog">
                           <div class="modal-content bg-light">

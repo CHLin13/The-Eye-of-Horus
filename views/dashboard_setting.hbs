@@ -97,7 +97,7 @@
       <div class="container-fluid">
         <div class="mx-5 d-flex justify-content-between">     
             <input class="form-control" type="text" name="name" id="name" placeholder="New Dashboard" value="{{dashboard.name}}" style="background: #343A40; color:white; width:20vw" required>
-            <button id="save" class="btn btn-info">SAVE</button>    
+            <button id="save" class="btn buttons">SAVE</button>    
         </div>
       </div><!-- /.container-fluid -->
     </section>
@@ -124,7 +124,7 @@
                   </select>
                   </div>
                   <div class="col-4">
-                    <button type="submit" class="btn btn-primary" id="add">Add</button>
+                    <button type="submit" class="btn buttons" id="add">Add</button>
                   </div>
                 </div>
             
@@ -148,7 +148,7 @@
                           {{#ifCond this.permission '2'}}Editor{{/ifCond}}
                           {{#ifCond this.permission '3'}}Admin{{/ifCond}}
                         </td>
-                        <td class="text-center"><i class="fas fa-minus-circle text-danger remove"></i></td>
+                        <td class="text-center"><i class="fas fa-minus-circle text-danger remove pointer"></i></td>
                     </tr>
                     {{/each}}
                   </tbody>
@@ -197,7 +197,7 @@
     tbody.append(`<tr class='roles ${roleId}'>
                   <td>${roleName}</td>
                   <td class="text-center ${permission.val()}">${permissionText}</td>
-                  <td class="d-flex align-items-center justify-content-center"><i class="fas fa-minus-circle text-danger remove"></i></td>
+                  <td class="d-flex align-items-center justify-content-center"><i class="fas fa-minus-circle text-danger remove pointer"></i></td>
               </tr>`)
     toastr.success('Add successfully')
   })

@@ -130,8 +130,8 @@
                      {{#each dashboards}}
                         <tr>
                           <td> <a href="/dashboards/{{this.id}}" style="color: #C2C7D0">{{this.name}}</a> </td>
-                          <td class="text-center"><a class="text-secondary" href="/dashboards/{{this.id}}/setting"><i class="fas fa-cog"></i></a></td>
-                          <td class="text-center text-danger"><a data-toggle="modal" data-target="#modal{{this.id}}"><i class="fas fa-minus-circle"></i></a></td>
+                          <td class="text-center"><a class="text-secondary" href="/dashboards/{{this.id}}/setting"><i class="fas fa-cog" style="color:#C2C7D0"></i></a></td>
+                          <td class="text-center text-danger"><a data-toggle="modal" data-target="#modal{{this.id}}"><i class="fas fa-minus-circle pointer"></i></a></td>
                             <div class="modal fade" id="modal{{this.id}}">
                               <div class="modal-dialog">
                               <div class="modal-content bg-light">
@@ -160,8 +160,8 @@
                           <tr>
                             <td> <a href="/dashboards/{{this.id}}" style="color: #C2C7D0">{{this.name}}</a> </td>
                             {{#if this.adminPermission}}
-                            <td class="text-center"><a class="text-secondary" href="/dashboards/{{this.id}}/setting"><i class="fas fa-cog"></i></a></td>
-                            <td class="text-center text-danger"><a data-toggle="modal" data-target="#modal{{this.id}}"><i class="fas fa-minus-circle"></i></a></td>
+                            <td class="text-center"><a href="/dashboards/{{this.id}}/setting"><i class="fas fa-cog" style="color:#C2C7D0"></i></a></td>
+                            <td class="text-center text-danger"><a data-toggle="modal" data-target="#modal{{this.id}}"><i class="fas fa-minus-circle pointer"></i></a></td>
                               <div class="modal fade" id="modal{{this.id}}">
                                 <div class="modal-dialog">
                                 <div class="modal-content bg-light">
