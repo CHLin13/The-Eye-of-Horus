@@ -102,7 +102,7 @@
         {{/if}}
         <form {{#if data}} action="/dashboards/{{data.dashboardId}}/chart/{{data.chartId}}?_method=PUT" {{else}} action="/dashboards/{{dashboardId}}/chart" {{/if}} method="post" class="pb-5">
           <div style="margin: 0; padding: 0;">
-              <div class="row pt-3 ml-5">
+              <div class="row pt-3 ml-5 align-items-center">
                 <div class="col-1 p-0">
                   <label for="title" class="d-flex align-items-center">Title</label>
                 </div>
@@ -140,7 +140,7 @@
                 </div>
               </div>
 
-              <div class="row">
+              <div class="row align-items-center">
                 <div class="col-12 card m-auto" style="width: 90%; background: #343A40">
                   <!-- /.card-header -->
                   <div class="card-body table-responsive p-1 d-flex justify-content-center" style="height: 50vh;">
@@ -150,7 +150,7 @@
                 </div>
               </div>
               
-              <div class="row mt-3 ml-5">
+              <div class="row mt-3 ml-5 align-items-center">
                 <div class="col-1 p-0">
                   <label for="source" class="d-flex align-items-center">Source</label>
                 </div>
@@ -185,7 +185,7 @@
                 </div>
               </div>
 
-              <div class="row mt-3 ml-5">  
+              <div class="row mt-3 ml-5 align-items-center">  
                 <div class="col-1 p-0">
                   <label for="style" class="d-flex align-items-center">Style</label>
                 </div>
@@ -224,7 +224,7 @@
                 </div>
               </div>
 
-              <div class="row mt-3 ml-5">
+              <div class="row mt-3 ml-5 align-items-center">
                 <div class="col-1 p-0">
                   <label for="xAxis-title" class="d-flex align-items-center">x-Axis title</label>
                 </div>
@@ -245,7 +245,7 @@
                 </div>
               </div>
               
-              <div class="row mt-3 ml-5">
+              <div class="row mt-3 ml-5 align-items-center">
                 <div class="col-1 p-0">
                   <label for="yAxis-title" class="d-flex align-items-center">y-Axis title</label>
                 </div>
