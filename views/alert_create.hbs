@@ -350,7 +350,12 @@
     const select = response.data.select + '_value'
 
     const trace = {
-      x: result.map(item => item.time),
+      x: result.map(item => {
+        const timeStr = new Date(item.time).toLocaleString('en-GB').split(', ')
+        const date = timeStr[0].split('/')
+        const time = timeStr[1].split(':')
+        return new Date(date[2],date[1],date[0],time[0],time[1],time[2])
+        }),
       y: result.map(item => item[select]),
       type: style.val(),
       connectgaps: true
