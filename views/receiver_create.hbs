@@ -95,24 +95,17 @@
     <section class="content">
       <div class="container-fluid">
         {{#if error_messages}}
-        <div class="alert alert-danger" role="alert" style="opacity: 0.5;">
+        <div class="alert alert-danger" role="alert" style="opacity: 0.8;">
         {{error_messages}}
         </div>
         {{/if}}
+        {{#if error}}
+          <div class="alert alert-danger" role="alert" style="opacity: 0.8;">
+            {{error}}
+          </div>
+        {{/if}}
         <!-- /.row -->
         <div class="row">
-          <div class="col-3 mx-auto my-3">
-            {{#if error_messages}}
-            <div class="alert alert-danger" role="alert" style="opacity: 0.5; margin:0;">
-              {{error_messages}}
-            </div>
-            {{/if}}
-            {{#if error}}
-              <div class="alert alert-danger" role="alert" style="opacity: 0.5; margin:0;">
-                {{error}}
-              </div>
-            {{/if}}
-            </div>
           <div class="col-12">
             <div class="card m-auto bg-dark" style="width: 90%;">
               <!-- form start -->
