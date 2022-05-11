@@ -65,7 +65,7 @@ const work = (async function () {
           checker = new checkerNoValue();
           break;
       }
-      
+
       for (let j = 0; j < limit; j++) {
         count += checker.check(system[j][select]);
       }
@@ -98,9 +98,10 @@ const work = (async function () {
         conn.release();
       }
     }
-    redis.disconnect();
+    await redis.disconnect();
   } catch (error) {
     console.error(error);
+    throw new Error(error);
   }
 })();
 

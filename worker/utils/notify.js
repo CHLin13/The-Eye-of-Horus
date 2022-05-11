@@ -19,8 +19,8 @@ module.exports = {
     try {
       await mg.messages().send(data);
     } catch (error) {
-      console.log({ error: error });
-      console.log('email error');
+      console.log({ 'email error': error });
+      throw new Error(error);
     }
   },
   Slack: async function slackNotify(url, message) {
@@ -31,8 +31,8 @@ module.exports = {
         username: ' The-Eye-of-Horus',
       });
     } catch (error) {
-      console.log({ error: error });
-      console.log('slack error');
+      console.log({ 'slack error': error });
+      throw new Error(error);
     }
   },
   Discord: async function discordNotify(id, message, token) {
@@ -47,8 +47,8 @@ module.exports = {
         avatarURL: 'https://i.imgur.com/euLn4Te.png',
       });
     } catch (error) {
-      console.log({ error: error });
-      console.log('discord error');
+      console.log({ 'discord error': error });
+      throw new Error(error);
     }
   },
 };
