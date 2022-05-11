@@ -7,9 +7,9 @@ const appController = require('../controllers/app_controller');
 router.post(
   '/postData',
   [
-    body('timestamp').not().isEmpty(),
-    body('name').not().isEmpty(),
-    body('value').not().isEmpty(),
+    body('timestamp').notEmpty(),
+    body('name').notEmpty(),
+    body('value').notEmpty(),
   ],
   appController.postData
 );

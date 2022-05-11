@@ -13,9 +13,9 @@ router.post(
   '/',
   authenticated,
   [
-    body('name').not().isEmpty(),
-    body('description').not().isEmpty(),
-    body('type').not().isEmpty(),
+    body('name').notEmpty(),
+    body('description').notEmpty(),
+    body('type').notEmpty(),
   ],
   receiverController.postReceiver
 );
@@ -25,9 +25,9 @@ router.put(
   '/:receiverId',
   authenticated,
   [
-    body('name').not().isEmpty(),
-    body('description').not().isEmpty(),
-    body('type').not().isEmpty(),
+    body('name').notEmpty(),
+    body('description').notEmpty(),
+    body('type').notEmpty(),
   ],
   receiverController.postReceiver
 );

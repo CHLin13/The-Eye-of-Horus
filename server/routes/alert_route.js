@@ -14,11 +14,11 @@ router.post(
   authenticated,
   authenticatedSuper,
   [
-    body('timeRange').not().isEmpty(),
-    body('source').not().isEmpty(),
-    body('interval').not().isEmpty(),
-    body('interval_unit').not().isEmpty(),
-    body('select').not().isEmpty(),
+    body('timeRange').notEmpty(),
+    body('source').notEmpty(),
+    body('interval').notEmpty(),
+    body('interval_unit').notEmpty(),
+    body('select').notEmpty(),
   ],
   dashboardController.chartPreview
 );
@@ -27,14 +27,14 @@ router.post(
   '/',
   authenticatedSuper,
   [
-    body('name').not().isEmpty(),
-    body('source').not().isEmpty(),
-    body('select').not().isEmpty(),
-    body('condition').not().isEmpty(),
-    body('eval_every_input').not().isEmpty(),
-    body('eval_for_input').not().isEmpty(),
-    body('receiver_id').not().isEmpty(),
-    body('message').not().isEmpty(),
+    body('name').notEmpty(),
+    body('source').notEmpty(),
+    body('select').notEmpty(),
+    body('condition').notEmpty(),
+    body('eval_every_input').notEmpty(),
+    body('eval_for_input').notEmpty(),
+    body('receiver_id').notEmpty(),
+    body('message').notEmpty(),
   ],
   alertController.postAlert
 );
@@ -43,14 +43,14 @@ router.put(
   '/:alertId',
   authenticatedSuper,
   [
-    body('name').not().isEmpty(),
-    body('source').not().isEmpty(),
-    body('select').not().isEmpty(),
-    body('condition').not().isEmpty(),
-    body('eval_every_input').not().isEmpty(),
-    body('eval_for_input').not().isEmpty(),
-    body('receiver_id').not().isEmpty(),
-    body('message').not().isEmpty(),
+    body('name').notEmpty(),
+    body('source').notEmpty(),
+    body('select').notEmpty(),
+    body('condition').notEmpty(),
+    body('eval_every_input').notEmpty(),
+    body('eval_for_input').notEmpty(),
+    body('receiver_id').notEmpty(),
+    body('message').notEmpty(),
   ],
   alertController.postAlert
 );

@@ -15,10 +15,10 @@ router.post(
   '/users',
   authenticatedSuper,
   [
-    body('name').not().isEmpty(),
+    body('name').notEmpty(),
     body('email').isEmail(),
-    body('superuser').not().isEmpty(),
-    body('status').not().isEmpty(),
+    body('superuser').notEmpty(),
+    body('status').notEmpty(),
   ],
   userController.postUser
 );
@@ -27,10 +27,10 @@ router.put(
   '/users/:userId',
   authenticatedSuper,
   [
-    body('name').not().isEmpty(),
+    body('name').notEmpty(),
     body('email').isEmail(),
-    body('superuser').not().isEmpty(),
-    body('status').not().isEmpty(),
+    body('superuser').notEmpty(),
+    body('status').notEmpty(),
   ],
   userController.postUser
 );
@@ -43,14 +43,14 @@ router.get('/roles/create', authenticatedSuper, roleController.getRoleCreate);
 router.post(
   '/roles',
   authenticatedSuper,
-  [body('name').not().isEmpty(), body('description').not().isEmpty()],
+  [body('name').notEmpty(), body('description').notEmpty()],
   roleController.postRole
 );
 router.get('/roles/:roleId', authenticatedSuper, roleController.getRole);
 router.put(
   '/roles/:roleId',
   authenticatedSuper,
-  [body('name').not().isEmpty(), body('description').not().isEmpty()],
+  [body('name').notEmpty(), body('description').notEmpty()],
   roleController.postRole
 );
 router.delete('/roles/:roleId', authenticatedSuper, roleController.deleteRole);

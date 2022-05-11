@@ -28,7 +28,7 @@ router.post(
   authenticated,
   getPermission,
   adminRole,
-  [body('name').not().isEmpty()],
+  [body('name').notEmpty()],
   dashboardController.postDashboard
 );
 
@@ -37,7 +37,7 @@ router.put(
   authenticated,
   getPermission,
   adminRole,
-  [body('name').not().isEmpty()],
+  [body('name').notEmpty()],
   dashboardController.postDashboard
 );
 router.get(
@@ -62,18 +62,18 @@ router.post(
   getPermission,
   viewerRole,
   [
-    body('timeRange').not().isEmpty(),
-    body('source').not().isEmpty(),
-    body('interval').not().isEmpty(),
-    body('interval_unit').not().isEmpty(),
-    body('select').not().isEmpty(),
+    body('timeRange').notEmpty(),
+    body('source').notEmpty(),
+    body('interval').notEmpty().isInt({ min: 1, max: 2000 }),
+    body('interval_unit').notEmpty(),
+    body('select').notEmpty(),
   ],
   dashboardController.chartPreview
 );
 router.post(
   '/type_instance',
   authenticated,
-  [body('source').not().isEmpty()],
+  [body('source').notEmpty()],
   dashboardController.getTypeInstance
 );
 
@@ -99,14 +99,14 @@ router.put(
   getPermission,
   editorRole,
   [
-    body('timeRange').not().isEmpty(),
-    body('source').not().isEmpty(),
-    body('style').not().isEmpty(),
-    body('interval').not().isEmpty(),
-    body('interval_unit').not().isEmpty(),
-    body('select').not().isEmpty(),
-    body('title').not().isEmpty(),
-    body('fontSize').not().isEmpty(),
+    body('timeRange').notEmpty(),
+    body('source').notEmpty(),
+    body('style').notEmpty(),
+    body('interval').notEmpty().isInt({ min: 1, max: 2000 }),
+    body('interval_unit').notEmpty(),
+    body('select').notEmpty(),
+    body('title').notEmpty(),
+    body('fontSize').notEmpty(),
   ],
   dashboardController.postChart
 );
@@ -123,14 +123,14 @@ router.post(
   getPermission,
   editorRole,
   [
-    body('timeRange').not().isEmpty(),
-    body('source').not().isEmpty(),
-    body('style').not().isEmpty(),
-    body('interval').not().isEmpty(),
-    body('interval_unit').not().isEmpty(),
-    body('select').not().isEmpty(),
-    body('title').not().isEmpty(),
-    body('fontSize').not().isEmpty(),
+    body('timeRange').notEmpty(),
+    body('source').notEmpty(),
+    body('style').notEmpty(),
+    body('interval').notEmpty().isInt({ min: 1, max: 2000 }),
+    body('interval_unit').notEmpty(),
+    body('select').notEmpty(),
+    body('title').notEmpty(),
+    body('fontSize').notEmpty(),
   ],
   dashboardController.postChart
 );

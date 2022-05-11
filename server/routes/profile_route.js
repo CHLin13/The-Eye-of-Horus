@@ -12,7 +12,7 @@ router.post(
   '/:userId',
   authenticated,
   [
-    body('name').not().isEmpty(),
+    body('name').notEmpty(),
     body('email').isEmail(),
     body('password').isLength({ min: 8 }),
   ],
