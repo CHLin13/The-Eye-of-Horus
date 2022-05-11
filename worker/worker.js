@@ -75,7 +75,7 @@ const work = (async function () {
       const errorMessage = result[i].message;
 
       if (count === limit) {
-        notify[result[i].receiver_type](detail[0], errorMessage, detail[1]);
+        await notify[result[i].receiver_type](detail[0], errorMessage, detail[1]);
       }
 
       let status = 0;
