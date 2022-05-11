@@ -82,10 +82,15 @@ message: ${message}`;
     };
 
     const conn = await pool.getConnection();
+    const [[originInput]] = await pool.query(
+      `SELECT eval_every_input FROM alert WHERE id = ?`,
+      [alertId]
+    );
 
     try {
       if (alertId) {
         await conn.query(`UPDATE alert SET ? WHERE id = ?`, [mqlData, alertId]);
+        await redis.HDEL(originInput.eval_every_input, alertId);
         await redis.HSET(eval_every_input, alertId, JSON.stringify(redisData));
       } else {
         const [result] = await conn.query(`INSERT INTO alert SET ?`, [mqlData]);
