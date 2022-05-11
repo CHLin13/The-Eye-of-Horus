@@ -35,9 +35,9 @@ const alertModel = {
     const [receiver] = await pool.query(`SELECT * FROM receiver WHERE id = ?`, [
       receiver_id,
     ]);
-    
+
     let msgType = '';
-    if(type){
+    if (type) {
       msgType = type;
     }
 
