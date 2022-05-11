@@ -20,7 +20,6 @@ module.exports = {
       await mg.messages().send(data);
     } catch (error) {
       console.log({ 'email error': error });
-      throw new Error(error);
     }
   },
   Slack: async function slackNotify(url, message) {
@@ -32,7 +31,6 @@ module.exports = {
       });
     } catch (error) {
       console.log({ 'slack error': error });
-      throw new Error(error);
     }
   },
   Discord: async function discordNotify(id, message, token) {
@@ -48,7 +46,6 @@ module.exports = {
       });
     } catch (error) {
       console.log({ 'discord error': error });
-      throw new Error(error);
     }
   },
 };

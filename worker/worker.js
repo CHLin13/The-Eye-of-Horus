@@ -99,11 +99,10 @@ const work = (async function () {
       }
     }
     await redis.disconnect();
-    process.exit();
   } catch (error) {
     console.error(error);
-    throw new Error(error);
   }
+  process.exit();
 })();
 
 console.log(`${INTERVAL}-working`);
