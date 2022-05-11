@@ -117,8 +117,8 @@ const dashboardModel = {
     const influxdb = new Influxdb.InfluxDB(
       `${INFLUX_URL}:${INFLUX_PORT}/${database}`
     );
-    if(database === 'App'){
-      measurement = `"${measurement}"`
+    if (database === 'App') {
+      measurement = `"${measurement}"`;
     }
     const system = await influxdb.query(
       `SHOW tag values ON ${database} from ${measurement} with key = type_instance`
@@ -248,6 +248,9 @@ const dashboardModel = {
   getChartDetail: async (dashboardId, chartId) => {
     const chartQuery = 'SELECT * FROM chart WHERE id = ?';
     const [chart] = await pool.query(chartQuery, chartId);
+    if (chart.length === 0) {
+      return false;
+    }
     const layout = JSON.parse(chart[0].layout);
     const data = {
       dashboardId: dashboardId,

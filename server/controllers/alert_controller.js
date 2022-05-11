@@ -49,6 +49,9 @@ const alertController = {
       const source = await dashboardModel.getSource();
       const receiver = await alertModel.getReceiver();
       const data = await alertModel.getAlert(alertId);
+      if(!data){
+        return res.status(301).redirect('/alerts');
+      }
       const type = await dashboardModel.getTypeInstance(data.source);
       return res
         .status(200)

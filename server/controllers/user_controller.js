@@ -43,11 +43,9 @@ const userController = {
         } else {
           req.flash('error_messages', 'All fields are required');
         }
-        return res
-          .status(401)
-          .json({
-            message: 'Email format is incorrect or all fields are required',
-          });
+        return res.status(401).json({
+          message: 'Email format is incorrect or all fields are required',
+        });
       }
 
       await userModel.postUser(
@@ -70,6 +68,9 @@ const userController = {
     try {
       const { userId } = req.params;
       const user = await userModel.getUser(userId);
+      if (!user) {
+        return res.status(301).redirect('/admin/users');
+      }
       const role = await roleModel.getRoles();
       return res.status(200).render('user_create', { user, role });
     } catch (error) {
@@ -81,13 +82,10 @@ const userController = {
   deleteUser: async (req, res) => {
     const { userId } = req.params;
     try {
-      if (Number(userId) === res.locals.localUser.id){
-        req.flash(
-          'error_messages',
-          'Can not delete yourself'
-        );
+      if (Number(userId) === res.locals.localUser.id) {
+        req.flash('error_messages', 'Can not delete yourself');
         return res.status(301).redirect('/admin/users');
-      } 
+      }
       await userModel.deleteUser(userId);
       return res.status(301).redirect('/admin/users');
     } catch (error) {

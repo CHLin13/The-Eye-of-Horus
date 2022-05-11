@@ -62,6 +62,9 @@ const userModel = {
       'SELECT user.*, user_role.role_id  FROM user LEFT JOIN user_role ON user.id = user_role.user_id WHERE user.id = ?';
     const [data] = await pool.query(sql, [userId]);
     const role = data.map((data) => data.role_id);
+    if(data.length === 0){
+      return false
+    }
     data[0].role_id = role;
     return data[0];
   },

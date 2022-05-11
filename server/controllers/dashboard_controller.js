@@ -47,6 +47,10 @@ const dashboardController = {
   getChartCreate: async (req, res) => {
     try {
       const dashboardId = req.params.dashboardId;
+      const dashboard = await dashboardModel.getDashboard(dashboardId);
+      if (dashboard.length === 0) {
+        return res.status(301).redirect(`/dashboards`);
+      }
       const source = await dashboardModel.getSource();
       return res.status(200).render('create', { source, dashboardId });
     } catch (error) {
@@ -149,7 +153,14 @@ const dashboardController = {
   getChart: async (req, res) => {
     try {
       const { dashboardId, chartId } = req.params;
+      const dashboard = await dashboardModel.getDashboard(dashboardId);
+      if (dashboard.length === 0) {
+        return res.status(301).redirect(`/dashboards`);
+      }
       const data = await dashboardModel.getChartDetail(dashboardId, chartId);
+      if (!data) {
+        return res.status(301).redirect(`/dashboards/${dashboardId}`);
+      }
       const source = await dashboardModel.getSource();
       const type = await dashboardModel.getTypeInstance(data.source);
 
@@ -176,6 +187,9 @@ const dashboardController = {
       const { dashboardId } = req.params;
       const role = await roleModel.getRoles();
       const [dashboard] = await dashboardModel.getDashboard(dashboardId);
+      if (!dashboard) {
+        return res.status(301).redirect('/dashboards');
+      }
       const permission = await dashboardModel.getPermission(dashboardId);
       return res.status(200).render('dashboard_setting', {
         role,
