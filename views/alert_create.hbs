@@ -305,7 +305,7 @@
                   <textarea class="form-control" name="message" id="message" cols="30" rows="3" style="background-color:#4b535a; color:#e9ecee" required>{{data.message}}</textarea>
                 </div>
               </div>
-              <div class="d-flex justify-content-end"><button type="submit" class="btn mr-5 buttons">SAVE</button></div>             
+              <div class="d-flex justify-content-end"><button type="submit" class="btn mr-5 buttons" id="save">SAVE</button></div>             
             </div>
           </div>
         </form>
@@ -332,51 +332,66 @@
   const style = $('#style')
   const title = $('#title')
   const fontSize = $('#font-size')
+  const save = $('#save')
 
+  async function loading() {
+    const sourceVal = source.val()
+    const response = await axios.post('/dashboards/type_instance',{ source: sourceVal })
+    let option = ''
+    for(let i = 0; i < response.data.length; i++) {
+      option += `<option value="${response.data[i]}">${response.data[i]}</option>`
+    }
+    type.html(option)
+  }
+  loading()
 
   preview.on('click', async (e) => {
-    const response = await axios.post('/alerts/chart/preview',{ 
-        timeRange: timeRange.val(),
-        source: source.val(),
-        type: type.val(),
-        style: '',
-        interval: interval.val(),
-        interval_unit: interval_unit.val(),
-        select: selects.val()
-      });
-    
-    const chart = charts[0]
-    const result = response.data.data
-    const select = response.data.select + '_value'
+    try{
+      const response = await axios.post('/alerts/chart/preview',{ 
+          timeRange: timeRange.val(),
+          source: source.val(),
+          type: type.val(),
+          style: '',
+          interval: interval.val(),
+          interval_unit: interval_unit.val(),
+          select: selects.val()
+        });
+      
+      const chart = charts[0]
+      const result = response.data.data
+      const select = response.data.select + '_value'
 
-    const trace = {
-      x: result.map(item => {
-        const timeStr = new Date(item.time).toLocaleString('en-GB').split(', ')
-        const date = timeStr[0].split('/')
-        const time = timeStr[1].split(':')
-        return new Date(date[2],date[1],date[0],time[0],time[1],time[2])
-        }),
-      y: result.map(item => item[select]),
-      type: style.val(),
-      connectgaps: true
+      const trace = {
+        x: result.map(item => {
+          const timeStr = new Date(item.time).toLocaleString('en-GB').split(', ')
+          const date = timeStr[0].split('/')
+          const time = timeStr[1].split(':')
+          return new Date(date[2],date[1],date[0],time[0],time[1],time[2])
+          }),
+        y: result.map(item => item[select]),
+        type: style.val(),
+        connectgaps: true
+      }
+
+      var layout = {
+        title:title.val(),
+        titlefont: { size: fontSize.val(), color: '#FFF' },
+          xaxis: {
+            tickfont: { color: '#FFF'  }
+          },
+          yaxis: {
+            tickfont: { color: '#FFF' }
+          }, 
+        paper_bgcolor: 'rgb(52,58,64)',
+        plot_bgcolor: 'rgba(0,0,0,0)',
+        legend: { font: { color: '#FFF' } },
+      };
+
+      Plotly.newPlot(chart, [trace], layout);
+    } catch (error){
+      toastr.error('Interval should be positive integer')
     }
-
-    var layout = {
-      title:title.val(),
-      titlefont: { size: fontSize.val(), color: '#FFF' },
-        xaxis: {
-          tickfont: { color: '#FFF'  }
-        },
-        yaxis: {
-          tickfont: { color: '#FFF' }
-        }, 
-      paper_bgcolor: 'rgb(52,58,64)',
-      plot_bgcolor: 'rgba(0,0,0,0)',
-      legend: { font: { color: '#FFF' } },
-    };
-
-    Plotly.newPlot(chart, [trace], layout);
-    })
+  })
 
   const condition = $('#condition')
   const value = $('#value')
@@ -446,11 +461,23 @@
     const evalForInput = eval_for_input.val().match(/[a-zA-Z]+|[0-9]+/g)
     const everyValue = evalEveryInput[0] * timeUnits[evalEveryInput[1]]
     const forValue = evalForInput[0] * timeUnits[evalForInput[1]]
+    if(evalForInput[0] < 1){
+      save.prop('disabled', true)
+      return toastr.error('All number should be positive integer')
+    }
+    
+    if(!timeUnits[evalForInput[1]]){
+      save.prop('disabled', true)
+      return toastr.error(`Correct format should be 1s, 5m, 7h`)
+    }
+
     if (forValue < everyValue){
-      warning[0].classList.remove("d-none")
+      save.prop('disabled', true)
+      return warning[0].classList.remove("d-none")
     } else {
       warning[0].classList.add("d-none")
     }
+    save.prop('disabled', false)
   })
   
   sources.change( async () => {

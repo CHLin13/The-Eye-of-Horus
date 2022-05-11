@@ -296,15 +296,27 @@
   const yAxisTitle = $('#yAxis-title')
   const yAxisFontSize = $('#yAxis-font-size')
   const yAxisTickFontSize = $('#yAxis-tick-font-size')
-const dashboardId = {{dashboardId}}
+  const dashboardId = {{dashboardId}}
+
+  async function loading() {
+    const sourceVal = source.val()
+    const response = await axios.post('/dashboards/type_instance',{ source: sourceVal })
+    let option = ''
+    for(let i = 0; i < response.data.length; i++) {
+      option += `<option value="${response.data[i]}">${response.data[i]}</option>`
+    }
+    type.html(option)
+  }
+  loading()
+    
 
   preview.on('click', async (e) => {
     let dashboardId = '{{dashboardId}}'
     if('{{data.dashboardId}}'){
       dashboardId = '{{data.dashboardId}}'
     }
-
-    const response = await axios.post(`/dashboards/${dashboardId}/chart/preview`,{ 
+    try{
+      const response = await axios.post(`/dashboards/${dashboardId}/chart/preview`,{ 
         timeRange: timeRange.val(),
         source: source.val(),
         type: type.val(),
@@ -313,43 +325,46 @@ const dashboardId = {{dashboardId}}
         interval_unit: interval_unit.val(),
         select: selects.val()
       });
-    
-    const chart = charts[0]
-    const result = response.data.data
-    const select = response.data.select + '_value'
 
-    const trace = {
-      x: result.map(item => {
-        const timeStr = new Date(item.time).toLocaleString('en-GB').split(', ')
-        const date = timeStr[0].split('/')
-        const time = timeStr[1].split(':')
-        return new Date(date[2],date[1],date[0],time[0],time[1],time[2])
-      }),
-      y: result.map(item => item[select]),
-      type: style.val(),
-      connectgaps: true
+      const chart = charts[0]
+      const result = response.data.data
+      const select = response.data.select + '_value'
+
+      const trace = {
+        x: result.map(item => {
+          const timeStr = new Date(item.time).toLocaleString('en-GB').split(', ')
+          const date = timeStr[0].split('/')
+          const time = timeStr[1].split(':')
+          return new Date(date[2],date[1],date[0],time[0],time[1],time[2])
+        }),
+        y: result.map(item => item[select]),
+        type: style.val(),
+        connectgaps: true
+      }
+
+      var layout = {
+        title: title.val(),
+        titlefont: { size: fontSize.val(), color: '#FFF' },
+          xaxis: {
+            title: xAxisTitle.val(),
+            titlefont: { size: xAxisFontSize.val(), color: '#FFF' },
+            tickfont: { size: xAxisTickFontSize.val(), color: '#FFF'  }
+          },
+          yaxis: {
+            title: yAxisTitle.val(),
+            titlefont: { size: yAxisFontSize.val(), color: '#FFF' },
+            tickfont: { size: yAxisTickFontSize.val(), color: '#FFF' }
+          }, 
+        paper_bgcolor: 'rgb(52,58,64)',
+        plot_bgcolor: 'rgba(0,0,0,0)',
+        legend: { font: { color: '#FFF' } },
+      };
+
+      Plotly.newPlot(chart, [trace], layout);
+    } catch (error){
+      toastr.error('Interval should be positive integer')
     }
-
-
-    var layout = {
-      title: title.val(),
-      titlefont: { size: fontSize.val(), color: '#FFF' },
-        xaxis: {
-          title: xAxisTitle.val(),
-          titlefont: { size: xAxisFontSize.val(), color: '#FFF' },
-          tickfont: { size: xAxisTickFontSize.val(), color: '#FFF'  }
-        },
-        yaxis: {
-          title: yAxisTitle.val(),
-          titlefont: { size: yAxisFontSize.val(), color: '#FFF' },
-          tickfont: { size: yAxisTickFontSize.val(), color: '#FFF' }
-        }, 
-      paper_bgcolor: 'rgb(52,58,64)',
-      plot_bgcolor: 'rgba(0,0,0,0)',
-      legend: { font: { color: '#FFF' } },
-    };
-
-    Plotly.newPlot(chart, [trace], layout);
+    
     })
 
   source.change( async () => {
