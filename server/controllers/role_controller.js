@@ -27,7 +27,7 @@ const roleController = {
       const { name, description } = req.body;
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        req.flash('error_messages', 'All fields are required');
+        req.flash('error_messages', 'Please follow the created rule');
         if (roleId) {
           return res.status(301).redirect(`/admin/roles/${roleId}`);
         }
