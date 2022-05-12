@@ -94,6 +94,11 @@
   <div class="content-wrapper bg-dark">
     <section class="content pt-5">
       <div class="container-fluid">
+        {{#if error_messages}}
+        <div class="alert alert-danger" role="alert" style="opacity: 0.8;">
+        {{error_messages}}
+        </div>
+        {{/if}}
         <!-- /.row -->
         <div class="row">
           <div class="col-12">

@@ -95,6 +95,11 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <div class="container-fluid">
+        {{#if error_messages}}
+        <div class="alert alert-danger" role="alert" style="opacity: 0.8;">
+        {{error_messages}}
+        </div>
+        {{/if}}
         <div class="mx-5 d-flex justify-content-between">     
             <input class="form-control" type="text" name="name" id="name" placeholder="New Dashboard" value="{{dashboard.name}}" style="background: #343A40; color:white; width:20vw" required>
             <button id="save" class="btn buttons">SAVE</button>    

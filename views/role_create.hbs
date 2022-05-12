@@ -95,6 +95,11 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <div class="container-fluid">
+        {{#if error_messages}}
+        <div class="alert alert-danger" role="alert" style="opacity: 0.8;">
+        {{error_messages}}
+        </div>
+        {{/if}}
         <div class="mx-5 d-flex justify-content-between">
           <div>
           </div>
