@@ -13,7 +13,12 @@ const profileModel = {
       email: email,
       password: hashedPassword,
     };
-
+    const [exist] = await pool.query(`SELECT email FROM user WHERE email = ?`, [
+      email,
+    ]);
+    if (exist.length > 0) {
+      return false;
+    }
     const conn = await pool.getConnection();
 
     try {

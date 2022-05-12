@@ -39,16 +39,16 @@ const userController = {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         if (errors.errors[0].param === 'email') {
-          req.flash('error_messages', 'Email format is incorrect');
+          return res.status(401).json({
+            message: 'Email format is incorrect',
+          });
         } else {
-          req.flash('error_messages', 'All fields are required');
+          return res.status(401).json({
+            message: 'All fields are required',
+          });
         }
-        return res.status(401).json({
-          message: 'Email format is incorrect or all fields are required',
-        });
       }
-
-      await userModel.postUser(
+      const response = await userModel.postUser(
         name,
         email,
         hashedPassword,
@@ -57,6 +57,11 @@ const userController = {
         role,
         userId
       );
+      if (!response) {
+        return res.status(401).json({
+          message: 'Email already registered',
+        });
+      }
       return res.status(301).redirect('/admin/users');
     } catch (error) {
       console.error(`Post role error: ${error}`);

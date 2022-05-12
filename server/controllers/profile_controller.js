@@ -67,7 +67,16 @@ const profileController = {
         const saltRounds = 10;
         const hashedPassword = await hash(tempPassword, saltRounds);
 
-        await profileModel.postProfile(name, email, hashedPassword, userId);
+        const response = await profileModel.postProfile(
+          name,
+          email,
+          hashedPassword,
+          userId
+        );
+        if (!response) {
+          req.flash('error_messages', 'Email already registered');
+          return res.status(301).redirect(`/profile/${userId}`);
+        }
         req.flash('success_messages', 'Update success');
         return res.status(301).redirect('/profile');
       } else {

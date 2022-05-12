@@ -31,6 +31,13 @@ const userModel = {
         await conn.query(`UPDATE user SET ? WHERE id = ?`, [update, userId]);
         await conn.query(`DELETE FROM user_role WHERE user_id = ?`, [userId]);
       } else {
+        const [exist] = await conn.query(
+          `SELECT email FROM user WHERE email = ?`,
+          [email]
+        );
+        if (exist.length > 0) {
+          return false;
+        }
         const [user] = await conn.query(`INSERT INTO user SET ?`, [data]);
         userId = user.insertId;
       }
@@ -62,8 +69,8 @@ const userModel = {
       'SELECT user.*, user_role.role_id  FROM user LEFT JOIN user_role ON user.id = user_role.user_id WHERE user.id = ?';
     const [data] = await pool.query(sql, [userId]);
     const role = data.map((data) => data.role_id);
-    if(data.length === 0){
-      return false
+    if (data.length === 0) {
+      return false;
     }
     data[0].role_id = role;
     return data[0];
