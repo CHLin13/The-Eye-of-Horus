@@ -9,11 +9,7 @@ const { adminRole, editorRole, viewerRole } = require('../../utils/role');
 //dashboard
 router.get('/', authenticated, dashboardController.getDashboards);
 
-router.get(
-  '/create',
-  authenticated,
-  dashboardController.getDashboardCreate
-);
+router.get('/create', authenticated, dashboardController.getDashboardCreate);
 router.get(
   '/:dashboardId/setting/',
   authenticated,
@@ -26,7 +22,7 @@ router.post(
   authenticated,
   getPermission,
   adminRole,
-  [body('name').notEmpty()],
+  [body('name').notEmpty().isLength({ max: 60 })],
   dashboardController.postDashboard
 );
 
@@ -35,7 +31,7 @@ router.put(
   authenticated,
   getPermission,
   adminRole,
-  [body('name').notEmpty()],
+  [body('name').notEmpty().isLength({ max: 60 })],
   dashboardController.postDashboard
 );
 router.get(
@@ -103,8 +99,8 @@ router.put(
     body('interval').notEmpty().isInt({ min: 1, max: 2000 }),
     body('interval_unit').notEmpty(),
     body('select').notEmpty(),
-    body('title').notEmpty(),
-    body('fontSize').notEmpty(),
+    body('title').notEmpty().isLength({ max: 50 }),
+    body('fontSize').notEmpty().isInt({ min: 1 }),
   ],
   dashboardController.postChart
 );
@@ -127,8 +123,8 @@ router.post(
     body('interval').notEmpty().isInt({ min: 1, max: 2000 }),
     body('interval_unit').notEmpty(),
     body('select').notEmpty(),
-    body('title').notEmpty(),
-    body('fontSize').notEmpty(),
+    body('title').notEmpty().isLength({ max: 50 }),
+    body('fontSize').notEmpty().isInt({ min: 1 }),
   ],
   dashboardController.postChart
 );

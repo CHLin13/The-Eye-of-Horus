@@ -141,7 +141,7 @@ const dashboardModel = {
     const rangeIntoSec =
       timeRange.split('-')[0] * units.timeUnits[timeRange.split('-')[1]];
     const limit = Math.floor(rangeIntoSec / intervalN);
-    
+
     if (database === 'App') {
       measurement = `"${measurement}"`;
     }
@@ -217,6 +217,27 @@ const dashboardModel = {
       layout: JSON.stringify(layout),
       setInterval: setInterval,
     };
+
+    const str = 'smhdw';
+    if (
+      isNaN(fontSize) ||
+      fontSize < 1 ||
+      isNaN(interval) ||
+      interval < 1 ||
+      !str.includes(interval_unit) ||
+      xAxisTitle.length > 20 ||
+      yAxisTitle.length > 20 ||
+      isNaN(xAxisFontSize) ||
+      xAxisFontSize < 1 ||
+      isNaN(xAxisTickFontSize) ||
+      xAxisTickFontSize < 1 ||
+      isNaN(yAxisFontSize) ||
+      yAxisFontSize < 1 ||
+      isNaN(yAxisTickFontSize) ||
+      yAxisTickFontSize < 1
+    ) {
+      return false;
+    }
 
     const conn = await pool.getConnection();
     try {

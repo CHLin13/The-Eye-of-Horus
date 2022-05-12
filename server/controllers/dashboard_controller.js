@@ -93,7 +93,10 @@ const dashboardController = {
       const { dashboardId, chartId } = req.params;
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        req.flash('error_messages', 'All fields are required');
+        req.flash(
+          'error_messages',
+          'Something wrong to create/edit the chart, please follow the created rule.'
+        );
         if (chartId) {
           return res
             .status(301)
@@ -101,7 +104,11 @@ const dashboardController = {
         }
         return res.status(301).redirect(`/dashboards/${dashboardId}/create`);
       }
-      await dashboardModel.postChart(req);
+      const response = await dashboardModel.postChart(req);
+      if (!response) {
+        req.flash('error_messages', 'Something wrong to create/edit the chart, please follow the created rule.');
+        return res.status(301).redirect(`/dashboards/${dashboardId}/create`);
+      }
       return res.status(301).redirect(`/dashboards/${dashboardId}`);
     } catch (error) {
       console.error(`Post dashboard create error: ${error}`);
@@ -203,7 +210,7 @@ const dashboardController = {
     }
   },
 
-  getDashboardCreate:async (req, res) => {
+  getDashboardCreate: async (req, res) => {
     try {
       const role = await roleModel.getRoles();
       return res.status(200).render('dashboard_setting', { role });
@@ -220,7 +227,10 @@ const dashboardController = {
 
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        req.flash('error_messages', 'All fields are required');
+        req.flash(
+          'error_messages',
+          'All fields are required; Max length of name is 60 characters'
+        );
         if (dashboardId) {
           return res.status(301).redirect(`/dashboards/${dashboardId}`);
         }
