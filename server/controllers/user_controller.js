@@ -38,24 +38,24 @@ const userController = {
 
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        if (errors.errors[0].param === 'email') {
+        if (errors.errors.some((item) => item.param === 'email')) {
           return res.status(401).json({
             message: 'Email format is incorrect',
           });
         } else {
           return res.status(401).json({
-            message: 'All fields are required',
+            message: 'Please follow the created rule',
           });
         }
       }
 
-      if (superuser !== 0 && superuser !== 1) {
+      if (superuser !== '0' && superuser !== '1') {
         return res.status(401).json({
           message: 'Superuser value is incorrect',
         });
       }
 
-      if (status !== 0 && status !== 1) {
+      if (status !== '0' && status !== '1') {
         return res.status(401).json({
           message: 'Status is incorrect',
         });
