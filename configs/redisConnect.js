@@ -16,9 +16,7 @@ redisClient.on('ready', () => {
 
 redisClient.on('error', () => {
   redisClient.ready = false;
-  if (process.env.NODE_ENV == 'production') {
-    console.log('Error in Redis');
-  }
+  console.log('Error in Redis');
 });
 
 redisClient.on('end', () => {
