@@ -12,9 +12,9 @@ router.post(
   '/:userId',
   authenticated,
   [
-    body('name').notEmpty(),
-    body('email').isEmail(),
-    body('password').isLength({ min: 8 }),
+    body('name').notEmpty().isLength({ max: 60 }),
+    body('email').isEmail().isLength({ max: 254 }),
+    body('password').isLength({ min: 8, max: 20 }),
   ],
   profileController.postProfile
 );

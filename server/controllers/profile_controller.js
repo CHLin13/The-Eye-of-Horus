@@ -32,10 +32,13 @@ const profileController = {
 
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        if (errors.errors[0].param === 'email') {
+        if (errors.errors.some((item) => item.param === 'email')) {
           req.flash('error_messages', 'Email format is incorrect');
-        } else if (errors.errors[0].param === 'password') {
-          req.flash('error_messages', 'Password should over than 8 characters');
+        } else if (errors.errors.some((item) => item.param === 'password')) {
+          req.flash(
+            'error_messages',
+            'Password should over than 8 and less than 20 characters'
+          );
         } else {
           req.flash('error_messages', 'Name is required');
         }
