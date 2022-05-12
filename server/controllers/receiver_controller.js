@@ -26,7 +26,7 @@ const receiverController = {
       const { receiverId } = req.params;
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        req.flash('error_messages', 'All fields are required');
+        req.flash('error_messages', 'Please follow the created rule');
         if (receiverId) {
           return res.status(301).redirect(`/receivers/${receiverId}`);
         }
