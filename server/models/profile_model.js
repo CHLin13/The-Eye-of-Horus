@@ -16,7 +16,8 @@ const profileModel = {
     const [exist] = await pool.query(`SELECT email FROM user WHERE email = ?`, [
       email,
     ]);
-    if (exist.length > 0) {
+
+    if (exist.length > 0 && exist[0].email !== email) {
       return false;
     }
     const conn = await pool.getConnection();
