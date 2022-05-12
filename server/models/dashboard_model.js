@@ -141,6 +141,10 @@ const dashboardModel = {
     const rangeIntoSec =
       timeRange.split('-')[0] * units.timeUnits[timeRange.split('-')[1]];
     const limit = Math.floor(rangeIntoSec / intervalN);
+    
+    if (database === 'App') {
+      measurement = `"${measurement}"`;
+    }
 
     if (type) {
       const system = await influxdb.query(
