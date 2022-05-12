@@ -43,14 +43,20 @@ router.get('/roles/create', authenticatedSuper, roleController.getRoleCreate);
 router.post(
   '/roles',
   authenticatedSuper,
-  [body('name').notEmpty(), body('description').notEmpty()],
+  [
+    body('name').notEmpty().isLength({ max: 60 }),
+    body('description').notEmpty().isLength({ max: 128 }),
+  ],
   roleController.postRole
 );
 router.get('/roles/:roleId', authenticatedSuper, roleController.getRole);
 router.put(
   '/roles/:roleId',
   authenticatedSuper,
-  [body('name').notEmpty(), body('description').notEmpty()],
+  [
+    body('name').notEmpty().isLength({ max: 60 }),
+    body('description').notEmpty().isLength({ max: 128 }),
+  ],
   roleController.postRole
 );
 router.delete('/roles/:roleId', authenticatedSuper, roleController.deleteRole);
