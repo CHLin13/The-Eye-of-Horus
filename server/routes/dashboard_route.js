@@ -12,9 +12,7 @@ router.get('/', authenticated, dashboardController.getDashboards);
 router.get(
   '/create',
   authenticated,
-  getPermission,
-  adminRole,
-  dashboardController.getDashboardSetting
+  dashboardController.getDashboardCreate
 );
 router.get(
   '/:dashboardId/setting/',

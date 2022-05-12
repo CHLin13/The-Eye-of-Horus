@@ -203,6 +203,16 @@ const dashboardController = {
     }
   },
 
+  getDashboardCreate:async (req, res) => {
+    try {
+      const role = await roleModel.getRoles();
+      return res.status(200).render('dashboard_setting', { role });
+    } catch (error) {
+      console.error(`Get dashboard create error: ${error}`);
+      return res.status(500).send('Internal Server Error');
+    }
+  },
+
   postDashboard: async (req, res) => {
     try {
       const { dashboardId } = req.params;
