@@ -13,8 +13,8 @@ router.post(
   '/',
   authenticated,
   [
-    body('name').notEmpty(),
-    body('description').notEmpty(),
+    body('name').notEmpty().isLength({ max: 60 }),
+    body('description').notEmpty().isLength({ max: 128 }),
     body('type').notEmpty(),
   ],
   receiverController.postReceiver
@@ -25,8 +25,8 @@ router.put(
   '/:receiverId',
   authenticated,
   [
-    body('name').notEmpty(),
-    body('description').notEmpty(),
+    body('name').notEmpty().isLength({ max: 60 }),
+    body('description').notEmpty().isLength({ max: 128 }),
     body('type').notEmpty(),
   ],
   receiverController.postReceiver

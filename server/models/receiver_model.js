@@ -32,6 +32,15 @@ const receiverModel = {
       tokenValue,
     } = req.body;
 
+    if (type !== 'Email' && type !== 'Slack' && type !== 'Discord') {
+      req.flash('error_messages', 'Type is incorrect');
+      if (receiverId) {
+        return `/receivers/${receiverId}`;
+      } else {
+        return `/receivers/create`;
+      }
+    }
+
     if (
       (type === 'Email' && emailValue === '') ||
       (type === 'Slack' && webhookURL === '') ||
@@ -85,18 +94,22 @@ const receiverModel = {
           }
 
           let alertMessage = `Warning from ${alert[i].source} ${msgType}
-condition: ${alert[i].select} ${conditions[alert[i].condition]} ${alert[i].value} 
+condition: ${alert[i].select} ${conditions[alert[i].condition]} ${
+            alert[i].value
+          } 
 message: ${alert[i].message}`;
           if (alert[i].condition === '3' || alert[i].value === '4') {
             alertMessage = `Warning from ${alert[i].source} ${msgType}
-condition: ${alert[i].select} ${conditions[alert[i].condition]} ${alert[i].value} & ${alert[i].value_max} 
+condition: ${alert[i].select} ${conditions[alert[i].condition]} ${
+              alert[i].value
+            } & ${alert[i].value_max} 
 message: ${alert[i].message}`;
           } else if (alert[i].condition === '5') {
             alertMessage = `Warning from ${alert[i].source} ${msgType}
 condition: ${alert[i].select} ${conditions[alert[i].condition]}
 message: ${alert[i].message}`;
           }
-          
+
           const redisData = {
             id: alert[i].id,
             name: alert[i].name,
