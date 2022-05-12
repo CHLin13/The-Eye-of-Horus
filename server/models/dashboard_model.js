@@ -132,7 +132,7 @@ const dashboardModel = {
     const { timeRange, source, interval, type, interval_unit, select } =
       req.body;
     const database = source.split('/')[0];
-    const measurement = source.split('/')[1];
+    let measurement = source.split('/')[1];
     const influxdb = new Influxdb.InfluxDB(
       `${INFLUX_URL}:${INFLUX_PORT}/${database}`
     );
