@@ -15,8 +15,8 @@ router.post(
   '/users',
   authenticatedSuper,
   [
-    body('name').notEmpty(),
-    body('email').isEmail(),
+    body('name').notEmpty().isLength({ max: 60 }),
+    body('email').isEmail().isLength({ max: 254 }),
     body('superuser').notEmpty(),
     body('status').notEmpty(),
   ],
@@ -27,8 +27,8 @@ router.put(
   '/users/:userId',
   authenticatedSuper,
   [
-    body('name').notEmpty(),
-    body('email').isEmail(),
+    body('name').notEmpty().isLength({ max: 60 }),
+    body('email').isEmail().isLength({ max: 254 }),
     body('superuser').notEmpty(),
     body('status').notEmpty(),
   ],

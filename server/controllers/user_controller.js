@@ -48,6 +48,19 @@ const userController = {
           });
         }
       }
+
+      if (superuser !== 0 && superuser !== 1) {
+        return res.status(401).json({
+          message: 'Superuser value is incorrect',
+        });
+      }
+
+      if (status !== 0 && status !== 1) {
+        return res.status(401).json({
+          message: 'Status is incorrect',
+        });
+      }
+
       const response = await userModel.postUser(
         name,
         email,
