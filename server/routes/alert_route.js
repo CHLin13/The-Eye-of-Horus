@@ -16,7 +16,7 @@ router.post(
   [
     body('timeRange').notEmpty(),
     body('source').notEmpty(),
-    body('interval').notEmpty(),
+    body('interval').notEmpty().isInt({ min: 1, max: 2000 }),
     body('interval_unit').notEmpty(),
     body('select').notEmpty(),
   ],
@@ -27,14 +27,14 @@ router.post(
   '/',
   authenticatedSuper,
   [
-    body('name').notEmpty(),
+    body('name').notEmpty().isLength({ max: 50 }),
     body('source').notEmpty(),
     body('select').notEmpty(),
     body('condition').notEmpty(),
     body('eval_every_input').notEmpty(),
     body('eval_for_input').notEmpty(),
     body('receiver_id').notEmpty(),
-    body('message').notEmpty(),
+    body('message').notEmpty().isLength({ max: 256 }),
   ],
   alertController.postAlert
 );

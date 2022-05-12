@@ -29,13 +29,20 @@ const alertController = {
       const { alertId } = req.params;
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        req.flash('error_messages', 'All fields are required');
+        req.flash('error_messages', 'Please follow the created rule');
         if (alertId) {
           return res.status(301).redirect(`/alerts/${alertId}`);
         }
         return res.status(301).redirect(`/alerts/create`);
       }
-      await alertModel.postAlert(req);
+      const response = await alertModel.postAlert(req);
+      if(!response){
+        req.flash('error_messages', 'Please follow the created rule');
+        if (alertId) {
+          return res.status(301).redirect(`/alerts/${alertId}`);
+        }
+        return res.status(301).redirect(`/alerts/create`);
+      }
       return res.status(301).redirect(`/alerts`);
     } catch (error) {
       console.error(`Post alert create error: ${error}`);

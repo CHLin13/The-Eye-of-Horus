@@ -32,6 +32,19 @@ const alertModel = {
       message,
     } = req.body;
 
+    const format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
+    const evalForInput = eval_for_input.match(/[a-zA-Z]+|[0-9]+/g);
+    const str = 'smhdwMy';
+    if (
+      isNaN(value) ||
+      isNaN(value_max) ||
+      format.test(eval_for_input) ||
+      evalForInput[0] < 0 ||
+      !str.includes(evalForInput[1])
+    ) {
+      return false;
+    }
+
     const [receiver] = await pool.query(`SELECT * FROM receiver WHERE id = ?`, [
       receiver_id,
     ]);
