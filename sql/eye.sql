@@ -26,7 +26,7 @@ DROP TABLE IF EXISTS `alert`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `alert` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(128) NOT NULL,
+  `name` varchar(60) NOT NULL,
   `source` varchar(128) NOT NULL,
   `type` varchar(20) DEFAULT NULL,
   `select` varchar(10) NOT NULL,
@@ -62,7 +62,7 @@ DROP TABLE IF EXISTS `chart`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `chart` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `title` varchar(127) DEFAULT NULL,
+  `title` varchar(50) DEFAULT NULL,
   `dashboard_id` int unsigned NOT NULL,
   `database` varchar(127) NOT NULL,
   `measurement` varchar(127) NOT NULL,
@@ -98,7 +98,7 @@ DROP TABLE IF EXISTS `dashboard`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `dashboard` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(127) NOT NULL,
+  `name` varchar(60) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -150,8 +150,8 @@ DROP TABLE IF EXISTS `receiver`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `receiver` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(128) NOT NULL,
-  `description` varchar(256) NOT NULL,
+  `name` varchar(60) NOT NULL,
+  `description` varchar(128) NOT NULL,
   `type` varchar(10) NOT NULL,
   `detail` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
@@ -176,8 +176,8 @@ DROP TABLE IF EXISTS `role`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `role` (
   `id` smallint unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `description` varchar(255) DEFAULT NULL,
+  `name` varchar(60) NOT NULL,
+  `description` varchar(128) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -200,9 +200,9 @@ DROP TABLE IF EXISTS `user`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `email` varchar(255) NOT NULL,
+  `email` varchar(254) NOT NULL,
   `password` char(60) DEFAULT NULL,
-  `name` varchar(127) NOT NULL,
+  `name` varchar(60) NOT NULL,
   `superuser` char(1) DEFAULT NULL,
   `status` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -215,7 +215,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'super@example.com','$2a$10$qvpMif5DZ29b.N0bBK5oWuCAKcVix/sJzvmG7a52zxfJXZG5AS.Ay','super','1','1');
+INSERT INTO `user` VALUES (1,'super@example.com','$2a$10$Fr8K/2q26O3.tsqIiUphLO3b2SDtD41t0lNuzdKquwDdCkjXKPsY2','super','1','1');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -256,4 +256,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-05-08  1:27:36
+-- Dump completed on 2022-05-12 22:34:25
