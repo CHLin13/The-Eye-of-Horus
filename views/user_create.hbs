@@ -136,7 +136,7 @@
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">
-                  <button type="submit" class="btn buttons" id="submit">Save</button>
+                  <button type="submit" class="btn buttons" id="submit" id="save">Save</button>
                 </div>
             <!-- /.card -->
           </div>
@@ -159,6 +159,25 @@
   const superuser = $('#superuser')
   const status = $('#status')
   const check = $('.checkbox')
+  const save = $('#save')
+
+  name.change(() => {
+    if(name.val().length > 60){
+      toastr.error('Max length of name is 60 characters')
+      save.prop('disabled', true)
+      return
+    }
+    save.prop('disabled', false)
+  })
+
+  email.change(() => {
+    if(email.val().length > 254){
+      toastr.error('Max length of email is 254 characters')
+      save.prop('disabled', true)
+      return
+    }
+    save.prop('disabled', false)
+  })
 
   check.on('click', (e) => {
     if(!e.target.checked){
@@ -194,7 +213,7 @@
       })
       location.href = "/admin/users";
     }catch(error){
-      toastr.error('Email format is incorrect')
+      toastr.error(error.response.data.message)
     }
     
     

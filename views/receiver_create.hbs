@@ -113,11 +113,11 @@
                 <div class="card-body">
                   <div class="form-group">
                     <label for="name">Name</label>
-                    <input class="form-control" type="text" name="name" placeholder="Name" value="{{receiver.name}}" required>
+                    <input class="form-control" type="text" name="name" id="name" placeholder="Name" value="{{receiver.name}}" required>
                   </div>
                   <div class="form-group">
                     <label for="description">Description</label>
-                    <input class="form-control" type="text" name="description" placeholder="Description" value="{{receiver.description}}" required>
+                    <input class="form-control" type="text" name="description" id="description" placeholder="Description" value="{{receiver.description}}" required>
                   </div>
                   
                   <div class="form-group mb-3 mt-5">
@@ -155,7 +155,7 @@
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">
-                  <button type="submit" class="btn " style="background-color: #8C745E; color:#C2C7D0">Save</button>
+                  <button type="submit" class="btn " style="background-color: #8C745E; color:#C2C7D0" id="save">Save</button>
                 </div>
               </form>
             <!-- /.card -->
@@ -173,6 +173,8 @@
 <!-- ./wrapper -->
 </body>
 <script>
+  const name = $('#name')
+  const description = $('#description')
   const type = $('#type')
   const email = $('#email')
   const slack = $('#slack')
@@ -181,7 +183,26 @@
   const webhookURL = $('#webhookURL')
   const idValue = $('#idValue')
   const tokenValue = $('#tokenValue')
+  const save = $('#save')
   
+  name.change(() => {
+    if(name.val().length > 60){
+      toastr.error('Max length of name is 60 characters')
+      save.prop('disabled', true)
+      return
+    }
+    save.prop('disabled', false)
+  })
+
+  description.change(() => {
+    if(description.val().length > 128){
+      toastr.error('Max length of description is 128 characters')
+      save.prop('disabled', true)
+      return
+    }
+    save.prop('disabled', false)
+  })
+
   if(type.val() === 'Email'){
     email[0].classList.remove('d-none')
     slack[0].classList.add('d-none')

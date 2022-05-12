@@ -127,7 +127,7 @@
                   </div>
                 <!-- /.card-body -->
                 <div class="card-footer">
-                  <button type="submit" class="btn buttons">Save</button>
+                  <button type="submit" class="btn buttons" id="save">Save</button>
                 </div>
               </form>
             <!-- /.card -->
@@ -144,3 +144,27 @@
 </div>
 <!-- ./wrapper -->
 </body>
+
+<script>
+  const name = $('#name')
+  const description = $('#description')
+  const save = $('#save')
+
+  name.change(() => {
+    if(name.val().length > 60){
+      toastr.error('Max length of name is 60 characters')
+      save.prop('disabled', true)
+      return
+    }
+    save.prop('disabled', false)
+  })
+
+  description.change(() => {
+    if(description.val().length > 128){
+      toastr.error('Max length of description is 128 characters')
+      save.prop('disabled', true)
+      return
+    }
+    save.prop('disabled', false)
+  })
+</script>

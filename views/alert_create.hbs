@@ -330,8 +330,6 @@
   const selects = $('#select')
   const charts = $('.chart')
   const style = $('#style')
-  const title = $('#title')
-  const fontSize = $('#font-size')
   const save = $('#save')
 
   async function loading() {
@@ -374,8 +372,7 @@
       }
 
       var layout = {
-        title:title.val(),
-        titlefont: { size: fontSize.val(), color: '#FFF' },
+        titlefont: { color: '#FFF' },
           xaxis: {
             tickfont: { color: '#FFF'  }
           },
@@ -443,7 +440,9 @@
   const eval_for_input = $('#eval-for-input')
   const warning = $('#warning')
   const sources = $('#source')
+  var format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
 
+  
   eval_every_input.change((e) => {
     const evalEveryInput = eval_every_input.val().match(/[a-zA-Z]+|[0-9]+/g)
     const evalForInput = eval_for_input.val().match(/[a-zA-Z]+|[0-9]+/g)
@@ -461,6 +460,12 @@
     const evalForInput = eval_for_input.val().match(/[a-zA-Z]+|[0-9]+/g)
     const everyValue = evalEveryInput[0] * timeUnits[evalEveryInput[1]]
     const forValue = evalForInput[0] * timeUnits[evalForInput[1]]
+
+    if(format.test(eval_for_input.val())){
+      save.prop('disabled', true)
+      return toastr.error('Not allow symbol in input')
+    } 
+
     if(evalForInput[0] < 1){
       save.prop('disabled', true)
       return toastr.error('All number should be positive integer')
@@ -488,5 +493,25 @@
       option += `<option value="${response.data[i]}">${response.data[i]}</option>`
     }
     type.html(option)
+  })
+
+  const name = $('#name')
+  name.change(() => {
+    if(name.val().length > 60){
+      toastr.error('Max length of name is 60 characters')
+      save.prop('disabled', true)
+      return
+    }
+    save.prop('disabled', false)
+  })
+
+  const message = $('#message')
+  message.change(() => {
+    if(message.val().length > 256){
+      toastr.error('Max length of message is 256 characters')
+      save.prop('disabled', true)
+      return
+    }
+    save.prop('disabled', false)
   })
 </script>

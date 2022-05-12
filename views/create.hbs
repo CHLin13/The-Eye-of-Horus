@@ -181,7 +181,7 @@
                 </div>
                 <div class="col-2 p-0">
                   <div class="btn" style="background-color:#59573C; color:#C2C7D0" id="preview">Preview chart</div>
-                  <button type="submit" class="btn" style="background-color: #8C745E; color:#C2C7D0">SAVE</button>
+                  <button type="submit" class="btn" style="background-color: #8C745E; color:#C2C7D0" id="save">SAVE</button>
                 </div>
               </div>
 
@@ -296,7 +296,7 @@
   const yAxisTitle = $('#yAxis-title')
   const yAxisFontSize = $('#yAxis-font-size')
   const yAxisTickFontSize = $('#yAxis-tick-font-size')
-  const dashboardId = {{dashboardId}}
+  const save = $('#save')
 
   async function loading() {
     const sourceVal = source.val()
@@ -309,6 +309,86 @@
   }
   loading()
     
+  title.change(() => {
+    if(title.val().length > 60){
+      toastr.error('Max length of title is 60 characters')
+      save.prop('disabled', true)
+      return
+    }
+    save.prop('disabled', false)
+  })
+
+  fontSize.change(() => {
+    if(fontSize.val() < 1){
+      toastr.error('Value of Title Font Size should over than 0')
+      save.prop('disabled', true)
+      return
+    }
+    save.prop('disabled', false)
+  })
+
+  interval.change(() => {
+    if(interval.val() < 1){
+      toastr.error('Interval should be positive integer')
+      save.prop('disabled', true)
+      return
+    }
+    save.prop('disabled', false)
+  })
+
+  xAxisTitle.change(() => {
+    if(xAxisTitle.val().length > 20){
+      toastr.error('Max length of x-Axis Title is 20 characters')
+      save.prop('disabled', true)
+      return
+    }
+    save.prop('disabled', false)
+  })
+
+  yAxisTitle.change(() => {
+    if(yAxisTitle.val().length > 20){
+      toastr.error('Max length of y-Axis Title is 20 characters')
+      save.prop('disabled', true)
+      return
+    }
+    save.prop('disabled', false)
+  })
+
+  xAxisFontSize.change(() => {
+    if(xAxisFontSize.val() < 1){
+      toastr.error('Value of x-Axis Font Size should over than 0')
+      save.prop('disabled', true)
+      return
+    }
+    save.prop('disabled', false)
+  })
+
+  yAxisFontSize.change(() => {
+    if(yAxisFontSize.val() < 1){
+      toastr.error('Value of y-Axis Font Size should over than 0')
+      save.prop('disabled', true)
+      return
+    }
+    save.prop('disabled', false)
+  })
+
+  xAxisTickFontSize.change(() => {
+    if(xAxisTickFontSize.val() < 1){
+      toastr.error('Value of x-Axis Tick Font Size should over than 0')
+      save.prop('disabled', true)
+      return
+    }
+    save.prop('disabled', false)
+  })
+
+  yAxisTickFontSize.change(() => {
+    if(yAxisTickFontSize.val() < 1){
+      toastr.error('Value of y-Axis Tick Font Size should over than 0')
+      save.prop('disabled', true)
+      return
+    }
+    save.prop('disabled', false)
+  })
 
   preview.on('click', async (e) => {
     let dashboardId = '{{dashboardId}}'

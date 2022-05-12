@@ -174,7 +174,17 @@
   const tbody = $('#tbody')
   const add = $('#add')
   const remove = $('.remove')
+  const name = $('#name')
   const save = $('#save')
+
+  name.change(() => {
+    if(name.val().length > 60){
+      toastr.error('Max length of title is 60 characters')
+      save.prop('disabled', true)
+      return
+    }
+    save.prop('disabled', false)
+  })
 
   add.on('click',() => {
     const permission = $('#permission')
