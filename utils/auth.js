@@ -4,7 +4,7 @@ const authenticated = (req, res, next) => {
   if (req.isAuthenticated(req)) {
     return next();
   }
-  return res.redirect('/');
+  return res.redirect('/login');
 };
 
 const authenticatedSuper = (req, res, next) => {
@@ -15,7 +15,7 @@ const authenticatedSuper = (req, res, next) => {
     }
     return res.redirect('/dashboards');
   }
-  return res.redirect('/');
+  return res.redirect('/login');
 };
 
 const getPermission = async (req, res, next) => {

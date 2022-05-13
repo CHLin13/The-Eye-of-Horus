@@ -11,7 +11,6 @@ router.get('/create', authenticatedSuper, alertController.getAlertCreate);
 
 router.post(
   '/chart/preview',
-  authenticated,
   authenticatedSuper,
   [
     body('timeRange').notEmpty(),
