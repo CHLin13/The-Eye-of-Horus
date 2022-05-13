@@ -50,6 +50,14 @@
       <li class="nav-item">
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/dashboards" style="display: inline-block;">Dashboard</a>
+        {{#if dashboard}}
+        <span style="color: #C2C7D0;">></span><a class="nav-link" href="/dashboards/{{dashboard.id}}" style="display: inline-block;">{{dashboard.name}}</a>
+        {{else}}
+        <span style="color: #C2C7D0;">></span><a class="nav-link" href="/dashboards/create" style="display: inline-block;">create</a>
+        {{/if}}
+      </li>
     </ul>
     <div class="d-flex align-items-center">
       <div class="hi">Hi, {{localUser.name}}{{#ifCond localUser.superuser '1'}} (Superuser){{/ifCond}}</div>

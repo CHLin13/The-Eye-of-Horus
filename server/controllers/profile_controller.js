@@ -18,6 +18,11 @@ const profileController = {
 
   getProfileEdit: async (req, res) => {
     try {
+      const { userId } = req.params;
+      const user = JSON.parse(req.user);
+      if(Number(userId) !== user.id){
+        return res.status(301).redirect('/profile')
+      }
       return res.status(200).render('profile_edit');
     } catch (error) {
       console.error(`Get profile edit error: ${error}`);

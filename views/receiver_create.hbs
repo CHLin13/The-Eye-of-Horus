@@ -7,6 +7,14 @@
       <li class="nav-item">
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/receivers" style="display: inline-block;">Receiver</a>
+        {{#if receiver}}
+        <span style="color: #C2C7D0;">></span><a class="nav-link" href="/receivers/{{receiver.id}}" style="display: inline-block;">{{receiver.name}}</a>
+        {{else}}
+        <span style="color: #C2C7D0;">></span><a class="nav-link" href="/receivers/create" style="display: inline-block;">create</a>
+        {{/if}}
+      </li>
     </ul>
     <div class="d-flex align-items-center">
       <div class="hi">Hi, {{localUser.name}}{{#ifCond localUser.superuser '1'}} (Superuser){{/ifCond}}</div>

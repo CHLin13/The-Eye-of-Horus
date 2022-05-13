@@ -47,12 +47,14 @@ const dashboardController = {
   getChartCreate: async (req, res) => {
     try {
       const dashboardId = req.params.dashboardId;
-      const dashboard = await dashboardModel.getDashboard(dashboardId);
-      if (dashboard.length === 0) {
+      const [dashboard] = await dashboardModel.getDashboard(dashboardId);
+      if (!dashboard) {
         return res.status(301).redirect(`/dashboards`);
       }
       const source = await dashboardModel.getSource();
-      return res.status(200).render('create', { source, dashboardId });
+      return res
+        .status(200)
+        .render('create', { source, dashboardId, dashboard });
     } catch (error) {
       console.error(`Get dashboard create error: ${error}`);
       return res.status(500).send('Internal Server Error');
@@ -160,8 +162,8 @@ const dashboardController = {
   getChart: async (req, res) => {
     try {
       const { dashboardId, chartId } = req.params;
-      const dashboard = await dashboardModel.getDashboard(dashboardId);
-      if (dashboard.length === 0) {
+      const [dashboard] = await dashboardModel.getDashboard(dashboardId);
+      if (!dashboard) {
         return res.status(301).redirect(`/dashboards`);
       }
       const data = await dashboardModel.getChartDetail(dashboardId, chartId);
@@ -171,7 +173,9 @@ const dashboardController = {
       const source = await dashboardModel.getSource();
       const type = await dashboardModel.getTypeInstance(data.source);
 
-      return res.status(200).render('create', { data, source, type });
+      return res
+        .status(200)
+        .render('create', { data, source, type, dashboard });
     } catch (error) {
       console.error(`Get chart detail error: ${error}`);
       return res.status(500).send('Internal Server Error');

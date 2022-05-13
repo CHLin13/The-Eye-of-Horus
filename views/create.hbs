@@ -7,6 +7,18 @@
       <li class="nav-item">
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/dashboards" style="display: inline-block;">Dashboard</a>
+        <span style="color: #C2C7D0;">></span>
+        <a class="nav-link" href="/dashboards/{{dashboard.id}}" style="display: inline-block;">{{dashboard.name}}</a>
+        {{#if data}}
+        <span style="color: #C2C7D0;">></span>
+        <a class="nav-link" href="/dashboards/{{data.dashboardId}}/chart/{{data.chartId}}" style="display: inline-block;">{{data.title}}</a>
+        {{else}}
+        <span style="color: #C2C7D0;">></span>
+        <a class="nav-link" href="/dashboards/{{dashboard.id}}/create" style="display: inline-block;">create</a>
+        {{/if}}
+      </li>
     </ul>
     <div class="d-flex align-items-center">
       <div class="hi">Hi, {{localUser.name}}{{#ifCond localUser.superuser '1'}} (Superuser){{/ifCond}}</div>
@@ -100,7 +112,12 @@
         {{error_messages}}
         </div>
         {{/if}}
-        <form {{#if data}} action="/dashboards/{{data.dashboardId}}/chart/{{data.chartId}}?_method=PUT" {{else}} action="/dashboards/{{dashboardId}}/chart" {{/if}} method="post" class="pb-5">
+        <form 
+        {{#if data}} 
+        action="/dashboards/{{data.dashboardId}}/chart/{{data.chartId}}?_method=PUT" 
+        {{else}} 
+        action="/dashboards/{{dashboardId}}/chart" 
+        {{/if}} method="post" class="pb-5">
           <div style="margin: 0; padding: 0;">
               <div class="row pt-3 ml-5 align-items-center">
                 <div class="col-1 p-0">
