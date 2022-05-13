@@ -10,8 +10,7 @@ passport.use(
       const [[user]] = await pool.query('SELECT * FROM user WHERE email = ?', [
         email,
       ]);
-
-      if (!user) {
+      if (!user || user.status !== '1') {
         return done(null, false, { message: 'Login failed' });
       }
       if (!bcrypt.compareSync(password, user.password)) {
