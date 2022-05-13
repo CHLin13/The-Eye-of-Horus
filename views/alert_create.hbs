@@ -117,7 +117,7 @@
               </div>
               <div class="row mt-3 ml-5 align-items-center">
                 <div class="col-2 p-0">
-                  <label for="source" class="d-flex align-items-center" >Source</label>
+                  <label for="source" class="d-flex align-items-center" >Source *</label>
                 </div>  
                 <div class="col-2 p-0 mr-5">
                   <select class="form-control" id="source" style="background: #343A40; color:white" name="source">              
@@ -133,7 +133,7 @@
                   </select>
                 </div>
                 <div class="col-2 p-0">
-                  <label for="type" class="d-flex align-items-center" >Type instance</label>
+                  <label for="type" class="d-flex align-items-center" >Type instance *</label>
                 </div>  
                 <div class="col-2 p-0 mr-5">
                   <select class="form-control" id="type" style="background: #343A40; color:white" name="type">
@@ -196,7 +196,7 @@
                   </select>
                 </div>
                 <div>
-                  <div class="btn mr-2" style="background-color:#59573C; color:#C2C7D0" id="preview">Preview chart</div>
+                  <div class="btn mr-2 preview" id="preview">Preview chart</div>
                 </div>
               </div>
               <div class="d-flex justify-content-center my-5" >
@@ -204,7 +204,7 @@
               </div>
               <div class="row mt-3 ml-5 align-items-center">
                 <div class="col-2 p-0">
-                  <label for="name" class="d-flex align-items-center">Name</label>
+                  <label for="name" class="d-flex align-items-center">Name *</label>
                 </div>
                 <div class="col-2 p-0">
                   <input class="form-control" type="text" id="name" placeholder="Name" name="name" style="background: #343A40; color:white" value="{{data.name}}" required>
@@ -212,7 +212,7 @@
               </div>
               <div class="row mt-3 ml-5 align-items-center">
                 <div class="col-2 p-0">
-                  <label for="select" class="d-flex align-items-center">When</label>
+                  <label for="select" class="d-flex align-items-center">When *</label>
                 </div>
                 <div class="col-2 p-0">
                   <select class="form-control" id="select" style="background: #343A40; color:white;" name="select" id="select">
@@ -225,8 +225,8 @@
                 </div>
                 <div class="col-2 p-0 mx-3">
                   <select class="form-control" id="condition" style="width: 13vw; background: #343A40; color:white;" name="condition">
-                    <option value="1" {{#ifCond data.condition '1'}}selected{{/ifCond}}>GREATER THAN  ">"</option>
-                    <option value="2" {{#ifCond data.condition '2'}}selected{{/ifCond}}>LESS THAN  "<"</option>
+                    <option value="1" {{#ifCond data.condition '1'}}selected{{/ifCond}}>GREATER THAN  ></option>
+                    <option value="2" {{#ifCond data.condition '2'}}selected{{/ifCond}}>LESS THAN  <</option>
                     <option value="3" {{#ifCond data.condition '3'}}selected{{/ifCond}}>IS OUTSIDE</option>
                     <option value="4" {{#ifCond data.condition '4'}}selected{{/ifCond}}>IS BETWEEN</option>
                     <option value="5" {{#ifCond data.condition '5'}}selected{{/ifCond}}>HAS NO VALUE</option>
@@ -248,7 +248,7 @@
               </div>
               <div class="row mt-3 ml-5 align-items-center">
                 <div class="col-2 p-0">
-                  <label for="eval-every-input" class="d-flex align-items-center">Evaluate every</label>
+                  <label for="eval-every-input" class="d-flex align-items-center">Evaluate every *</label>
                 </div>
                 <div class="col-2 p-0 mr-5">
                   <select class="form-control" id="eval-every-input" style="background: #343A40; color:white;" name="eval_every_input">
@@ -281,7 +281,7 @@
               <div class="p-3 d-none" style="margin: 3vh 5vw 0 5vw; background-color:#4b535a; color:#bec4ca" id="warning"><i class="fas fa-exclamation-triangle text-warning mr-3"></i>Setting a "for" duration that is less than or equal to the evaluation interval will result in the evaluation interval being used to calculate when an alert that has stopped receiving data will be closed.</div>
               <div class="row mt-3 ml-5 align-items-center">
                 <div class="col-2 p-0">
-                  <label for="receiver_id" class="d-flex align-items-center">Receiver</label>
+                  <label for="receiver_id" class="d-flex align-items-center">Receiver *</label>
                 </div>
                 <div class="col-2 p-0">
                   <select class="form-control" id="receiver_id" style="background: #343A40; color:white;" name="receiver_id">
@@ -296,10 +296,13 @@
                     {{/if}}
                   </select>
                 </div>
+                <div class="col-2 p-0 ml-3">
+                  <div class="text-secondary">* Receiver is required</div>
+                </div>
               </div>
               <div class="row mt-3 ml-5 align-items-center">
                 <div class="col-2 p-0">
-                  <label for="message" class="d-flex align-items-center">Alert message</label>
+                  <label for="message" class="d-flex align-items-center">Alert message *</label>
                 </div>
                 <div class="col-2 p-0">
                   <textarea class="form-control" name="message" id="message" cols="30" rows="3" style="background-color:#4b535a; color:#e9ecee" required>{{data.message}}</textarea>
@@ -336,8 +339,12 @@
     const sourceVal = source.val()
     const response = await axios.post('/dashboards/type_instance',{ source: sourceVal })
     let option = ''
-    for(let i = 0; i < response.data.length; i++) {
-      option += `<option value="${response.data[i]}">${response.data[i]}</option>`
+    if(response.data.length > 0){
+      for(let i = 0; i < response.data.length; i++) {
+        option += `<option value="${response.data[i]}">${response.data[i]}</option>`
+      }
+    } else {
+      option += `<option value="-" selected disabled>-</option>`
     }
     type.html(option)
   }
@@ -489,8 +496,12 @@
     const sourceVal = sources.val()
     const response = await axios.post('/dashboards/type_instance',{ source: sourceVal })
     let option = ''
-    for(let i = 0; i < response.data.length; i++) {
-      option += `<option value="${response.data[i]}">${response.data[i]}</option>`
+    if(response.data.length > 0){
+      for(let i = 0; i < response.data.length; i++) {
+        option += `<option value="${response.data[i]}">${response.data[i]}</option>`
+      }
+    } else {
+      option += `<option value="-" selected disabled>-</option>`
     }
     type.html(option)
   })

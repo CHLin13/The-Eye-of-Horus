@@ -104,19 +104,19 @@
           <div style="margin: 0; padding: 0;">
               <div class="row pt-3 ml-5 align-items-center">
                 <div class="col-1 p-0">
-                  <label for="title" class="d-flex align-items-center">Title</label>
+                  <label for="title" class="d-flex align-items-center">Title *</label>
                 </div>
                 <div class="col-2 p-0 mr-5">
                   <input class="form-control" type="text" id="title" name="title" placeholder="Chart-1"style="background: #343A40; color:white" value="{{data.title}}" required>
                 </div>
                 <div class="col-2 p-0">
-                  <label for="font-size" class="d-flex align-items-center">Title font size</label>
+                  <label for="font-size" class="d-flex align-items-center">Title font size *</label>
                 </div>
                 <div class="col-2 p-0 mr-5" style="margin-left: -30px;">
                   <input class="form-control" style="background: #343A40; color:white" type="number" min="0" id="font-size" name="fontSize" {{#if data}}value="{{data.titleFontSize}}" {{else}} value="20" {{/if}} required>
                 </div>
                 <div class="col-2 p-0">
-                  <label for="time-range" class="d-flex align-items-center">Time range</label>
+                  <label for="time-range" class="d-flex align-items-center">Time range *</label>
                 </div>
                 <div class="col-2 p-0" style="margin-left: -30px;">
                   <select class="form-control" id="time-range" style="background: #343A40; color:white" name="timeRange">
@@ -152,7 +152,7 @@
               
               <div class="row mt-3 ml-5 align-items-center">
                 <div class="col-1 p-0">
-                  <label for="source" class="d-flex align-items-center">Source</label>
+                  <label for="source" class="d-flex align-items-center">Source *</label>
                 </div>
                 <div class="col-2 p-0 mr-5">
                   <select class="form-control" id="source" style="background: #343A40; color:white" name="source">                 
@@ -168,7 +168,7 @@
                   </select>
                 </div>
                 <div class="col-2 p-0">
-                  <label for="type" class="d-flex align-items-center">Type instance</label>
+                  <label for="type" class="d-flex align-items-center">Type instance *</label>
                 </div>
                 <div class="col-2 p-0" style="margin-left: -30px; margin-right: 230px;">
                   <select class="form-control" id="type" style="background: #343A40; color:white" name="type">
@@ -180,14 +180,14 @@
                   </select>
                 </div>
                 <div class="col-2 p-0">
-                  <div class="btn" style="background-color:#59573C; color:#C2C7D0" id="preview">Preview chart</div>
-                  <button type="submit" class="btn" style="background-color: #8C745E; color:#C2C7D0" id="save">SAVE</button>
+                  <div class="btn preview" id="preview">Preview chart</div>
+                  <button type="submit" class="btn buttons" id="save">SAVE</button>
                 </div>
               </div>
 
               <div class="row mt-3 ml-5 align-items-center">  
                 <div class="col-1 p-0">
-                  <label for="style" class="d-flex align-items-center">Style</label>
+                  <label for="style" class="d-flex align-items-center">Style *</label>
                 </div>
                 <div class="col-2 p-0 mr-5">
                   <select class="form-control" id="style" style="background: #343A40; color:white" name="style">
@@ -196,7 +196,7 @@
                   </select>
                 </div>
                 <div class="col-2 p-0">
-                  <label for="interval" class="d-flex align-items-center">Interval</label>
+                  <label for="interval" class="d-flex align-items-center">Interval *</label>
                 </div>
                 <div class="col-1 p-0" style="margin-left: -30px;" >
                   <input class="form-control" type="number" min="1" style="background: #343A40; color:white; width:80px" name="interval" id="interval" {{#if data}}value="{{data.interval}}" {{else}} value="10" {{/if}}>
@@ -211,7 +211,7 @@
                   </select>
                 </div>
                 <div class="col-2 p-0">
-                  <label for="select" class="d-flex align-items-center">Select</label>
+                  <label for="select" class="d-flex align-items-center">Select *</label>
                 </div>
                 <div class="col-2 p-0" style="margin-left: -30px;">
                   <select class="form-control" id="select" style="background: #343A40; color:white" name="select" id="select">
@@ -302,8 +302,12 @@
     const sourceVal = source.val()
     const response = await axios.post('/dashboards/type_instance',{ source: sourceVal })
     let option = ''
-    for(let i = 0; i < response.data.length; i++) {
-      option += `<option value="${response.data[i]}">${response.data[i]}</option>`
+    if(response.data.length > 0){
+      for(let i = 0; i < response.data.length; i++) {
+        option += `<option value="${response.data[i]}">${response.data[i]}</option>`
+      }
+    } else {
+      option += `<option value="-" selected disabled>-</option>`
     }
     type.html(option)
   }
@@ -451,8 +455,12 @@
     const sourceVal = source.val()
     const response = await axios.post('/dashboards/type_instance',{ source: sourceVal })
     let option = ''
-    for(let i = 0; i < response.data.length; i++) {
-      option += `<option value="${response.data[i]}">${response.data[i]}</option>`
+    if(response.data.length > 0){
+      for(let i = 0; i < response.data.length; i++) {
+        option += `<option value="${response.data[i]}">${response.data[i]}</option>`
+      }
+    } else {
+      option += `<option value="-" selected disabled>-</option>`
     }
     type.html(option)
   })

@@ -153,7 +153,7 @@
                           {{#ifCond this.permission '2'}}Editor{{/ifCond}}
                           {{#ifCond this.permission '3'}}Admin{{/ifCond}}
                         </td>
-                        <td class="text-center"><i class="fas fa-minus-circle text-danger remove pointer"></i></td>
+                        <td class="text-center"><i class="fas fa-minus-circle delete remove pointer"></i></td>
                     </tr>
                     {{/each}}
                   </tbody>
@@ -212,7 +212,7 @@
     tbody.append(`<tr class='roles ${roleId}'>
                   <td>${roleName}</td>
                   <td class="text-center ${permission.val()}">${permissionText}</td>
-                  <td class="d-flex align-items-center justify-content-center"><i class="fas fa-minus-circle text-danger remove pointer"></i></td>
+                  <td class="d-flex align-items-center justify-content-center"><i class="fas fa-minus-circle delete remove pointer "></i></td>
               </tr>`)
     toastr.success('Add successfully')
   })

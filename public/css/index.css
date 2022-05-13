@@ -19,6 +19,12 @@
   color:#C2C7D0
 }
 
+.buttons:hover {
+  background-color: #6a5846;
+  border:none;
+  color:#C2C7D0
+}
+
 #profile {
   text-decoration: none;
   color:rgba(240, 239, 239, 0.908);
@@ -38,4 +44,39 @@
 
 .pointer {
   cursor: pointer
+}
+
+.preview {
+  background-color:#7c7a55;
+  color:#C2C7D0
+}
+
+.preview:hover {
+  background-color: #59573C;
+  color: #C2C7D0
+}
+
+.edit, .cog {
+  color:#C2C7D0;
+}
+
+.edit:hover, .cog:hover {
+  color: #91959c;
+}
+
+.chart-edit {
+  color:#8C745E
+}
+
+.chart-edit:hover {
+  color:#a68e78
+}
+
+.delete {
+  color: #d7616d;
+}
+
+.delete:hover {
+  color: #DC3545;
+  
 }
