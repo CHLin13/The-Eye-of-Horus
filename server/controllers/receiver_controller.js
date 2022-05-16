@@ -33,6 +33,16 @@ const receiverController = {
         return res.status(301).redirect(`/receivers/create`);
       }
       const url = await receiverModel.postReceiver(req);
+      if (!url) {
+        req.flash(
+          'error_messages',
+          'Something wrong, please follow the created rule'
+        );
+        if (receiverId) {
+          return res.status(301).redirect(`/receivers/${receiverId}`);
+        }
+        return res.status(301).redirect(`/receivers/create`);
+      }
       return res.status(301).redirect(url);
     } catch (error) {
       console.error(`Post receiver error: ${error}`);

@@ -32,6 +32,7 @@ const alertModel = {
       message,
     } = req.body;
 
+    // eslint-disable-next-line no-useless-escape
     const format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
     const evalForInput = eval_for_input.match(/[a-zA-Z]+|[0-9]+/g);
     const str = 'smhdwMy';

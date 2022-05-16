@@ -63,7 +63,7 @@ const receiverModel = {
       detail.push(idValue);
       detail.push(tokenValue);
     } else {
-      return { error };
+      return false;
     }
 
     const data = {
