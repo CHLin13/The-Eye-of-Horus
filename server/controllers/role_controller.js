@@ -26,6 +26,7 @@ const roleController = {
       const { roleId } = req.params;
       const { name, description } = req.body;
       const errors = validationResult(req);
+
       if (!errors.isEmpty()) {
         req.flash('error_messages', 'Please follow the created rule');
         if (roleId) {
@@ -33,6 +34,7 @@ const roleController = {
         }
         return res.status(301).redirect(`/admin/roles/create`);
       }
+
       await roleModel.postRole(roleId, name, description);
       return res.status(301).redirect('/admin/roles');
     } catch (error) {
@@ -45,9 +47,11 @@ const roleController = {
     try {
       const { roleId } = req.params;
       const role = await roleModel.getRole(roleId);
+
       if (!role) {
         return res.status(301).redirect('/admin/roles');
       }
+
       return res.status(200).render('role_create', { role });
     } catch (error) {
       console.error(`Get role error: ${error}`);
@@ -56,8 +60,8 @@ const roleController = {
   },
 
   deleteRole: async (req, res) => {
-    const { roleId } = req.params;
     try {
+      const { roleId } = req.params;
       await roleModel.deleteRole(roleId);
       return res.status(301).redirect('/admin/roles');
     } catch (error) {

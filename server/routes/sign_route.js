@@ -7,8 +7,6 @@ const loginController = require('../controllers/sign_controller');
 
 router.get('/', loginController.indexPage);
 
-//sign in
-router.get('/login', loginController.signinPage);
 router.post(
   '/login',
   [
@@ -16,7 +14,7 @@ router.post(
     body('password').isLength({ min: 8 }),
   ],
   passport.authenticate('local', {
-    failureRedirect: '/login',
+    failureRedirect: '/',
     failureFlash: true,
   }),
   loginController.signin

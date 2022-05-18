@@ -27,22 +27,17 @@ const alertController = {
   postAlert: async (req, res) => {
     try {
       const { alertId } = req.params;
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        req.flash('error_messages', 'Please follow the created rule');
-        if (alertId) {
-          return res.status(301).redirect(`/alerts/${alertId}`);
-        }
-        return res.status(301).redirect(`/alerts/create`);
-      }
       const response = await alertModel.postAlert(req);
-      if(!response){
+      const errors = validationResult(req);
+
+      if (!errors.isEmpty() || !response) {
         req.flash('error_messages', 'Please follow the created rule');
         if (alertId) {
           return res.status(301).redirect(`/alerts/${alertId}`);
         }
         return res.status(301).redirect(`/alerts/create`);
       }
+
       return res.status(301).redirect(`/alerts`);
     } catch (error) {
       console.error(`Post alert create error: ${error}`);
@@ -56,9 +51,11 @@ const alertController = {
       const source = await dashboardModel.getSource();
       const receiver = await alertModel.getReceiver();
       const data = await alertModel.getAlert(alertId);
-      if(!data){
+
+      if (!data) {
         return res.status(301).redirect('/alerts');
       }
+
       const type = await dashboardModel.getTypeInstance(data.source);
       return res
         .status(200)

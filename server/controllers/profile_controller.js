@@ -20,9 +20,11 @@ const profileController = {
     try {
       const { userId } = req.params;
       const user = JSON.parse(req.user);
-      if(Number(userId) !== user.id){
-        return res.status(301).redirect('/profile')
+
+      if (Number(userId) !== user.id) {
+        return res.status(301).redirect('/profile');
       }
+
       return res.status(200).render('profile_edit');
     } catch (error) {
       console.error(`Get profile edit error: ${error}`);
@@ -34,8 +36,11 @@ const profileController = {
     try {
       const userId = JSON.parse(req.user).id;
       const { name, email, password, newPassword, passwordConfirm } = req.body;
-
+      let tempPassword = password;
+      const userPassword = await profileModel.getPassword(userId);
+      const compareResult = await compare(password, userPassword);
       const errors = validationResult(req);
+
       if (!errors.isEmpty()) {
         if (errors.errors.some((item) => item.param === 'email')) {
           req.flash('error_messages', 'Email format is incorrect');
@@ -50,7 +55,11 @@ const profileController = {
         return res.status(301).redirect(`/profile/${userId}`);
       }
 
-      let tempPassword = password;
+      if (!compareResult) {
+        req.flash('error_messages', 'Incorrect password');
+        return res.status(301).redirect(`/profile/${userId}`);
+      }
+
       if (newPassword) {
         if (newPassword.length < 8) {
           req.flash(
@@ -68,29 +77,22 @@ const profileController = {
         tempPassword = newPassword;
       }
 
-      const hashedPassword = await profileModel.getPassword(userId);
+      const saltRounds = 10;
+      const hashedPassword = await hash(tempPassword, saltRounds);
+      const response = await profileModel.postProfile(
+        name,
+        email,
+        hashedPassword,
+        userId
+      );
 
-      const compareResult = await compare(password, hashedPassword.password);
-      if (compareResult) {
-        const saltRounds = 10;
-        const hashedPassword = await hash(tempPassword, saltRounds);
-
-        const response = await profileModel.postProfile(
-          name,
-          email,
-          hashedPassword,
-          userId
-        );
-        if (!response) {
-          req.flash('error_messages', 'Email already registered');
-          return res.status(301).redirect(`/profile/${userId}`);
-        }
-        req.flash('success_messages', 'Update success');
-        return res.status(301).redirect('/profile');
-      } else {
-        req.flash('error_messages', 'Incorrect password');
+      if (!response) {
+        req.flash('error_messages', 'Email already registered');
         return res.status(301).redirect(`/profile/${userId}`);
       }
+      
+      req.flash('success_messages', 'Update success');
+      return res.status(301).redirect('/profile');
     } catch (error) {
       console.error(`Post profile error: ${error}`);
       return res.status(500).send('Internal Server Error');

@@ -25,15 +25,9 @@ const receiverController = {
     try {
       const { receiverId } = req.params;
       const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        req.flash('error_messages', 'Please follow the created rule');
-        if (receiverId) {
-          return res.status(301).redirect(`/receivers/${receiverId}`);
-        }
-        return res.status(301).redirect(`/receivers/create`);
-      }
       const url = await receiverModel.postReceiver(req);
-      if (!url) {
+
+      if (!errors.isEmpty() || !url) {
         req.flash(
           'error_messages',
           'Something wrong, please follow the created rule'
@@ -43,6 +37,7 @@ const receiverController = {
         }
         return res.status(301).redirect(`/receivers/create`);
       }
+
       return res.status(301).redirect(url);
     } catch (error) {
       console.error(`Post receiver error: ${error}`);
@@ -54,9 +49,11 @@ const receiverController = {
     try {
       const { receiverId } = req.params;
       const [receiver] = await receiverModel.getReceiver(receiverId);
+
       if (!receiver) {
         return res.status(301).redirect('/receivers');
       }
+
       return res.status(200).render('receiver_create', { receiver });
     } catch (error) {
       console.error(`Get receiver error: ${error}`);
@@ -65,8 +62,8 @@ const receiverController = {
   },
 
   deleteReceiver: async (req, res) => {
-    const { receiverId } = req.params;
     try {
+      const { receiverId } = req.params;
       await receiverModel.deleteReceiver(receiverId);
       return res.status(301).redirect('/receivers');
     } catch (error) {

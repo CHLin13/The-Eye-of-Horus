@@ -6,21 +6,9 @@ const loginController = {
       if (req.user) {
         return res.status(301).redirect('/dashboards');
       }
-      return res.status(301).redirect('/login');
-    } catch (error) {
-      console.error(`Get index page error: ${error}`);
-      return res.status(500).send('Internal Server Error');
-    }
-  },
-
-  signinPage: async (req, res) => {
-    try {
-      if (req.user) {
-        return res.status(301).redirect('/dashboards');
-      }
       return res.status(200).render('login');
     } catch (error) {
-      console.error(`Get login page error: ${error}`);
+      console.error(`Get index page error: ${error}`);
       return res.status(500).send('Internal Server Error');
     }
   },
@@ -34,7 +22,7 @@ const loginController = {
         } else if (errors.errors.some((item) => item.param === 'password')) {
           req.flash('error_messages', 'Password should over than 8 characters');
         }
-        return res.status(301).redirect(`/login`);
+        return res.status(301).redirect(`/`);
       }
       return res.status(301).redirect('/dashboards');
     } catch (error) {
@@ -47,7 +35,7 @@ const loginController = {
     try {
       req.flash('success_messages', 'Logout success');
       req.logout();
-      return res.status(301).redirect('/login');
+      return res.status(301).redirect('/');
     } catch (error) {
       console.error(`Sign out error: ${error}`);
       return res.status(500).send('Internal Server Error');

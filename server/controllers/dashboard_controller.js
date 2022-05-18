@@ -1,31 +1,17 @@
 const { validationResult } = require('express-validator');
 const dashboardModel = require('../models/dashboard_model');
 const roleModel = require('../models/role_model');
+const { attachPermission } = require('../../utils/permission');
 
 const dashboardController = {
   getDashboards: async (req, res) => {
     try {
-      const dashboards = await dashboardModel.getDashboards();
+      const userRole = res.locals.localUser.role_id;
+      let dashboards = await dashboardModel.getDashboards();
 
-      for (let i = 0; i < dashboards.length; i++) {
-        const obj = {};
+      //Attach permission property to dashboards according to user's role
+      dashboards = await attachPermission(dashboards, userRole);
 
-        for (let j = 0; j < dashboards[i].role_id.length; j++) {
-          obj[dashboards[i].role_id[j]] = dashboards[i].permission[j];
-        }
-
-        const userRole = res.locals.localUser.role_id;
-        if (userRole) {
-          for (let k = 0; k < userRole.length; k++) {
-            if (obj[userRole[k]] === '3') {
-              dashboards[i].adminPermission = true;
-              dashboards[i].viewPermission = true;
-            } else if (obj[userRole[k]] === '1' || obj[userRole[k]] === '2') {
-              dashboards[i].viewPermission = true;
-            }
-          }
-        }
-      }
       return res.status(200).render('dashboards', { dashboards });
     } catch (error) {
       console.error(`Get dashboards error: ${error}`);
@@ -48,10 +34,12 @@ const dashboardController = {
     try {
       const dashboardId = req.params.dashboardId;
       const [dashboard] = await dashboardModel.getDashboard(dashboardId);
+      const source = await dashboardModel.getSource();
+
       if (!dashboard) {
         return res.status(301).redirect(`/dashboards`);
       }
-      const source = await dashboardModel.getSource();
+
       return res
         .status(200)
         .render('create', { source, dashboardId, dashboard });
@@ -63,11 +51,13 @@ const dashboardController = {
 
   chartPreview: async (req, res) => {
     try {
+      const data = await dashboardModel.previewChart(req);
       const errors = validationResult(req);
+
       if (!errors.isEmpty()) {
         return res.status(401).json({ error: 'All fields are required' });
       }
-      const data = await dashboardModel.previewChart(req);
+
       return res.status(200).json({ data: data, select: req.body.select });
     } catch (error) {
       console.error(`Preview chart error: ${error}`);
@@ -78,11 +68,13 @@ const dashboardController = {
   getTypeInstance: async (req, res) => {
     try {
       const { source } = req.body;
+      const result = await dashboardModel.getTypeInstance(source);
       const errors = validationResult(req);
+
       if (!errors.isEmpty()) {
         return res.status(401).json({ error: 'Source is required' });
       }
-      const result = await dashboardModel.getTypeInstance(source);
+
       return res.status(200).json(result);
     } catch (error) {
       console.error(`Get typeInstance error: ${error}`);
@@ -93,8 +85,10 @@ const dashboardController = {
   postChart: async (req, res) => {
     try {
       const { dashboardId, chartId } = req.params;
+      const response = await dashboardModel.postChart(req);
       const errors = validationResult(req);
-      if (!errors.isEmpty()) {
+
+      if (!errors.isEmpty() || !response) {
         req.flash(
           'error_messages',
           'Something wrong to create/edit the chart, please follow the created rule.'
@@ -106,11 +100,7 @@ const dashboardController = {
         }
         return res.status(301).redirect(`/dashboards/${dashboardId}/create`);
       }
-      const response = await dashboardModel.postChart(req);
-      if (!response) {
-        req.flash('error_messages', 'Something wrong to create/edit the chart, please follow the created rule.');
-        return res.status(301).redirect(`/dashboards/${dashboardId}/create`);
-      }
+
       return res.status(301).redirect(`/dashboards/${dashboardId}`);
     } catch (error) {
       console.error(`Post dashboard create error: ${error}`);
@@ -121,37 +111,19 @@ const dashboardController = {
   getDashboard: async (req, res) => {
     try {
       const dashboardId = req.params.dashboardId;
-      const [dashboard] = await dashboardModel.getDashboard(dashboardId);
-      const chart = await dashboardModel.getCharts(dashboardId);
-      let editPermission = false;
-      let adminPermission = false;
       const userRole = res.locals.localUser.role_id;
-      const obj = {};
-
+      let dashboard = await dashboardModel.getDashboard(dashboardId);
+      const chart = await dashboardModel.getCharts(dashboardId);
       if (!dashboard) {
         return res.status(301).redirect('/dashboards');
       }
 
-      if (userRole) {
-        for (let i = 0; i < dashboard.role_id.length; i++) {
-          obj[dashboard.role_id[i]] = dashboard.permission[i];
-        }
-
-        for (let i = 0; i < userRole.length; i++) {
-          if (obj[userRole[i]] === '3') {
-            editPermission = true;
-            adminPermission = true;
-          } else if (obj[userRole[i]] === '2') {
-            editPermission = true;
-          }
-        }
-      }
+      //Attach permission property to dashboard according to user role
+      [dashboard] = await attachPermission(dashboard, userRole);
 
       return res.status(200).render('dashboard_detail', {
         chart,
         dashboard,
-        editPermission,
-        adminPermission,
       });
     } catch (error) {
       console.error(`Get dashboard detail error: ${error}`);
@@ -163,16 +135,16 @@ const dashboardController = {
     try {
       const { dashboardId, chartId } = req.params;
       const [dashboard] = await dashboardModel.getDashboard(dashboardId);
+      const data = await dashboardModel.getChartDetail(dashboardId, chartId);
+      const source = await dashboardModel.getSource();
+
       if (!dashboard) {
         return res.status(301).redirect(`/dashboards`);
-      }
-      const data = await dashboardModel.getChartDetail(dashboardId, chartId);
-      if (!data) {
+      } else if (!data) {
         return res.status(301).redirect(`/dashboards/${dashboardId}`);
       }
-      const source = await dashboardModel.getSource();
-      const type = await dashboardModel.getTypeInstance(data.source);
 
+      const type = await dashboardModel.getTypeInstance(data.source);
       return res
         .status(200)
         .render('create', { data, source, type, dashboard });
@@ -195,19 +167,20 @@ const dashboardController = {
 
   getDashboardSetting: async (req, res) => {
     try {
-      const { dashboardId } = req.params;
-      const role = await roleModel.getRoles();
-      const [dashboard] = await dashboardModel.getDashboard(dashboardId);
-      if (!dashboard) {
-        return res.status(301).redirect('/dashboards');
-      }
-      const permission = await dashboardModel.getPermission(dashboardId);
-      return res.status(200).render('dashboard_setting', {
-        role,
-        dashboard,
-        dashboardId,
-        permission,
-      });
+    const { dashboardId } = req.params;
+    const role = await roleModel.getRoles();
+    let dashboard = await dashboardModel.getDashboard(dashboardId);
+    const permission = await dashboardModel.getPermission(dashboardId);
+    if (!dashboard) {
+      return res.status(301).redirect('/dashboards');
+    }
+    dashboard = dashboard[0]
+    return res.status(200).render('dashboard_setting', {
+      role,
+      dashboard,
+      dashboardId,
+      permission,
+    });
     } catch (error) {
       console.error(`Get dashboard create error: ${error}`);
       return res.status(500).send('Internal Server Error');
@@ -228,8 +201,8 @@ const dashboardController = {
     try {
       const { dashboardId } = req.params;
       const { name, roleId, permission } = req.body;
-
       const errors = validationResult(req);
+
       if (!errors.isEmpty()) {
         req.flash(
           'error_messages',
