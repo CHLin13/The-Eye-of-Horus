@@ -15,7 +15,7 @@ router.post(
   [
     body('name').notEmpty().isLength({ max: 60 }),
     body('description').notEmpty().isLength({ max: 128 }),
-    body('type').notEmpty(),
+    body('mediaType').notEmpty(),
   ],
   receiverController.postReceiver
 );
@@ -27,7 +27,7 @@ router.put(
   [
     body('name').notEmpty().isLength({ max: 60 }),
     body('description').notEmpty().isLength({ max: 128 }),
-    body('type').notEmpty(),
+    body('mediaType').notEmpty(),
   ],
   receiverController.postReceiver
 );

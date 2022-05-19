@@ -4,7 +4,7 @@ const profileModel = {
   getPassword: async (userId) => {
     const sql = 'SELECT password FROM user WHERE id = ?';
     const [[password]] = await pool.query(sql, [userId]);
-    return password;
+    return password.password;
   },
 
   postProfile: async (name, email, hashedPassword, userId) => {
@@ -13,17 +13,17 @@ const profileModel = {
       email: email,
       password: hashedPassword,
     };
-    const [exist] = await pool.query(`SELECT email FROM user WHERE email = ?`, [
+    const [[emailExist]] = await pool.query('SELECT email FROM user WHERE email = ?', [
       email,
     ]);
 
-    if (exist.length > 0 && exist[0].email !== email) {
+    if (emailExist && emailExist.email !== email) {
       return false;
     }
+    
     const conn = await pool.getConnection();
-
     try {
-      await conn.query(`UPDATE user SET ? WHERE id = ?`, [data, userId]);
+      await conn.query('UPDATE user SET ? WHERE id = ?', [data, userId]);
       await conn.query('COMMIT');
       return true;
     } catch (error) {

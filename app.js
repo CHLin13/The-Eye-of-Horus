@@ -75,7 +75,7 @@ app.use(async function (req, res, next) {
   const databaseList = await influx.query('SHOW DATABASES');
   const database404 = databaseList
     .map((database) => database.name)
-    .find((name) => name === 'DB404');
+    .some((name) => name === 'DB404');
   try {
     if (!database404) {
       await influx.query('CREATE DATABASE DB404');

@@ -1,6 +1,6 @@
 const pool = require('../../configs/mysqlConnect');
 const redis = require('../../configs/redisConnect');
-const { conditions } = require('../../utils/units');
+const { conditions, conditionLabel } = require('../../utils/enums');
 
 const receiverModel = {
   getReceiver: async (receiverId) => {
@@ -11,12 +11,11 @@ const receiverModel = {
     }
 
     const [receiver] = await pool.query(sql, [receiverId]);
-    receiver.map((receiver) => (receiver.detail = JSON.parse(receiver.detail)));
     receiver.map((receiver) => {
+      receiver.detail = JSON.parse(receiver.detail);
       receiver.d0 = receiver.detail[0];
       receiver.d1 = receiver.detail[1];
     });
-
     return receiver;
   },
 
@@ -25,14 +24,14 @@ const receiverModel = {
     const {
       name,
       description,
-      type,
+      mediaType,
       emailValue,
       webhookURL,
       idValue,
       tokenValue,
     } = req.body;
-
-    if (type !== 'Email' && type !== 'Slack' && type !== 'Discord') {
+    const types = ['Email', 'Slack', 'Discord'];
+    if (!types.some((type) => type === mediaType)) {
       req.flash('error_messages', 'Type is incorrect');
       if (receiverId) {
         return `/receivers/${receiverId}`;
@@ -42,9 +41,10 @@ const receiverModel = {
     }
 
     if (
-      (type === 'Email' && emailValue === '') ||
-      (type === 'Slack' && webhookURL === '') ||
-      (type === 'Discord' && idValue === '' && tokenValue === '')
+      (mediaType === 'Email' && emailValue === '') ||
+      (mediaType === 'Slack' && webhookURL === '') ||
+      (mediaType === 'Discord' && idValue === '') ||
+      (mediaType === 'Discord' && tokenValue === '')
     ) {
       req.flash('error_messages', 'All fields are required');
       if (receiverId) {
@@ -54,14 +54,14 @@ const receiverModel = {
       }
     }
 
-    const detail = [];
-    if (emailValue !== '') {
-      detail.push(emailValue);
-    } else if (webhookURL !== '') {
-      detail.push(webhookURL);
-    } else if (idValue !== '' && tokenValue !== '') {
-      detail.push(idValue);
-      detail.push(tokenValue);
+    const mediaProperties = [];
+    if (mediaType === 'Email' && emailValue !== '') {
+      mediaProperties.push(emailValue);
+    } else if (mediaType === 'Slack' && webhookURL !== '') {
+      mediaProperties.push(webhookURL);
+    } else if (mediaType === 'Discord' && idValue !== '' && tokenValue !== '') {
+      mediaProperties.push(idValue);
+      mediaProperties.push(tokenValue);
     } else {
       return false;
     }
@@ -69,8 +69,8 @@ const receiverModel = {
     const data = {
       name: name,
       description: description,
-      type: type,
-      detail: JSON.stringify(detail),
+      type: mediaType,
+      detail: JSON.stringify(mediaProperties),
     };
 
     const [alerts] = await pool.query(
@@ -86,52 +86,66 @@ const receiverModel = {
           data,
           receiverId,
         ]);
-        for (let i = 0; i < alert.length; i++) {
-          let msgType = alert[i].type;
-          console.log(alert[i].type);
-          if (!alert[i].type || alert[i].type === null) {
-            msgType = ' ';
-          }
+        await Promise.all(
+          alerts.forEach(async (alert) => {
+            const {
+              id,
+              name,
+              source,
+              type,
+              select,
+              condition,
+              value,
+              value_max,
+              eval_every_input,
+              eval_for_input,
+              message,
+            } = alert;
+            console.log(message);
+            let msgType = type;
+            if (!type || type === null) {
+              msgType = ' ';
+            }
+            let alertMessage = '';
+            if (
+              condition === conditions.GREATER ||
+              condition === conditions.LESS
+            ) {
+              alertMessage = `Warning from ${source} ${msgType}
+          condition: ${select} ${conditionLabel[condition]} ${value}
+          message: ${message}`;
+            } else if (
+              condition === conditions.OUTSIDE ||
+              condition === conditions.BETWEEN
+            ) {
+              alertMessage = `Warning from ${source} ${msgType}
+          condition: ${select} ${conditionLabel[condition]} ${value} & ${value_max}
+          message: ${message}`;
+            } else if (condition === conditions.noVALUE) {
+              alertMessage = `Warning from ${source} ${msgType}
+          condition: ${select} ${conditionLabel[condition]}
+          message: ${message}`;
+            }
 
-          let alertMessage = `Warning from ${alert[i].source} ${msgType}
-condition: ${alert[i].select} ${conditions[alert[i].condition]} ${
-            alert[i].value
-          } 
-message: ${alert[i].message}`;
-          if (alert[i].condition === '3' || alert[i].value === '4') {
-            alertMessage = `Warning from ${alert[i].source} ${msgType}
-condition: ${alert[i].select} ${conditions[alert[i].condition]} ${
-              alert[i].value
-            } & ${alert[i].value_max} 
-message: ${alert[i].message}`;
-          } else if (alert[i].condition === '5') {
-            alertMessage = `Warning from ${alert[i].source} ${msgType}
-condition: ${alert[i].select} ${conditions[alert[i].condition]}
-message: ${alert[i].message}`;
-          }
-
-          const redisData = {
-            id: alert[i].id,
-            name: alert[i].name,
-            source: alert[i].source,
-            type: alert[i].type,
-            select: alert[i].select,
-            condition: alert[i].condition,
-            value: Number(alert[i].value),
-            value_max: Number(alert[i].value_max),
-            eval_every_input: alert[i].eval_every_input,
-            eval_for_input: alert[i].eval_for_input,
-            receiver_id: receiverId,
-            receiver_type: type,
-            receiver_detail: JSON.stringify(detail),
-            message: alertMessage,
-          };
-          await redis.HSET(
-            alert[i].eval_every_input,
-            alert[i].id,
-            JSON.stringify(redisData)
-          );
-        }
+            const redisData = {
+              id: id,
+              name: name,
+              source: source,
+              type: type,
+              select: select,
+              condition: condition,
+              value: Number(value),
+              value_max: Number(value_max),
+              eval_every_input: eval_every_input,
+              eval_for_input: eval_for_input,
+              receiver_id: receiverId,
+              receiver_type: mediaType,
+              receiver_detail: JSON.stringify(mediaProperties),
+              message: alertMessage,
+            };
+            await redis.HSET(eval_every_input, id, JSON.stringify(redisData));
+          })
+        );
       } else {
         await conn.query('INSERT INTO receiver SET ?', [data]);
       }
@@ -146,7 +160,7 @@ message: ${alert[i].message}`;
   },
 
   deleteReceiver: async (receiverId) => {
-    const [alert] = await pool.query(
+    const [alerts] = await pool.query(
       'SELECT distinct alert.id, alert.eval_every_input FROM alert INNER JOIN receiver WHERE alert.receiver_id = ?',
       [receiverId]
     );
@@ -156,10 +170,11 @@ message: ${alert[i].message}`;
     try {
       const sql = 'DELETE FROM receiver WHERE id = ?';
       await conn.query(sql, [receiverId]);
-
-      for (let i = 0; i < alert.length; i++) {
-        await redis.HDEL(alert[i].eval_every_input, alert[i].id);
-      }
+      await Promise.all(
+        alerts.forEach(async (alert) => {
+          await redis.HDEL(alert.eval_every_input, alert.id);
+        })
+      );
     } catch (error) {
       await conn.query('ROLLBACK');
       return { error };

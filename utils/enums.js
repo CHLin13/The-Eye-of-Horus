@@ -1,5 +1,13 @@
 module.exports = {
   conditions: {
+    'GREATER': '1',
+    'LESS': '2',
+    'OUTSIDE': '3',
+    'BETWEEN': '4',
+    'noVALUE': '5',
+  },
+
+  conditionLabel: {
     1: 'GREATER THAN >',
     2: 'LESS THAN <',
     3: 'IS OUTSIDE',

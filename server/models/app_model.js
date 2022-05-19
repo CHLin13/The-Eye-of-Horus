@@ -12,12 +12,10 @@ const appModel = {
       req.headers['x-forwarded-for'] || req.socket.remoteAddress || null;
     const { timestamp, name, value } = req.body;
     const measurement = `${name}(${ip.slice(7)})`;
-    const database = await influx.query('SHOW DATABASES');
-    const databaseApp = database
-      .map((database) => database.name)
-      .find((name) => name === 'App');
+    const databases = await influx.query('SHOW DATABASES');
+
     try {
-      if (!databaseApp) {
+      if (!databases.some((database) => database.name === 'App')) {
         await influx.query('CREATE DATABASE App');
       }
       await influx.writePoints([

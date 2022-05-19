@@ -3,8 +3,8 @@ const pool = require('../../configs/mysqlConnect');
 const roleModel = {
   getRoles: async () => {
     const sql = 'SELECT * FROM role';
-    const [role] = await pool.query(sql);
-    return role;
+    const [roles] = await pool.query(sql);
+    return roles;
   },
 
   postRole: async (roleId, name, description) => {
@@ -32,8 +32,8 @@ const roleModel = {
 
   getRole: async (roleId) => {
     const sql = 'SELECT * FROM role WHERE id = ?';
-    const [data] = await pool.query(sql, [roleId]);
-    return data[0];
+    const [[role]] = await pool.query(sql, [roleId]);
+    return role;
   },
 
   deleteRole: async (roleId) => {

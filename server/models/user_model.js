@@ -3,21 +3,13 @@ const pool = require('../../configs/mysqlConnect');
 const userModel = {
   getUsers: async () => {
     const sql = 'SELECT * FROM user';
-    const [role] = await pool.query(sql);
-    return role;
+    const [users] = await pool.query(sql);
+    return users;
   },
 
-  postUser: async (name, email, password, superuser, status, role, userId) => {
+  postUser: async (name, email, password, superuser, status, roles, userId) => {
     userId = Number(userId);
     const data = {
-      name: name,
-      email: email,
-      password: password,
-      superuser: superuser,
-      status: status,
-    };
-
-    const update = {
       name: name,
       email: email,
       superuser: superuser,
@@ -35,21 +27,19 @@ const userModel = {
           'SELECT email FROM user WHERE email = ?',
           [email]
         );
-        if (exist.length > 0) {
+        if (alreadyRegistered) {
           return false;
         }
+        //Insert default password
+        data.password = password
         const [user] = await conn.query('INSERT INTO user SET ?', [data]);
         userId = user.insertId;
       }
 
-      const user_role = role.map((role) => {
-        const arr = [];
-        arr.push(userId);
-        arr.push(Number(role));
-        return arr;
-      });
-      if (user_role.length !== 0) {
-        await conn.query(`INSERT INTO user_role (user_id, role_id) VALUES ?`, [
+      const user_role = roles.map((role) => [userId, Number(role)]);
+
+      if (user_role.length > 0) {
+        await conn.query('INSERT INTO user_role (user_id, role_id) VALUES ?', [
           user_role,
         ]);
       }
@@ -67,13 +57,14 @@ const userModel = {
   getUser: async (userId) => {
     const sql =
       'SELECT user.*, user_role.role_id  FROM user LEFT JOIN user_role ON user.id = user_role.user_id WHERE user.id = ?';
-    const [data] = await pool.query(sql, [userId]);
-    const role = data.map((data) => data.role_id);
-    if (data.length === 0) {
+    const [user] = await pool.query(sql, [userId]);
+
+    if (user.length === 0) {
       return false;
     }
-    data[0].role_id = role;
-    return data[0];
+
+    user[0].role_id = user.map((item) => item.role_id);
+    return user[0];
   },
 
   deleteUser: async (userId) => {

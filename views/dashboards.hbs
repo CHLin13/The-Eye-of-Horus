@@ -170,7 +170,11 @@
                       {{#each dashboards}}
                         {{#if this.viewPermission}}
                           <tr>
-                            <td> <a href="/dashboards/{{this.id}}" style="color: #C2C7D0">{{this.name}}</a> </td>
+                            <td> 
+                              <a href="/dashboards/{{this.id}}" style="color: #C2C7D0">
+                                <div style="height:100%;width:100%">{{this.name}}</div>
+                              </a> 
+                            </td>
                             {{#if this.adminPermission}}
                             <td class="text-center"><a href="/dashboards/{{this.id}}/setting"><i class="fas fa-cog" style="color:#C2C7D0"></i></a></td>
                             <td class="text-center"><a data-toggle="modal" data-target="#modal{{this.id}}" class="delete"><i class="fas fa-minus-circle pointer"></i></a></td>
