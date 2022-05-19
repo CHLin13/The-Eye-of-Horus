@@ -4,8 +4,8 @@ const roleModel = require('../models/role_model');
 const roleController = {
   getRoles: async (req, res) => {
     try {
-      const role = await roleModel.getRoles();
-      return res.status(200).render('roles', { role });
+      const roles = await roleModel.getRoles();
+      return res.status(200).render('roles', { roles });
     } catch (error) {
       console.error(`Get role list error: ${error}`);
       return res.status(500).send('Internal Server Error');

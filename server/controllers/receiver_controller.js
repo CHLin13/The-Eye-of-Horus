@@ -4,8 +4,8 @@ const receiverModel = require('../models/receiver_model');
 const receiverController = {
   getReceivers: async (req, res) => {
     try {
-      const receiver = await receiverModel.getReceiver();
-      return res.status(200).render('receivers', { receiver });
+      const receivers = await receiverModel.getReceiver();
+      return res.status(200).render('receivers', { receivers });
     } catch (error) {
       console.error(`Get receiver list error: ${error}`);
       return res.status(500).send('Internal Server Error');
@@ -25,9 +25,9 @@ const receiverController = {
     try {
       const { receiverId } = req.params;
       const errors = validationResult(req);
-      const url = await receiverModel.postReceiver(req);
+      const response = await receiverModel.postReceiver(req);
 
-      if (!errors.isEmpty() || !url) {
+      if (!errors.isEmpty() || !response) {
         req.flash(
           'error_messages',
           'Something wrong, please follow the created rule'
@@ -38,7 +38,7 @@ const receiverController = {
         return res.status(301).redirect(`/receivers/create`);
       }
 
-      return res.status(301).redirect(url);
+      return res.status(301).redirect(response);
     } catch (error) {
       console.error(`Post receiver error: ${error}`);
       return res.status(500).send('Internal Server Error');

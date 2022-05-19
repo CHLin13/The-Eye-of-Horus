@@ -19,7 +19,7 @@ const profileController = {
   getProfileEdit: async (req, res) => {
     try {
       const { userId } = req.params;
-      const user = JSON.parse(req.user);
+      const user = res.locals.localUser;
 
       if (Number(userId) !== user.id) {
         return res.status(301).redirect('/profile');
@@ -34,7 +34,7 @@ const profileController = {
 
   postProfile: async (req, res) => {
     try {
-      const userId = JSON.parse(req.user).id;
+      const userId = res.locals.localUser.id;
       const { name, email, password, newPassword, passwordConfirm } = req.body;
       let tempPassword = password;
       const userPassword = await profileModel.getPassword(userId);

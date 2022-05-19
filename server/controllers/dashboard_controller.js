@@ -32,9 +32,9 @@ const dashboardController = {
 
   getChartCreate: async (req, res) => {
     try {
-      const dashboardId = req.params.dashboardId;
+      const { dashboardId } = req.params;
       const [dashboard] = await dashboardModel.getDashboard(dashboardId);
-      const source = await dashboardModel.getSource();
+      const sources = await dashboardModel.getSources();
 
       if (!dashboard) {
         return res.status(301).redirect(`/dashboards`);
@@ -42,7 +42,7 @@ const dashboardController = {
 
       return res
         .status(200)
-        .render('create', { source, dashboardId, dashboard });
+        .render('create', { sources, dashboardId, dashboard });
     } catch (error) {
       console.error(`Get dashboard create error: ${error}`);
       return res.status(500).send('Internal Server Error');
@@ -68,14 +68,14 @@ const dashboardController = {
   getTypeInstance: async (req, res) => {
     try {
       const { source } = req.body;
-      const result = await dashboardModel.getTypeInstance(source);
+      const typeInstance = await dashboardModel.getTypeInstance(source);
       const errors = validationResult(req);
 
       if (!errors.isEmpty()) {
         return res.status(401).json({ error: 'Source is required' });
       }
 
-      return res.status(200).json(result);
+      return res.status(200).json(typeInstance);
     } catch (error) {
       console.error(`Get typeInstance error: ${error}`);
       return res.status(500).send('Internal Server Error');
@@ -110,10 +110,11 @@ const dashboardController = {
 
   getDashboard: async (req, res) => {
     try {
-      const dashboardId = req.params.dashboardId;
+      const { dashboardId } = req.params;
       const userRole = res.locals.localUser.role_id;
       let dashboard = await dashboardModel.getDashboard(dashboardId);
-      const chart = await dashboardModel.getCharts(dashboardId);
+      const charts = await dashboardModel.getCharts(dashboardId);
+
       if (!dashboard) {
         return res.status(301).redirect('/dashboards');
       }
@@ -122,7 +123,7 @@ const dashboardController = {
       [dashboard] = await attachPermission(dashboard, userRole);
 
       return res.status(200).render('dashboard_detail', {
-        chart,
+        charts,
         dashboard,
       });
     } catch (error) {
@@ -135,19 +136,19 @@ const dashboardController = {
     try {
       const { dashboardId, chartId } = req.params;
       const [dashboard] = await dashboardModel.getDashboard(dashboardId);
-      const data = await dashboardModel.getChartDetail(dashboardId, chartId);
-      const source = await dashboardModel.getSource();
+      const chart = await dashboardModel.getChartDetail(dashboardId, chartId);
+      const sources = await dashboardModel.getSources();
 
       if (!dashboard) {
         return res.status(301).redirect(`/dashboards`);
-      } else if (!data) {
+      } else if (!chart) {
         return res.status(301).redirect(`/dashboards/${dashboardId}`);
       }
 
-      const type = await dashboardModel.getTypeInstance(data.source);
+      const typeInstance = await dashboardModel.getTypeInstance(chart.source);
       return res
         .status(200)
-        .render('create', { data, source, type, dashboard });
+        .render('create', { chart, sources, typeInstance, dashboard });
     } catch (error) {
       console.error(`Get chart detail error: ${error}`);
       return res.status(500).send('Internal Server Error');
@@ -167,20 +168,22 @@ const dashboardController = {
 
   getDashboardSetting: async (req, res) => {
     try {
-    const { dashboardId } = req.params;
-    const role = await roleModel.getRoles();
-    let dashboard = await dashboardModel.getDashboard(dashboardId);
-    const permission = await dashboardModel.getPermission(dashboardId);
-    if (!dashboard) {
-      return res.status(301).redirect('/dashboards');
-    }
-    dashboard = dashboard[0]
-    return res.status(200).render('dashboard_setting', {
-      role,
-      dashboard,
-      dashboardId,
-      permission,
-    });
+      const { dashboardId } = req.params;
+      const roles = await roleModel.getRoles();
+      let dashboard = await dashboardModel.getDashboard(dashboardId);
+      const permission = await dashboardModel.getPermission(dashboardId);
+
+      if (!dashboard) {
+        return res.status(301).redirect('/dashboards');
+      }
+
+      dashboard = dashboard[0];
+      return res.status(200).render('dashboard_setting', {
+        roles,
+        dashboard,
+        dashboardId,
+        permission,
+      });
     } catch (error) {
       console.error(`Get dashboard create error: ${error}`);
       return res.status(500).send('Internal Server Error');
@@ -189,8 +192,8 @@ const dashboardController = {
 
   getDashboardCreate: async (req, res) => {
     try {
-      const role = await roleModel.getRoles();
-      return res.status(200).render('dashboard_setting', { role });
+      const roles = await roleModel.getRoles();
+      return res.status(200).render('dashboard_setting', { roles });
     } catch (error) {
       console.error(`Get dashboard create error: ${error}`);
       return res.status(500).send('Internal Server Error');

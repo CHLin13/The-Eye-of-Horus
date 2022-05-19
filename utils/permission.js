@@ -1,27 +1,27 @@
-const attachPermission = async (dashboard, userRole) => {
-  for (let i = 0; i < dashboard.length; i++) {
+const { rolePermission } = require('../utils/enums');
+const attachPermission = async (dashboards, userRoles) => {
+  for (let i = 0; i < dashboards.length; i++) {
     const obj = {};
 
-    for (let j = 0; j < dashboard[i].role_id.length; j++) {
-      obj[dashboard[i].role_id[j]] = dashboard[i].permission[j];
+    for (let j = 0; j < dashboards[i].role_id.length; j++) {
+      obj[dashboards[i].role_id[j]] = dashboards[i].permission[j];
     }
-
-    if (userRole) {
-      for (let k = 0; k < userRole.length; k++) {
-        if (obj[userRole[k]] === '3') {
-          dashboard[i].adminPermission = true;
-          dashboard[i].editPermission = true;
-          dashboard[i].viewPermission = true;
-        } else if (obj[userRole[k]] === '2') {
-          dashboard[i].editPermission = true;
-          dashboard[i].viewPermission = true;
-        } else if (obj[userRole[k]] === '1') {
-          dashboard[i].viewPermission = true;
+    if (userRoles) {
+      for (let k = 0; k < userRoles.length; k++) {
+        if (obj[userRoles[k]] === rolePermission.admin) {
+          dashboards[i].adminPermission = true;
+          dashboards[i].editPermission = true;
+          dashboards[i].viewPermission = true;
+        } else if (obj[userRoles[k]] === rolePermission.editor) {
+          dashboards[i].editPermission = true;
+          dashboards[i].viewPermission = true;
+        } else if (obj[userRoles[k]] === rolePermission.viewer) {
+          dashboards[i].viewPermission = true;
         }
       }
     }
   }
-  return dashboard;
+  return dashboards;
 };
 
 module.exports = {

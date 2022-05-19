@@ -130,11 +130,11 @@
                 <div class="col-2 p-0 mr-5">
                   <select class="form-control" id="source" style="background: #343A40; color:white" name="source">              
                     {{#if data}}
-                      {{#each source}}
+                      {{#each sources}}
                       <option value="{{this}}" {{#ifCond this ../data.source }}selected{{/ifCond}}>{{this}}</option>
                       {{/each}}
                     {{else}}
-                      {{#each source}}
+                      {{#each sources}}
                       <option value="{{this}}">{{this}}</option>
                       {{/each}}
                     {{/if}}
@@ -294,11 +294,11 @@
                 <div class="col-2 p-0">
                   <select class="form-control" id="receiver_id" style="background: #343A40; color:white;" name="receiver_id">
                     {{#if data}}
-                      {{#each receiver}}
+                      {{#each receivers}}
                         <option value="{{this.id}}" {{#ifCond this.id ../data.receiver_id }}selected{{/ifCond}}>{{this.name}} / {{this.type}}</option>
                       {{/each}}
                     {{else}}
-                      {{#each receiver}}
+                      {{#each receivers}}
                         <option value="{{this.id}}">{{this.name}} / {{this.type}}</option>
                       {{/each}}
                     {{/if}}

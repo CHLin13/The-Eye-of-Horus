@@ -1,8 +1,9 @@
-//TODO:refector
 const { getPermission } = require('./auth');
+const { rolePermission } = require('../utils/enums');
+
 const adminRole = async (req, res, next) => {
   const permission = await getPermission(req, res);
-  if (permission === '3') {
+  if (permission === rolePermission.admin) {
     return next();
   } else {
     return res.redirect('/dashboards');
@@ -11,7 +12,10 @@ const adminRole = async (req, res, next) => {
 
 const editorRole = async (req, res, next) => {
   const permission = await getPermission(req, res);
-  if (permission === '3' || permission === '2') {
+  if (
+    permission === rolePermission.admin ||
+    permission === rolePermission.editor
+  ) {
     return next();
   } else {
     return res.redirect('/dashboards');
@@ -20,7 +24,11 @@ const editorRole = async (req, res, next) => {
 
 const viewerRole = async (req, res, next) => {
   const permission = await getPermission(req, res);
-  if (permission === '3' || permission === '2' || permission === '1') {
+  if (
+    permission === rolePermission.admin ||
+    permission === rolePermission.editor ||
+    permission === rolePermission.viewer
+  ) {
     return next();
   } else {
     return res.redirect('/dashboards');

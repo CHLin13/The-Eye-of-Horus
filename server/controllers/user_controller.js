@@ -1,3 +1,4 @@
+const { superPermission, userStatus } = require('../../utils/enums');
 const { validationResult } = require('express-validator');
 const userModel = require('../models/user_model');
 const roleModel = require('../models/role_model');
@@ -9,8 +10,8 @@ const hash = util.promisify(bcrypt.hash);
 const userController = {
   getUsers: async (req, res) => {
     try {
-      const user = await userModel.getUsers();
-      return res.status(200).render('users', { user });
+      const users = await userModel.getUsers();
+      return res.status(200).render('users', { users });
     } catch (error) {
       console.error(`Get role list error: ${error}`);
       return res.status(500).send('Internal Server Error');
@@ -19,8 +20,8 @@ const userController = {
 
   getUserCreate: async (req, res) => {
     try {
-      const role = await roleModel.getRoles();
-      return res.status(200).render('user_create', { role });
+      const roles = await roleModel.getRoles();
+      return res.status(200).render('user_create', { roles });
     } catch (error) {
       console.error(`Get role create error: ${error}`);
       return res.status(500).send('Internal Server Error');
@@ -49,13 +50,12 @@ const userController = {
         }
       }
 
-      if (superuser !== '0' && superuser !== '1') {
+      if (!Object.values(superPermission).includes(superuser)) {
         return res.status(401).json({
           message: 'Superuser value is incorrect',
         });
       }
-
-      if (status !== '0' && status !== '1') {
+      if (!Object.values(userStatus).includes(status)) {
         return res.status(401).json({
           message: 'Status is incorrect',
         });
@@ -75,6 +75,7 @@ const userController = {
           message: 'Email already registered',
         });
       }
+
       return res.status(301).redirect('/admin/users');
     } catch (error) {
       console.error(`Post role error: ${error}`);
@@ -86,11 +87,13 @@ const userController = {
     try {
       const { userId } = req.params;
       const user = await userModel.getUser(userId);
+
       if (!user) {
         return res.status(301).redirect('/admin/users');
       }
-      const role = await roleModel.getRoles();
-      return res.status(200).render('user_create', { user, role });
+
+      const roles = await roleModel.getRoles();
+      return res.status(200).render('user_create', { user, roles });
     } catch (error) {
       console.error(`Get user error: ${error}`);
       return res.status(500).send('Internal Server Error');
@@ -99,11 +102,13 @@ const userController = {
 
   deleteUser: async (req, res) => {
     const { userId } = req.params;
+    const user = res.locals.localUser
     try {
-      if (Number(userId) === res.locals.localUser.id) {
+      if (Number(userId) === user.id) {
         req.flash('error_messages', 'Can not delete yourself');
         return res.status(301).redirect('/admin/users');
       }
+      
       await userModel.deleteUser(userId);
       return res.status(301).redirect('/admin/users');
     } catch (error) {

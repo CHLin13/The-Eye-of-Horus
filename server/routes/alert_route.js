@@ -6,8 +6,8 @@ const alertController = require('../controllers/alert_controller');
 const dashboardController = require('../controllers/dashboard_controller');
 const { authenticated, authenticatedSuper } = require('../../utils/auth');
 
-router.get('/', authenticated, alertController.getAlertList);
-router.get('/create', authenticatedSuper, alertController.getAlertCreate);
+router.get('/', authenticated, alertController.getAlerts);
+router.get('/create', authenticatedSuper, alertController.getAlert);
 
 router.post(
   '/chart/preview',

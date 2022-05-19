@@ -3,23 +3,12 @@ const dashboardModel = require('../models/dashboard_model');
 const alertModel = require('../models/alert_model');
 
 const alertController = {
-  getAlertList: async (req, res) => {
+  getAlerts: async (req, res) => {
     try {
-      const alert = await alertModel.getAlerts();
-      return res.status(200).render('alerts', { alert });
+      const alerts = await alertModel.getAlerts();
+      return res.status(200).render('alerts', { alerts });
     } catch (error) {
       console.error(`Get alert list error: ${error}`);
-      return res.status(500).send('Internal Server Error');
-    }
-  },
-
-  getAlertCreate: async (req, res) => {
-    try {
-      const source = await dashboardModel.getSource();
-      const receiver = await alertModel.getReceiver();
-      return res.status(200).render('alert_create', { source, receiver });
-    } catch (error) {
-      console.error(`Get alert create error: ${error}`);
       return res.status(500).send('Internal Server Error');
     }
   },
@@ -48,10 +37,14 @@ const alertController = {
   getAlert: async (req, res) => {
     try {
       const alertId = req.params.alertId;
-      const source = await dashboardModel.getSource();
-      const receiver = await alertModel.getReceiver();
-      const data = await alertModel.getAlert(alertId);
+      const sources = await dashboardModel.getSources();
+      const receivers = await alertModel.getReceivers();
 
+      if (!alertId) {
+        return res.status(200).render('alert_create', { sources, receivers });
+      }
+
+      const data = await alertModel.getAlert(alertId);
       if (!data) {
         return res.status(301).redirect('/alerts');
       }
@@ -59,7 +52,7 @@ const alertController = {
       const type = await dashboardModel.getTypeInstance(data.source);
       return res
         .status(200)
-        .render('alert_create', { data, source, receiver, type });
+        .render('alert_create', { data, sources, receivers, type });
     } catch (error) {
       console.error(`Get alert error: ${error}`);
       return res.status(500).send('Internal Server Error');

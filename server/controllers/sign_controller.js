@@ -24,6 +24,7 @@ const loginController = {
         }
         return res.status(301).redirect(`/`);
       }
+      
       return res.status(301).redirect('/dashboards');
     } catch (error) {
       console.error(`Login url error: ${error}`);

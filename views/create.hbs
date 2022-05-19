@@ -11,9 +11,9 @@
         <a class="nav-link" href="/dashboards" style="display: inline-block;">Dashboard</a>
         <span style="color: #C2C7D0;">></span>
         <a class="nav-link" href="/dashboards/{{dashboard.id}}" style="display: inline-block;">{{dashboard.name}}</a>
-        {{#if data}}
+        {{#if chart}}
         <span style="color: #C2C7D0;">></span>
-        <a class="nav-link" href="/dashboards/{{data.dashboardId}}/chart/{{data.chartId}}" style="display: inline-block;">{{data.title}}</a>
+        <a class="nav-link" href="/dashboards/{{chart.dashboardId}}/chart/{{chart.chartId}}" style="display: inline-block;">{{chart.title}}</a>
         {{else}}
         <span style="color: #C2C7D0;">></span>
         <a class="nav-link" href="/dashboards/{{dashboard.id}}/create" style="display: inline-block;">create</a>
@@ -113,8 +113,8 @@
         </div>
         {{/if}}
         <form 
-        {{#if data}} 
-        action="/dashboards/{{data.dashboardId}}/chart/{{data.chartId}}?_method=PUT" 
+        {{#if chart}} 
+        action="/dashboards/{{chart.dashboardId}}/chart/{{chart.chartId}}?_method=PUT" 
         {{else}} 
         action="/dashboards/{{dashboardId}}/chart" 
         {{/if}} method="post" class="pb-5">
@@ -124,35 +124,35 @@
                   <label for="title" class="d-flex align-items-center">Title *</label>
                 </div>
                 <div class="col-2 p-0 mr-5">
-                  <input class="form-control" type="text" id="title" name="title" placeholder="Chart-1"style="background: #343A40; color:white" value="{{data.title}}" required>
+                  <input class="form-control" type="text" id="title" name="title" placeholder="Chart-1"style="background: #343A40; color:white" value="{{chart.title}}" required>
                 </div>
                 <div class="col-2 p-0">
                   <label for="font-size" class="d-flex align-items-center">Title font size *</label>
                 </div>
                 <div class="col-2 p-0 mr-5" style="margin-left: -30px;">
-                  <input class="form-control" style="background: #343A40; color:white" type="number" min="0" id="font-size" name="fontSize" {{#if data}}value="{{data.titleFontSize}}" {{else}} value="20" {{/if}} required>
+                  <input class="form-control" style="background: #343A40; color:white" type="number" min="0" id="font-size" name="fontSize" {{#if chart}}value="{{chart.titleFontSize}}" {{else}} value="20" {{/if}} required>
                 </div>
                 <div class="col-2 p-0">
                   <label for="time-range" class="d-flex align-items-center">Time range *</label>
                 </div>
                 <div class="col-2 p-0" style="margin-left: -30px;">
                   <select class="form-control" id="time-range" style="background: #343A40; color:white" name="timeRange">
-                    <option value="5-m" {{#ifCond data.timeRange '5-m'}}selected{{/ifCond}}>Last 5 minutes</option>
-                    <option value="15-m"{{#ifCond data.timeRange '15-m'}}selected{{/ifCond}}>Last 15 minutes</option>
-                    <option value="30-m"{{#ifCond data.timeRange '30-m'}}selected{{/ifCond}}>Last 30 minutes</option>
-                    <option value="1-h" {{#ifCond data.timeRange '1-h'}}selected{{/ifCond}}>Last 1 hour</option>
-                    <option value="3-h" {{#ifCond data.timeRange '3-h'}}selected{{/ifCond}}>Last 3 hour</option>
-                    <option value="6-h" {{#ifCond data.timeRange '6-h'}}selected{{/ifCond}}>Last 6 hour</option>
-                    <option value="12-h" {{#ifCond data.timeRange '12-h'}}selected{{/ifCond}}>Last 12 hour</option>
-                    <option value="24-h" {{#ifCond data.timeRange '24-h'}}selected{{/ifCond}}>Last 24 hour</option>
-                    <option value="2-d" {{#ifCond data.timeRange '2-d'}}selected{{/ifCond}}>Last 2 days</option>
-                    <option value="7-d" {{#ifCond data.timeRange '7-d'}}selected{{/ifCond}}>Last 7 days</option>
-                    <option value="30-d" {{#ifCond data.timeRange '30-d'}}selected{{/ifCond}}>Last 30 days</option>
-                    <option value="90-d" {{#ifCond data.timeRange '90-d'}}selected{{/ifCond}}>Last 90 days</option>
-                    <option value="6-M" {{#ifCond data.timeRange '6-M'}}selected{{/ifCond}}>Last 6 months</option>
-                    <option value="1-y" {{#ifCond data.timeRange '1-y'}}selected{{/ifCond}}>Last 1 year</option>
-                    <option value="2-y" {{#ifCond data.timeRange '2-y'}}selected{{/ifCond}}>Last 2 years</option>
-                    <option value="5-y"{{#ifCond data.timeRange '5-y'}}selected{{/ifCond}}>Last 5 years</option>
+                    <option value="5-m" {{#ifCond chart.timeRange '5-m'}}selected{{/ifCond}}>Last 5 minutes</option>
+                    <option value="15-m"{{#ifCond chart.timeRange '15-m'}}selected{{/ifCond}}>Last 15 minutes</option>
+                    <option value="30-m"{{#ifCond chart.timeRange '30-m'}}selected{{/ifCond}}>Last 30 minutes</option>
+                    <option value="1-h" {{#ifCond chart.timeRange '1-h'}}selected{{/ifCond}}>Last 1 hour</option>
+                    <option value="3-h" {{#ifCond chart.timeRange '3-h'}}selected{{/ifCond}}>Last 3 hour</option>
+                    <option value="6-h" {{#ifCond chart.timeRange '6-h'}}selected{{/ifCond}}>Last 6 hour</option>
+                    <option value="12-h" {{#ifCond chart.timeRange '12-h'}}selected{{/ifCond}}>Last 12 hour</option>
+                    <option value="24-h" {{#ifCond chart.timeRange '24-h'}}selected{{/ifCond}}>Last 24 hour</option>
+                    <option value="2-d" {{#ifCond chart.timeRange '2-d'}}selected{{/ifCond}}>Last 2 days</option>
+                    <option value="7-d" {{#ifCond chart.timeRange '7-d'}}selected{{/ifCond}}>Last 7 days</option>
+                    <option value="30-d" {{#ifCond chart.timeRange '30-d'}}selected{{/ifCond}}>Last 30 days</option>
+                    <option value="90-d" {{#ifCond chart.timeRange '90-d'}}selected{{/ifCond}}>Last 90 days</option>
+                    <option value="6-M" {{#ifCond chart.timeRange '6-M'}}selected{{/ifCond}}>Last 6 months</option>
+                    <option value="1-y" {{#ifCond chart.timeRange '1-y'}}selected{{/ifCond}}>Last 1 year</option>
+                    <option value="2-y" {{#ifCond chart.timeRange '2-y'}}selected{{/ifCond}}>Last 2 years</option>
+                    <option value="5-y"{{#ifCond chart.timeRange '5-y'}}selected{{/ifCond}}>Last 5 years</option>
                   </select>
                 </div>
               </div>
@@ -173,12 +173,12 @@
                 </div>
                 <div class="col-2 p-0 mr-5">
                   <select class="form-control" id="source" style="background: #343A40; color:white" name="source">                 
-                    {{#if data}}
-                      {{#each source}}
-                      <option value="{{this}}" {{#ifCond this ../data.source }}selected{{/ifCond}}>{{this}}</option>
+                    {{#if chart}}
+                      {{#each sources}}
+                      <option value="{{this}}" {{#ifCond this ../chart.source }}selected{{/ifCond}}>{{this}}</option>
                       {{/each}}
                     {{else}}
-                      {{#each source}}
+                      {{#each sources}}
                       <option value="{{this}}">{{this}}</option>
                       {{/each}}
                     {{/if}}
@@ -189,9 +189,9 @@
                 </div>
                 <div class="col-2 p-0" style="margin-left: -30px; margin-right: 230px;">
                   <select class="form-control" id="type" style="background: #343A40; color:white" name="type">
-                    {{#if data}}
-                      {{#each type}}
-                        <option value="{{this}}" {{#ifCond this ../data.type }}selected{{/ifCond}}>{{this}}</option>
+                    {{#if chart}}
+                      {{#each typeInstance}}
+                        <option value="{{this}}" {{#ifCond this ../chart.type }}selected{{/ifCond}}>{{this}}</option>
                       {{/each}}
                     {{/if}}
                   </select>
@@ -208,23 +208,23 @@
                 </div>
                 <div class="col-2 p-0 mr-5">
                   <select class="form-control" id="style" style="background: #343A40; color:white" name="style">
-                    <option value="line" {{#ifCond data.style 'line'}}selected{{/ifCond}}>line chart</option>
-                    <option value="bar" {{#ifCond data.style 'bar'}}selected{{/ifCond}}>bar chart</option>
+                    <option value="line" {{#ifCond chart.style 'line'}}selected{{/ifCond}}>line chart</option>
+                    <option value="bar" {{#ifCond chart.style 'bar'}}selected{{/ifCond}}>bar chart</option>
                   </select>
                 </div>
                 <div class="col-2 p-0">
                   <label for="interval" class="d-flex align-items-center">Interval *</label>
                 </div>
                 <div class="col-1 p-0" style="margin-left: -30px;" >
-                  <input class="form-control" type="number" min="1" style="background: #343A40; color:white; width:80px" name="interval" id="interval" {{#if data}}value="{{data.interval}}" {{else}} value="10" {{/if}}>
+                  <input class="form-control" type="number" min="1" style="background: #343A40; color:white; width:80px" name="interval" id="interval" {{#if chart}}value="{{chart.interval}}" {{else}} value="10" {{/if}}>
                 </div>
                 <div class="col-1 p-0 mr-5">
                   <select class="form-control" style="background: #343A40; color:white" name="interval_unit" id="interval_unit">
-                    <option value="s" {{#ifCond data.interval_unit 's'}}selected{{/ifCond}}>second</option>
-                    <option value="m" {{#ifCond data.interval_unit 'm'}}selected{{/ifCond}}>minute</option>
-                    <option value="h" {{#ifCond data.interval_unit 'h'}}selected{{/ifCond}}>hour</option>
-                    <option value="d" {{#ifCond data.interval_unit 'd'}}selected{{/ifCond}}>day</option>
-                    <option value="w" {{#ifCond data.interval_unit 'w'}}selected{{/ifCond}}>week</option>
+                    <option value="s" {{#ifCond chart.interval_unit 's'}}selected{{/ifCond}}>second</option>
+                    <option value="m" {{#ifCond chart.interval_unit 'm'}}selected{{/ifCond}}>minute</option>
+                    <option value="h" {{#ifCond chart.interval_unit 'h'}}selected{{/ifCond}}>hour</option>
+                    <option value="d" {{#ifCond chart.interval_unit 'd'}}selected{{/ifCond}}>day</option>
+                    <option value="w" {{#ifCond chart.interval_unit 'w'}}selected{{/ifCond}}>week</option>
                   </select>
                 </div>
                 <div class="col-2 p-0">
@@ -232,11 +232,11 @@
                 </div>
                 <div class="col-2 p-0" style="margin-left: -30px;">
                   <select class="form-control" id="select" style="background: #343A40; color:white" name="select" id="select">
-                    <option value="min" {{#ifCond data.select 'min'}}selected{{/ifCond}}>min</option>
-                    <option value="max" {{#ifCond data.select 'max'}}selected{{/ifCond}}>max</option>
-                    <option value="mean" {{#ifCond data.select 'mean'}}selected{{/ifCond}}>mean</option>
-                    <option value="sum" {{#ifCond data.select 'sum'}}selected{{/ifCond}}>sum</option>
-                    <option value="count" {{#ifCond data.select 'count'}}selected{{/ifCond}}>count</option>
+                    <option value="min" {{#ifCond chart.select 'min'}}selected{{/ifCond}}>min</option>
+                    <option value="max" {{#ifCond chart.select 'max'}}selected{{/ifCond}}>max</option>
+                    <option value="mean" {{#ifCond chart.select 'mean'}}selected{{/ifCond}}>mean</option>
+                    <option value="sum" {{#ifCond chart.select 'sum'}}selected{{/ifCond}}>sum</option>
+                    <option value="count" {{#ifCond chart.select 'count'}}selected{{/ifCond}}>count</option>
                   </select>
                 </div>
               </div>
@@ -246,19 +246,19 @@
                   <label for="xAxis-title" class="d-flex align-items-center">x-Axis title</label>
                 </div>
                 <div class="col-2 p-0 mr-5">
-                  <input class="form-control" type="text" style="background: #343A40; color:white" name="xAxisTitle" id="xAxis-title" placeholder="xAxis" {{#if data}}value="{{data.xAxisTitle}}"{{/if}}>
+                  <input class="form-control" type="text" style="background: #343A40; color:white" name="xAxisTitle" id="xAxis-title" placeholder="xAxis" {{#if chart}}value="{{chart.xAxisTitle}}"{{/if}}>
                 </div>
                 <div class="col-2 p-0">
                   <label for="xAxis-font-size" class="d-flex align-items-center">x-Axis title font size</label>
                 </div>
                 <div class="col-2 p-0 mr-5" style="margin-left: -30px;">
-                  <input class="form-control" type="number" min="1" style="background: #343A40; color:white" name="xAxisFontSize" id="xAxis-font-size" {{#if data}} value="{{data.xAxisFontSize}}" {{else}} value="16" {{/if}}>
+                  <input class="form-control" type="number" min="1" style="background: #343A40; color:white" name="xAxisFontSize" id="xAxis-font-size" {{#if chart}} value="{{chart.xAxisFontSize}}" {{else}} value="16" {{/if}}>
                 </div>
                 <div class="col-2 p-0">
                   <label for="xAxis-tick-font-size" class="d-flex align-items-center">x-Axis tick font size</label>
                 </div>
                 <div class="col-2 p-0" style="margin-left: -30px;">
-                  <input class="form-control" type="number" min="1" style="background: #343A40; color:white" name="xAxisTickFontSize" id="xAxis-tick-font-size" {{#if data}} value="{{data.xAxisTickFontSize}}" {{else}} value="12" {{/if}}>
+                  <input class="form-control" type="number" min="1" style="background: #343A40; color:white" name="xAxisTickFontSize" id="xAxis-tick-font-size" {{#if chart}} value="{{chart.xAxisTickFontSize}}" {{else}} value="12" {{/if}}>
                 </div>
               </div>
               
@@ -267,19 +267,19 @@
                   <label for="yAxis-title" class="d-flex align-items-center">y-Axis title</label>
                 </div>
                 <div class="col-2 p-0 mr-5">
-                  <input class="form-control" type="text" style="background: #343A40; color:white" name="yAxisTitle" id="yAxis-title" placeholder="yAxis" {{#if data}}value="{{data.yAxisTitle}}"{{/if}}>
+                  <input class="form-control" type="text" style="background: #343A40; color:white" name="yAxisTitle" id="yAxis-title" placeholder="yAxis" {{#if chart}}value="{{chart.yAxisTitle}}"{{/if}}>
                 </div>
                 <div class="col-2 p-0">
                   <label for="yAxis-font-size" class="d-flex align-items-center">y-Axis title font size</label>
                 </div>
                 <div class="col-2 p-0 mr-5" style="margin-left: -30px;">
-                  <input class="form-control" type="number" min="1" style="background: #343A40; color:white" name="yAxisFontSize" id="yAxis-font-size" {{#if data}} value="{{data.yAxisFontSize}}" {{else}} value="16" {{/if}}>
+                  <input class="form-control" type="number" min="1" style="background: #343A40; color:white" name="yAxisFontSize" id="yAxis-font-size" {{#if chart}} value="{{chart.yAxisFontSize}}" {{else}} value="16" {{/if}}>
                 </div>
                 <div class="col-2 p-0">
                   <label for="yAxis-tick-font-size" class="d-flex align-items-center">y-Axis tick font size</label>
                 </div>
                 <div class="col-2 p-0" style="margin-left: -30px;">
-                  <input class="form-control" type="number" min="1" style="background: #343A40; color:white" name="yAxisTickFontSize" id="yAxis-tick-font-size" {{#if data}} value="{{data.yAxisTickFontSize}}" {{else}} value="12" {{/if}}>
+                  <input class="form-control" type="number" min="1" style="background: #343A40; color:white" name="yAxisTickFontSize" id="yAxis-tick-font-size" {{#if chart}} value="{{chart.yAxisTickFontSize}}" {{else}} value="12" {{/if}}>
                 </div>
               </div>
           </div>
@@ -330,7 +330,7 @@
     type.html(option)
   }
   
-  {{#if data}}
+  {{#if chart}}
   {{else}}
   loading()
   {{/if}} 
@@ -418,8 +418,8 @@
 
   preview.on('click', async (e) => {
     let dashboardId = '{{dashboardId}}'
-    if('{{data.dashboardId}}'){
-      dashboardId = '{{data.dashboardId}}'
+    if('{{chart.dashboardId}}'){
+      dashboardId = '{{chart.dashboardId}}'
     }
     try{
       const response = await axios.post(`/dashboards/${dashboardId}/chart/preview`,{ 

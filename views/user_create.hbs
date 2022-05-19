@@ -138,7 +138,7 @@
                   <div class="form-group">
                     <label for="roles">Roles</label>
                     <div>
-                      {{#each role}}
+                      {{#each roles}}
                         <div class="form-check form-check-inline">
                           <input class="form-check-input checkbox" type="checkbox" id="{{this.id}}" value="{{this.name}}" {{#each ../user.role_id}}{{#ifCond this ../this.id}}checked{{/ifCond}}{{/each}}>
                           <label class="form-check-label" for="{{this.id}}">{{this.name}}</label>

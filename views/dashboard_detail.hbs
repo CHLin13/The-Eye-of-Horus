@@ -8,9 +8,9 @@
           M: 30 * 24 * 60 * 60,
           y: 365 * 30 * 24 * 60 * 60,
         };
-    async function chart(id, time_range, database, measurement, type, chart_type, interval, interval_unit, selects, layout, chart_type , dashboardId) {
+    async function chart(id, time_range, database, measurement, type, chart_type, interval, interval_unit, selects, layout, chart_type , dashboard_id) {
 
-    const response = await axios.post(`/dashboards/${dashboardId}/chart/preview`,{
+    const response = await axios.post(`/dashboards/${dashboard_id}/chart/preview`,{
       timeRange: time_range,
       source: database + '/' + measurement,
       type: type,
@@ -188,9 +188,9 @@
         {{/if}}
         <div class="card-wrapper d-flex flex-wrap ml-3 bg-dark ">
           {{#ifCond localUser.superuser '1'}}
-          {{#each chart}}
+          {{#each charts}}
             <div class="card m-2 bg-dark {{this.id}}" style="width: 48%; height: 50vh; position:relative; box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.651)">
-              <a href="/dashboards/{{this.dashboardId}}/chart/{{this.id}}" class="btn mt-3" style="height: 4vh; line-height:100%; position:absolute; left: 5%"><i class="fas fa-edit chart-edit"></i></a>
+              <a href="/dashboards/{{this.dashboard_id}}/chart/{{this.id}}" class="btn mt-3" style="height: 4vh; line-height:100%; position:absolute; left: 5%"><i class="fas fa-edit chart-edit"></i></a>
               <button  class="btn mt-3 font-weight-bold" style="height: 4vh; line-height:100%; background-color:transparent; border:none; color:aliceblue; position:absolute; right: 5%" data-toggle="modal" data-target="#modal{{this.id}}">X</button>
               <div class="modal fade" id="modal{{this.id}}">
                 <div class="modal-dialog">
@@ -207,7 +207,7 @@
                   </div>
                   <div class="modal-footer justify-content-end">
                     <button type="button" class="btn btn-outline-light" style="margin-right: 7vw;" data-dismiss="modal">Cancel</button>
-                    <form action="/dashboards/{{this.dashboardId}}/chart/{{this.id}}?_method=DELETE" method="post" style="position:absolute; right: 5%; display:block">
+                    <form action="/dashboards/{{this.dashboard_id}}/chart/{{this.id}}?_method=DELETE" method="post" style="position:absolute; right: 5%; display:block">
                       <button type="submit" class="btn btn-danger">Delete</button>
                     </form>
                   </div>
@@ -218,7 +218,7 @@
 
             <script>
             function runner{{this.id}}() {
-                chart({{this.id}}, '{{this.time_range}}','{{this.database}}','{{this.measurement}}','{{this.type}}','{{this.chart_type}}',{{this.interval}},'{{this.interval_unit}}','{{this.select}}','{{{this.layout}}}', '{{this.chart_type}}',{{this.dashboardId}});
+                chart({{this.id}}, '{{this.time_range}}','{{this.database}}','{{this.measurement}}','{{this.type}}','{{this.chart_type}}',{{this.interval}},'{{this.interval_unit}}','{{this.select}}','{{{this.layout}}}', '{{this.chart_type}}',{{this.dashboard_id}});
                 setTimeout(function() {
                     runner{{this.id}}();
                 }, {{{this.setInterval}}});
@@ -228,10 +228,10 @@
             </script>
           {{/each}}
           {{else}}
-          {{#each chart}}
+          {{#each charts}}
             <div class="card m-2 bg-dark {{this.id}}" style="width: 48%; height: 50vh; position:relative; box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.651)">
               {{#if ../dashboard.editPermission}}
-              <a href="/dashboards/{{this.dashboardId}}/chart/{{this.id}}" class="btn mt-3" style="height: 4vh; line-height:100%; position:absolute; left: 5%"><i class="fas fa-edit chart-edit" style="color:#8C745E;"></i></a>
+              <a href="/dashboards/{{this.dashboard_id}}/chart/{{this.id}}" class="btn mt-3" style="height: 4vh; line-height:100%; position:absolute; left: 5%"><i class="fas fa-edit chart-edit" style="color:#8C745E;"></i></a>
               <button  class="btn mt-3 font-weight-bold" style="height: 4vh; line-height:100%; background-color:transparent; border:none; color:aliceblue; position:absolute; right: 5%" data-toggle="modal" data-target="#modal{{this.id}}">X</button>
               {{/if}}
               <div class="modal fade" id="modal{{this.id}}">
@@ -249,7 +249,7 @@
                   </div>
                   <div class="modal-footer justify-content-end">
                     <button type="button" class="btn btn-outline-light" style="margin-right: 7vw;" data-dismiss="modal">Cancel</button>
-                    <form action="/dashboards/{{this.dashboardId}}/chart/{{this.id}}?_method=DELETE" method="post" style="position:absolute; right: 5%">
+                    <form action="/dashboards/{{this.dashboard_id}}/chart/{{this.id}}?_method=DELETE" method="post" style="position:absolute; right: 5%">
                       <button type="submit" class="btn btn-danger">Delete</button>
                     </form>
                   </div>
@@ -261,7 +261,7 @@
             <script>
             
             function runner{{this.id}}() {
-                chart({{this.id}}, '{{this.time_range}}','{{this.database}}','{{this.measurement}}','{{this.type}}','{{this.chart_type}}',{{this.interval}},'{{this.interval_unit}}','{{this.select}}','{{{this.layout}}}', '{{this.chart_type}}',{{this.dashboardId}});
+                chart({{this.id}}, '{{this.time_range}}','{{this.database}}','{{this.measurement}}','{{this.type}}','{{this.chart_type}}',{{this.interval}},'{{this.interval_unit}}','{{this.select}}','{{{this.layout}}}', '{{this.chart_type}}',{{this.dashboard_id}});
                 setTimeout(function() {
                     runner{{this.id}}();
                 }, {{{this.setInterval}}});
