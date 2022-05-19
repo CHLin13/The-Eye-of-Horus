@@ -4,7 +4,7 @@ const authenticated = (req, res, next) => {
   if (req.isAuthenticated(req)) {
     return next();
   }
-  return res.redirect('/login');
+  return res.redirect('/');
 };
 
 const authenticatedSuper = (req, res, next) => {
@@ -15,10 +15,10 @@ const authenticatedSuper = (req, res, next) => {
     }
     return res.redirect('/dashboards');
   }
-  return res.redirect('/login');
+  return res.redirect('/');
 };
 
-const getPermission = async (req, res, next) => {
+const getPermission = async (req, res) => {
   const user = res.locals.localUser;
   const superuser = user.superuser;
   let role = '';
@@ -32,7 +32,7 @@ const getPermission = async (req, res, next) => {
       WHERE user_role.user_id = ? AND dashboard_permission.dashboard_id = ?`;
     const [permission] = await pool.query(sql, [userId, dashboardId]);
     if (permission.length < 1) {
-      return res.redirect('/');
+      return false;
     }
 
     role = permission.reduce((accu, curr) => {
@@ -46,8 +46,7 @@ const getPermission = async (req, res, next) => {
     }, {}).permission;
   }
 
-  res.locals.role = role;
-  next();
+  return role;
 };
 
 module.exports = {

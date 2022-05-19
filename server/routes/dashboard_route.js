@@ -3,7 +3,8 @@ const router = express.Router();
 const { body } = require('express-validator');
 
 const dashboardController = require('../controllers/dashboard_controller');
-const { authenticated, getPermission } = require('../../utils/auth');
+
+const { authenticated } = require('../../utils/auth');
 const { adminRole, editorRole, viewerRole } = require('../../utils/role');
 
 //dashboard
@@ -13,14 +14,12 @@ router.get('/create', authenticated, dashboardController.getDashboardCreate);
 router.get(
   '/:dashboardId/setting/',
   authenticated,
-  getPermission,
   adminRole,
   dashboardController.getDashboardSetting
 );
 router.post(
   '/',
   authenticated,
-  getPermission,
   adminRole,
   [body('name').notEmpty().isLength({ max: 60 })],
   dashboardController.postDashboard
@@ -29,7 +28,6 @@ router.post(
 router.put(
   '/:dashboardId',
   authenticated,
-  getPermission,
   adminRole,
   [body('name').notEmpty().isLength({ max: 60 })],
   dashboardController.postDashboard
@@ -37,14 +35,12 @@ router.put(
 router.get(
   '/:dashboardId',
   authenticated,
-  getPermission,
   viewerRole,
   dashboardController.getDashboard
 );
 router.delete(
   '/:dashboardId',
   authenticated,
-  getPermission,
   adminRole,
   dashboardController.deleteDashboard
 );
@@ -53,7 +49,6 @@ router.delete(
 router.post(
   '/:dashboardId/chart/preview',
   authenticated,
-  getPermission,
   viewerRole,
   [
     body('timeRange').notEmpty(),
@@ -75,7 +70,6 @@ router.post(
 router.get(
   '/:dashboardId/create',
   authenticated,
-  getPermission,
   editorRole,
   dashboardController.getChartCreate
 );
@@ -83,14 +77,12 @@ router.get(
 router.get(
   '/:dashboardId/chart/:chartId',
   authenticated,
-  getPermission,
   editorRole,
   dashboardController.getChart
 );
 router.put(
   '/:dashboardId/chart/:chartId',
   authenticated,
-  getPermission,
   editorRole,
   [
     body('timeRange').notEmpty(),
@@ -107,14 +99,12 @@ router.put(
 router.delete(
   '/:dashboardId/chart/:chartId',
   authenticated,
-  getPermission,
   editorRole,
   dashboardController.deleteChart
 );
 router.post(
   '/:dashboardId/chart',
   authenticated,
-  getPermission,
   editorRole,
   [
     body('timeRange').notEmpty(),

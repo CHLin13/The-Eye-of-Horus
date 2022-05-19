@@ -1,5 +1,7 @@
+//TODO:refector
+const { getPermission } = require('./auth');
 const adminRole = async (req, res, next) => {
-  const permission = res.locals.role;
+  const permission = await getPermission(req, res);
   if (permission === '3') {
     return next();
   } else {
@@ -8,7 +10,7 @@ const adminRole = async (req, res, next) => {
 };
 
 const editorRole = async (req, res, next) => {
-  const permission = res.locals.role;
+  const permission = await getPermission(req, res);
   if (permission === '3' || permission === '2') {
     return next();
   } else {
@@ -17,7 +19,7 @@ const editorRole = async (req, res, next) => {
 };
 
 const viewerRole = async (req, res, next) => {
-  const permission = res.locals.role;
+  const permission = await getPermission(req, res);
   if (permission === '3' || permission === '2' || permission === '1') {
     return next();
   } else {
