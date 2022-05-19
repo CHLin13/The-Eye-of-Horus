@@ -356,7 +356,10 @@
     }
     type.html(option)
   }
+  {{#if data}}
+  {{else}}
   loading()
+  {{/if}}
 
   preview.on('click', async (e) => {
     try{

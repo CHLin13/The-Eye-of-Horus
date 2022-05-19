@@ -68,7 +68,6 @@
     </div>
   </nav>
   <!-- /.navbar -->
-
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-2">
     <!-- Brand Logo -->
@@ -165,12 +164,12 @@
             <div class="d-flex justify-content-end">
               <a href="/dashboards/{{dashboard.id}}/create"><button class="btn buttons"><i class="fas fa-plus"></i></button></a>
             {{else}}
-              {{#if adminPermission}}
+              {{#if dashboard.adminPermission}}
               <a class="text-secondary ml-3" href="/dashboards/{{dashboard.id}}/setting"><i class="fas fa-cog"></i></a>
               {{/if}}
             </div>
             <div class="d-flex justify-content-end">
-              {{#if editPermission}}
+              {{#if dashboard.editPermission}}
               <a href="/dashboards/{{dashboard.id}}/create"><button class="btn buttons"><i class="fas fa-plus"></i></button></a>
               {{/if}}
             {{/ifCond}}
@@ -231,7 +230,7 @@
           {{else}}
           {{#each chart}}
             <div class="card m-2 bg-dark {{this.id}}" style="width: 48%; height: 50vh; position:relative; box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.651)">
-              {{#if ../editPermission}}
+              {{#if ../dashboard.editPermission}}
               <a href="/dashboards/{{this.dashboardId}}/chart/{{this.id}}" class="btn mt-3" style="height: 4vh; line-height:100%; position:absolute; left: 5%"><i class="fas fa-edit chart-edit" style="color:#8C745E;"></i></a>
               <button  class="btn mt-3 font-weight-bold" style="height: 4vh; line-height:100%; background-color:transparent; border:none; color:aliceblue; position:absolute; right: 5%" data-toggle="modal" data-target="#modal{{this.id}}">X</button>
               {{/if}}

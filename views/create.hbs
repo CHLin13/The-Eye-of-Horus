@@ -315,6 +315,7 @@
   const yAxisTickFontSize = $('#yAxis-tick-font-size')
   const save = $('#save')
 
+
   async function loading() {
     const sourceVal = source.val()
     const response = await axios.post('/dashboards/type_instance',{ source: sourceVal })
@@ -328,7 +329,11 @@
     }
     type.html(option)
   }
+  
+  {{#if data}}
+  {{else}}
   loading()
+  {{/if}} 
     
   title.change(() => {
     if(title.val().length > 60){

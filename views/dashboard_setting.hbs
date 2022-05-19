@@ -1,258 +1,275 @@
-<body class="hold-transition sidebar-mini">
-<div class="wrapper">
-  <!-- Navbar -->
-  <nav class="main-header navbar navbar-expand navbar-dark d-flex justify-content-between">
-    <!-- Left navbar links -->
-    <ul class="navbar-nav">
-      <li class="nav-item">
-        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/dashboards" style="display: inline-block;">Dashboard</a>
-        {{#if dashboard}}
-        <span style="color: #C2C7D0;">></span>
-        <a class="nav-link" href="/dashboards/{{dashboard.id}}/setting" style="display: inline-block;">{{dashboard.name}}</a>
-        {{else}}
-        <span style="color: #C2C7D0;">></span>
-        <a class="nav-link" href="/dashboards/create" style="display: inline-block;">create</a>
-        {{/if}}
-      </li>
-    </ul>
-    <div class="d-flex align-items-center">
-      <div class="hi">Hi, {{localUser.name}}{{#ifCond localUser.superuser '1'}} (Superuser){{/ifCond}}</div>
-      <a href="/profile" class="nav-link" id="profile">Profile</a>
-      <form action="/logout" method="post">
-        <button type="submit" class="signout">Sign out</button>
-      </form>
-    </div>
-  </nav>
-  <!-- /.navbar -->
+<body class='hold-transition sidebar-mini'>
+  <div class='wrapper'>
+    <!-- Navbar -->
+    <nav
+      class='main-header navbar navbar-expand navbar-dark d-flex justify-content-between'
+    >
+      <!-- Left navbar links -->
+      <ul class='navbar-nav'>
+        <li class='nav-item'>
+          <a class='nav-link' data-widget='pushmenu' href='#' role='button'><i
+              class='fas fa-bars'
+            ></i></a>
+        </li>
+        <li class='nav-item'>
+          <a
+            class='nav-link'
+            href='/dashboards'
+            style='display: inline-block;'
+          >Dashboard</a>
+          {{#if dashboard}}
+            <span style='color: #C2C7D0;'>></span>
+            <a
+              class='nav-link'
+              href='/dashboards/{{dashboard.id}}/setting'
+              style='display: inline-block;'
+            >{{dashboard.name}}</a>
+          {{else}}
+            <span style='color: #C2C7D0;'>></span>
+            <a
+              class='nav-link'
+              href='/dashboards/create'
+              style='display: inline-block;'
+            >create</a>
+          {{/if}}
+        </li>
+      </ul>
+      <div class='d-flex align-items-center'>
+        <div class='hi'>Hi,
+          {{localUser.name}}{{#ifCond localUser.superuser '1'}}
+            (Superuser){{/ifCond}}</div>
+        <a href='/profile' class='nav-link' id='profile'>Profile</a>
+        <form action='/logout' method='post'>
+          <button type='submit' class='signout'>Sign out</button>
+        </form>
+      </div>
+    </nav>
+    <!-- /.navbar -->
 
-  <!-- Main Sidebar Container -->
-  <aside class="main-sidebar sidebar-dark-primary elevation-2">
-    <!-- Brand Logo -->
-    <a href="/dashboards" class="brand-link">
-      <img src="/eye.PNG" alt=" Logo" class="brand-image img-circle elevation-3">
-      <span class="brand-text font-weight-light">The Eye of Horus</span>
-    </a>
+    <!-- Main Sidebar Container -->
+    <aside class='main-sidebar sidebar-dark-primary elevation-2'>
+      <!-- Brand Logo -->
+      <a href='/dashboards' class='brand-link'>
+        <img
+          src='/eye.PNG'
+          alt=' Logo'
+          class='brand-image img-circle elevation-3'
+        />
+        <span class='brand-text font-weight-light'>The Eye of Horus</span>
+      </a>
 
-    <!-- Sidebar -->
-    <div class="sidebar">
-      <!-- Sidebar Menu -->
-      <nav class="mt-2">
-        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-          <!-- Add icons to the links using the .nav-icon class
+      <!-- Sidebar -->
+      <div class='sidebar'>
+        <!-- Sidebar Menu -->
+        <nav class='mt-2'>
+          <ul
+            class='nav nav-pills nav-sidebar flex-column'
+            data-widget='treeview'
+            role='menu'
+            data-accordion='false'
+          >
+            <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-          <li class="nav-item">
-            <a href="/dashboards" class="nav-link select">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
-              <p>
-                Dashboard
-              </p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="/alerts" class="nav-link">
-              <i class="nav-icon fas fa-bell"></i>
-              <p>
-                Alert
-              </p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="/receivers" class="nav-link">
-              <i class="nav-icon fas fa-envelope"></i>
-              <p>
-                Receiver
-              </p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="/profile" class="nav-link">
-              <i class="nav-icon fa fa-user"></i>
-              <p>
-                Profile
-              </p>
-            </a>
-          </li>
-          {{#ifCond localUser.superuser '1'}}
-          <li class="nav-item">
-            <a href="/admin/users" class="nav-link">
-              <i class="nav-icon fa fa-users"></i>
-              <p>
-                Users
-              </p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="/admin/roles" class="nav-link">
-              <i class="nav-icon fa fa-user-tag"></i>
-              <p>
-                Roles
-              </p>
-            </a>
-          </li>
-          {{/ifCond}}
-        </ul>
-      </nav>
-      <!-- /.sidebar-menu -->
-    </div>
-    <!-- /.sidebar -->
-  </aside>
+            <li class='nav-item'>
+              <a href='/dashboards' class='nav-link select'>
+                <i class='nav-icon fas fa-tachometer-alt'></i>
+                <p>
+                  Dashboard
+                </p>
+              </a>
+            </li>
+            <li class='nav-item'>
+              <a href='/alerts' class='nav-link'>
+                <i class='nav-icon fas fa-bell'></i>
+                <p>
+                  Alert
+                </p>
+              </a>
+            </li>
+            <li class='nav-item'>
+              <a href='/receivers' class='nav-link'>
+                <i class='nav-icon fas fa-envelope'></i>
+                <p>
+                  Receiver
+                </p>
+              </a>
+            </li>
+            <li class='nav-item'>
+              <a href='/profile' class='nav-link'>
+                <i class='nav-icon fa fa-user'></i>
+                <p>
+                  Profile
+                </p>
+              </a>
+            </li>
+            {{#ifCond localUser.superuser '1'}}
+              <li class='nav-item'>
+                <a href='/admin/users' class='nav-link'>
+                  <i class='nav-icon fa fa-users'></i>
+                  <p>
+                    Users
+                  </p>
+                </a>
+              </li>
+              <li class='nav-item'>
+                <a href='/admin/roles' class='nav-link'>
+                  <i class='nav-icon fa fa-user-tag'></i>
+                  <p>
+                    Roles
+                  </p>
+                </a>
+              </li>
+            {{/ifCond}}
+          </ul>
+        </nav>
+        <!-- /.sidebar-menu -->
+      </div>
+      <!-- /.sidebar -->
+    </aside>
 
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper bg-dark">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <div class="container-fluid">
-        {{#if error_messages}}
-        <div class="alert alert-danger" role="alert" style="opacity: 0.8;">
-        {{error_messages}}
-        </div>
-        {{/if}}
-        <div class="mx-5 d-flex justify-content-between">     
-            <input class="form-control" type="text" name="name" id="name" placeholder="New Dashboard" value="{{dashboard.name}}" style="background: #343A40; color:white; width:20vw" required>
-            <button id="save" class="btn buttons">SAVE</button>    
-        </div>
-      </div><!-- /.container-fluid -->
-    </section>
-
-    <!-- Main content -->
-    <section class="content">
-      <div class="container-fluid">
-        <!-- /.row -->
-        <div class="row">
-          <div class="col-12">
-                <div class="row my-4  ml-5">
-                  <div class="col-4">
-                    <select class="form-control" type="text" placeholder="role" id="role" name="role" style="background: #343A40; color:white">
-                      {{#each role}}
-                      <option value="{{this.id}}">{{this.name}}</option>
-                      {{/each}}
-                    </select>
-                  </div>
-                  <div class="col-4">
-                  <select class="form-control" id="permission" style="background: #343A40; color:white">
-                    <option value="1">Viewer</option>
-                    <option value="2">Editor</option>
-                    <option value="3">Admin</option>
-                  </select>
-                  </div>
-                  <div class="col-4">
-                    <button type="submit" class="btn buttons" id="add">Add</button>
-                  </div>
-                </div>
-            
-            <div class="card m-auto" style="width: 90%;">
-              <!-- /.card-header -->
-              <div class="card-body table-responsive p-0 bg-dark" style="height: 400px">
-                <table class="table table-head-fixed text-nowrap">
-                  <thead>
-                    <tr>
-                      <th class="col-3 bg-secondary">Role</th>
-                      <th class="col-3 text-center bg-secondary">Permission</th>
-                      <th class="col-2 text-center bg-secondary">Delete</th>
-                    </tr>
-                  </thead>
-                  <tbody id="tbody">
-                    {{#each permission}}
-                      <tr class='roles {{this.role_id}}'>
-                        <td>{{this.role_name}}</td>
-                        <td class="text-center {{this.permission}}">
-                          {{#ifCond this.permission '1'}}Viewer{{/ifCond}}
-                          {{#ifCond this.permission '2'}}Editor{{/ifCond}}
-                          {{#ifCond this.permission '3'}}Admin{{/ifCond}}
-                        </td>
-                        <td class="text-center"><i class="fas fa-minus-circle delete remove pointer"></i></td>
-                    </tr>
-                    {{/each}}
-                  </tbody>
-                </table>
-              </div>
-              <!-- /.card-body -->
+    <!-- Content Wrapper. Contains page content -->
+    <div class='content-wrapper bg-dark'>
+      <!-- Content Header (Page header) -->
+      <section class='content-header'>
+        <div class='container-fluid'>
+          {{#if error_messages}}
+            <div class='alert alert-danger' role='alert' style='opacity: 0.8;'>
+              {{error_messages}}
             </div>
-            <!-- /.card -->
+          {{/if}}
+          <div class='mx-5 d-flex justify-content-between'>
+            <input
+              class='form-control'
+              type='text'
+              name='name'
+              id='name'
+              placeholder='New Dashboard'
+              value='{{dashboard.name}}'
+              style='background: #343A40; color:white; width:20vw'
+              required
+            />
+            <button id='save' class='btn buttons'>SAVE</button>
           </div>
-        </div>
-      </div><!-- /.container-fluid -->
-    </section>
-    <!-- /.content -->
+        </div><!-- /.container-fluid -->
+      </section>
+
+      <!-- Main content -->
+      <section class='content'>
+        <div class='container-fluid'>
+          <!-- /.row -->
+          <div class='row'>
+            <div class='col-12'>
+              <div class='row my-4 ml-5'>
+                <div class='col-4'>
+                  <select
+                    class='form-control'
+                    type='text'
+                    placeholder='role'
+                    id='role'
+                    name='role'
+                    style='background: #343A40; color:white'
+                  >
+                    {{#each role}}
+                      <option value='{{this.id}}'>{{this.name}}</option>
+                    {{/each}}
+                  </select>
+                </div>
+                <div class='col-4'>
+                  <select
+                    class='form-control'
+                    id='permission'
+                    style='background: #343A40; color:white'
+                  >
+                    <option value='1'>Viewer</option>
+                    <option value='2'>Editor</option>
+                    <option value='3'>Admin</option>
+                  </select>
+                </div>
+                <div class='col-4'>
+                  <button
+                    type='submit'
+                    class='btn buttons'
+                    id='add'
+                  >Add</button>
+                </div>
+              </div>
+
+              <div class='card m-auto' style='width: 90%;'>
+                <!-- /.card-header -->
+                <div
+                  class='card-body table-responsive p-0 bg-dark'
+                  style='height: 400px'
+                >
+                  <table class='table table-head-fixed text-nowrap'>
+                    <thead>
+                      <tr>
+                        <th class='col-3 bg-secondary'>Role</th>
+                        <th
+                          class='col-3 text-center bg-secondary'
+                        >Permission</th>
+                        <th class='col-2 text-center bg-secondary'>Delete</th>
+                      </tr>
+                    </thead>
+                    <tbody id='tbody'>
+                      {{#each permission}}
+                        <tr class='roles {{this.role_id}}'>
+                          <td>{{this.role_name}}</td>
+                          <td class='text-center {{this.permission}}'>
+                            {{#ifCond this.permission '1'}}Viewer{{/ifCond}}
+                            {{#ifCond this.permission '2'}}Editor{{/ifCond}}
+                            {{#ifCond this.permission '3'}}Admin{{/ifCond}}
+                          </td>
+                          <td class='text-center'><i
+                              class='fas fa-minus-circle delete remove pointer'
+                            ></i></td>
+                        </tr>
+                      {{/each}}
+                    </tbody>
+                  </table>
+                </div>
+                <!-- /.card-body -->
+              </div>
+              <!-- /.card -->
+            </div>
+          </div>
+        </div><!-- /.container-fluid -->
+      </section>
+      <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+    <footer class='main-footer bg-dark'>
+      <strong>Copyright &copy; 2022 The Eye of Horus&nbsp;</strong>
+      All rights reserved.
+    </footer>
   </div>
-  <!-- /.content-wrapper -->
-  <footer class="main-footer bg-dark">
-    <strong>Copyright &copy; 2022 The Eye of Horus&nbsp;</strong> All rights reserved.
-  </footer>
-</div>
-<!-- ./wrapper -->
+  <!-- ./wrapper -->
 
-<script>
-  const tbody = $('#tbody')
-  const add = $('#add')
-  const remove = $('.remove')
-  const name = $('#name')
-  const save = $('#save')
-
-  name.change(() => {
-    if(name.val().length > 60){
-      toastr.error('Max length of title is 60 characters')
-      save.prop('disabled', true)
-      return
-    }
-    save.prop('disabled', false)
-  })
-
-  add.on('click',() => {
-    const permission = $('#permission')
-    const roleId = $('#role').val()
-    const roles = $('.roles')
-    const roleName = $('#role option:selected').text()
-    const permissionText = $('#permission option:selected').text()
-
-    if(!roleId){
-      toastr.error('Role and permission are required')
-      return
-    }
-
-    for(let i = 0; i < roles.length; i++){
-      if(roles[i].classList[1] === roleId) {
-        toastr.error('Role already exist')
-        return
-      } 
-    }
-    tbody.append(`<tr class='roles ${roleId}'>
-                  <td>${roleName}</td>
-                  <td class="text-center ${permission.val()}">${permissionText}</td>
-                  <td class="d-flex align-items-center justify-content-center"><i class="fas fa-minus-circle delete remove pointer "></i></td>
-              </tr>`)
-    toastr.success('Add successfully')
-  })
-
-  tbody.on('click',(e) => {
+  <script>
+    const tbody = $('#tbody') const add = $('#add') const remove = $('.remove')
+    const name = $('#name') const save = $('#save') name.change(() => {
+    if(name.val().length > 60){ toastr.error('Max length of title is 60
+    characters') save.prop('disabled', true) return } save.prop('disabled',
+    false) }) add.on('click',() => { const permission = $('#permission') const
+    roleId = $('#role').val() const roles = $('.roles') const roleName =
+    $('#role option:selected').text() const permissionText = $('#permission
+    option:selected').text() if(!roleId){ toastr.error('Role and permission are
+    required') return } for(let i = 0; i < roles.length; i++){
+    if(roles[i].classList[1] === roleId) { toastr.error('Role already exist')
+    return } } tbody.append(`<tr class='roles ${roleId}'> <td>${roleName}</td>
+    <td class="text-center ${permission.val()}">${permissionText}</td> <td
+    class="d-flex align-items-center justify-content-center"><i class="fas
+    fa-minus-circle delete remove pointer "></i></td> </tr>`)
+    toastr.success('Add successfully') }) tbody.on('click',(e) => {
     if(e.target.classList[3] === 'remove'){
-      e.target.parentElement.parentElement.remove() 
-    }
-  })
-  
-  save.on('click', async () => {
-    const name = $('#name').val()
-    if(!name){
-      toastr.error('Name is required')
-      return
-    }
-    const roleIdArr = []
-    const permissionArr = []
-    for(let i = 0; i < tbody.children().length; i++){
-      roleIdArr.push(tbody.children()[i].classList[1])
-      permissionArr.push(tbody.children()[i].childNodes[3].classList[1])
-    }
+    e.target.parentElement.parentElement.remove() } }) save.on('click', async ()
+    => { const name = $('#name').val() if(!name){ toastr.error('Name is
+    required') return } const roleIdArr = [] const permissionArr = [] for(let i
+    = 0; i < tbody.children().length; i++){
+    roleIdArr.push(tbody.children()[i].classList[1])
+    permissionArr.push(tbody.children()[i].childNodes[3].classList[1]) } let URL
+    = '/dashboards' if('{{dashboardId}}'){ URL = `/dashboards/{{dashboardId}}?_method=PUT`
+    } await axios.post(URL,{name: name ,dashboardId: '{{dashboardId}}', roleId:
+    roleIdArr, permission: permissionArr}) location.href = "/" })
 
-    let URL = '/dashboards'
-    if('{{dashboardId}}'){
-      URL = `/dashboards/{{dashboardId}}?_method=PUT`
-    }
-    await axios.post(URL,{name: name ,dashboardId: '{{dashboardId}}', roleId: roleIdArr, permission: permissionArr})
-    location.href = "/"
-  })
-
-</script>
+  </script>
 </body>
