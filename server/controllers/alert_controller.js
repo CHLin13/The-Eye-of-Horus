@@ -24,10 +24,10 @@ const alertController = {
         if (alertId) {
           return res.status(301).redirect(`/alerts/${alertId}`);
         }
-        return res.status(301).redirect(`/alerts/create`);
+        return res.status(301).redirect('/alerts/create');
       }
 
-      return res.status(301).redirect(`/alerts`);
+      return res.status(301).redirect('/alerts');
     } catch (error) {
       console.error(`Post alert create error: ${error}`);
       return res.status(500).send('Internal Server Error');
@@ -63,7 +63,7 @@ const alertController = {
     try {
       const alertId = req.params.alertId;
       await alertModel.deleteAlert(alertId);
-      return res.status(301).redirect(`/alerts`);
+      return res.status(301).redirect('/alerts');
     } catch (error) {
       console.error(`Delete alert error: ${error}`);
       return res.status(500).send('Internal Server Error');

@@ -32,7 +32,7 @@ const roleController = {
         if (roleId) {
           return res.status(301).redirect(`/admin/roles/${roleId}`);
         }
-        return res.status(301).redirect(`/admin/roles/create`);
+        return res.status(301).redirect('/admin/roles/create');
       }
 
       await roleModel.postRole(roleId, name, description);

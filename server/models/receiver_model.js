@@ -37,7 +37,7 @@ const receiverModel = {
       if (receiverId) {
         return `/receivers/${receiverId}`;
       } else {
-        return `/receivers/create`;
+        return '/receivers/create';
       }
     }
 
@@ -50,7 +50,7 @@ const receiverModel = {
       if (receiverId) {
         return `/receivers/${receiverId}`;
       } else {
-        return `/receivers/create`;
+        return '/receivers/create';
       }
     }
 
@@ -73,8 +73,8 @@ const receiverModel = {
       detail: JSON.stringify(detail),
     };
 
-    const [alert] = await pool.query(
-      `SELECT * FROM alert WHERE receiver_id = ?`,
+    const [alerts] = await pool.query(
+      'SELECT * FROM alert WHERE receiver_id = ?',
       [receiverId]
     );
 
@@ -82,7 +82,7 @@ const receiverModel = {
 
     try {
       if (receiverId) {
-        await conn.query(`UPDATE receiver SET ? WHERE id = ?`, [
+        await conn.query('UPDATE receiver SET ? WHERE id = ?', [
           data,
           receiverId,
         ]);
@@ -133,7 +133,7 @@ message: ${alert[i].message}`;
           );
         }
       } else {
-        await conn.query(`INSERT INTO receiver SET ?`, [data]);
+        await conn.query('INSERT INTO receiver SET ?', [data]);
       }
       await conn.query('COMMIT');
       return '/receivers';

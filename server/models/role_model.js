@@ -14,12 +14,11 @@ const roleModel = {
     };
 
     const conn = await pool.getConnection();
-
     try {
       if (roleId) {
-        await conn.query(`UPDATE role SET ? WHERE id = ?`, [data, roleId]);
+        await conn.query('UPDATE role SET ? WHERE id = ?', [data, roleId]);
       } else {
-        await conn.query(`INSERT INTO role SET ?`, [data]);
+        await conn.query('INSERT INTO role SET ?', [data]);
       }
       await conn.query('COMMIT');
       return true;

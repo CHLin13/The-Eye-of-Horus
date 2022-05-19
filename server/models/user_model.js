@@ -28,17 +28,17 @@ const userModel = {
 
     try {
       if (userId) {
-        await conn.query(`UPDATE user SET ? WHERE id = ?`, [update, userId]);
-        await conn.query(`DELETE FROM user_role WHERE user_id = ?`, [userId]);
+        await conn.query('UPDATE user SET ? WHERE id = ?', [data, userId]);
+        await conn.query('DELETE FROM user_role WHERE user_id = ?', [userId]);
       } else {
-        const [exist] = await conn.query(
-          `SELECT email FROM user WHERE email = ?`,
+        const [[alreadyRegistered]] = await conn.query(
+          'SELECT email FROM user WHERE email = ?',
           [email]
         );
         if (exist.length > 0) {
           return false;
         }
-        const [user] = await conn.query(`INSERT INTO user SET ?`, [data]);
+        const [user] = await conn.query('INSERT INTO user SET ?', [data]);
         userId = user.insertId;
       }
 

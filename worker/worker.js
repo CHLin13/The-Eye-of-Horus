@@ -87,7 +87,7 @@ const work = (async function () {
 
       const conn = await pool.getConnection();
       try {
-        await conn.query(`UPDATE alert SET status = ? WHERE id = ?`, [
+        await conn.query('UPDATE alert SET status = ? WHERE id = ?', [
           status,
           result[i].id,
         ]);

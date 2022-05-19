@@ -35,7 +35,7 @@ const receiverController = {
         if (receiverId) {
           return res.status(301).redirect(`/receivers/${receiverId}`);
         }
-        return res.status(301).redirect(`/receivers/create`);
+        return res.status(301).redirect('/receivers/create');
       }
 
       return res.status(301).redirect(response);

@@ -22,7 +22,7 @@ const loginController = {
         } else if (errors.errors.some((item) => item.param === 'password')) {
           req.flash('error_messages', 'Password should over than 8 characters');
         }
-        return res.status(301).redirect(`/`);
+        return res.status(301).redirect('/');
       }
       
       return res.status(301).redirect('/dashboards');
