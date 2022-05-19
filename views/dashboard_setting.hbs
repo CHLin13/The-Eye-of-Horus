@@ -245,31 +245,62 @@
   <!-- ./wrapper -->
 
   <script>
-    const tbody = $('#tbody') const add = $('#add') const remove = $('.remove')
-    const name = $('#name') const save = $('#save') name.change(() => {
-    if(name.val().length > 60){ toastr.error('Max length of title is 60
-    characters') save.prop('disabled', true) return } save.prop('disabled',
-    false) }) add.on('click',() => { const permission = $('#permission') const
-    roleId = $('#role').val() const roles = $('.roles') const roleName =
-    $('#role option:selected').text() const permissionText = $('#permission
-    option:selected').text() if(!roleId){ toastr.error('Role and permission are
-    required') return } for(let i = 0; i < roles.length; i++){
-    if(roles[i].classList[1] === roleId) { toastr.error('Role already exist')
-    return } } tbody.append(`<tr class='roles ${roleId}'> <td>${roleName}</td>
-    <td class="text-center ${permission.val()}">${permissionText}</td> <td
-    class="d-flex align-items-center justify-content-center"><i class="fas
-    fa-minus-circle delete remove pointer "></i></td> </tr>`)
-    toastr.success('Add successfully') }) tbody.on('click',(e) => {
+    const tbody = $('#tbody') 
+    const add = $('#add') 
+    const remove = $('.remove')
+    const name = $('#name') 
+    const save = $('#save') 
+
+    name.change(() => {
+      if(name.val().length > 60) { 
+        toastr.error('Max length of title is 60 characters') 
+        save.prop('disabled', true) 
+        return 
+      } 
+        save.prop('disabled',false) 
+    }) 
+    
+    add.on('click',() => { const permission = $('#permission') 
+    const roleId = $('#role').val() 
+    const roles = $('.roles') 
+    const roleName = $('#role option:selected').text() 
+    const permissionText = $('#permission option:selected').text() 
+
+    if(!roleId) { 
+        toastr.error('Role and permission are required') 
+        return 
+    } 
+
+    for(let i = 0; i < roles.length; i++){
+      if(roles[i].classList[1] === roleId) { 
+        toastr.error('Role already exist')
+        return } } 
+      tbody.append(`<tr class='roles ${roleId}'> <td>${roleName}</td>
+        <td class="text-center ${permission.val()}">${permissionText}</td> <td
+        class="d-flex align-items-center justify-content-center"><i class="fas
+        fa-minus-circle delete remove pointer "></i></td> </tr>`)
+    toastr.success('Add successfully') }) 
+    
+    tbody.on('click',(e) => {
     if(e.target.classList[3] === 'remove'){
-    e.target.parentElement.parentElement.remove() } }) save.on('click', async ()
-    => { const name = $('#name').val() if(!name){ toastr.error('Name is
-    required') return } const roleIdArr = [] const permissionArr = [] for(let i
-    = 0; i < tbody.children().length; i++){
-    roleIdArr.push(tbody.children()[i].classList[1])
-    permissionArr.push(tbody.children()[i].childNodes[3].classList[1]) } let URL
-    = '/dashboards' if('{{dashboardId}}'){ URL = `/dashboards/{{dashboardId}}?_method=PUT`
-    } await axios.post(URL,{name: name ,dashboardId: '{{dashboardId}}', roleId:
-    roleIdArr, permission: permissionArr}) location.href = "/" })
+    e.target.parentElement.parentElement.remove() } }) 
+    save.on('click', async () => { 
+      const name = $('#name').val() 
+      if(!name) { 
+        toastr.error('Name is required') 
+        return 
+      } 
+      const roleIdArr = [] 
+      const permissionArr = [] 
+      for(let i = 0; i < tbody.children().length; i++){
+      roleIdArr.push(tbody.children()[i].classList[1])
+      permissionArr.push(tbody.children()[i].childNodes[3].classList[1]) } 
+      let URL = '/dashboards' 
+      if('{{dashboardId}}'){ 
+        URL = `/dashboards/{{dashboardId}}?_method=PUT`
+    } 
+    await axios.post(URL,{name: name ,dashboardId: '{{dashboardId}}', roleId: roleIdArr, permission: permissionArr}) 
+    location.href = "/" })
 
   </script>
 </body>
