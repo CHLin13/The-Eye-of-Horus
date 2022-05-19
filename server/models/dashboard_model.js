@@ -44,21 +44,23 @@ const dashboardModel = {
     const conn = await pool.getConnection();
     try {
       if (dashboardId) {
-        await conn.query(`UPDATE dashboard SET ? WHERE id = ?`, [
+        //update dashboard name and flush all permission
+        await conn.query('UPDATE dashboard SET ? WHERE id = ?', [
           { name: name },
           dashboardId,
         ]);
         await conn.query(
-          `DELETE FROM dashboard_permission WHERE dashboard_id = ?`,
+          'DELETE FROM dashboard_permission WHERE dashboard_id = ?',
           [dashboardId]
         );
       } else {
-        const [dashboard] = await conn.query(`INSERT INTO dashboard SET ?`, [
+        const [dashboard] = await conn.query('INSERT INTO dashboard SET ?', [
           { name: name },
         ]);
         dashboardId = dashboard.insertId;
       }
 
+      //Integrate role id, dashboard and permission into the same array
       roleId = roleId.map((id) => [Number(id)]);
       for (let i = 0; i, i < roleId.length; i++) {
         roleId[i].unshift(dashboardId);
@@ -81,7 +83,6 @@ const dashboardModel = {
 
   deleteDashboard: async (dashboardId) => {
     const conn = await pool.getConnection();
-
     try {
       const sql = 'DELETE FROM dashboard WHERE id = ?';
       await conn.query(sql, [dashboardId]);
