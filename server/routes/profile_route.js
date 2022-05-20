@@ -13,7 +13,6 @@ router.post(
   authenticated,
   [
     body('name').notEmpty().isLength({ max: 60 }),
-    body('email').isEmail().isLength({ max: 254 }),
     body('password').isLength({ min: 8, max: 20 }),
   ],
   profileController.postProfile

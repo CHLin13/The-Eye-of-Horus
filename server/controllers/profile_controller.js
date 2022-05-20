@@ -35,16 +35,14 @@ const profileController = {
   postProfile: async (req, res) => {
     try {
       const userId = res.locals.localUser.id;
-      const { name, email, password, newPassword, passwordConfirm } = req.body;
+      const { name, password, newPassword, passwordConfirm } = req.body;
       let tempPassword = password;
       const userPassword = await profileModel.getPassword(userId);
       const compareResult = await compare(password, userPassword);
       const errors = validationResult(req);
 
       if (!errors.isEmpty()) {
-        if (errors.errors.some((item) => item.param === 'email')) {
-          req.flash('error_messages', 'Email format is incorrect');
-        } else if (errors.errors.some((item) => item.param === 'password')) {
+        if (errors.errors.some((item) => item.param === 'password')) {
           req.flash(
             'error_messages',
             'Password should over than 8 and less than 20 characters'
@@ -79,17 +77,11 @@ const profileController = {
 
       const saltRounds = 10;
       const hashedPassword = await hash(tempPassword, saltRounds);
-      const response = await profileModel.postProfile(
+      await profileModel.postProfile(
         name,
-        email,
         hashedPassword,
         userId
       );
-
-      if (!response) {
-        req.flash('error_messages', 'Email already registered');
-        return res.status(301).redirect(`/profile/${userId}`);
-      }
       
       req.flash('success_messages', 'Update success');
       return res.status(301).redirect('/profile');

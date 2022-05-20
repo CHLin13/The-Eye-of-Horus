@@ -7,19 +7,11 @@ const profileModel = {
     return password.password;
   },
 
-  postProfile: async (name, email, hashedPassword, userId) => {
+  postProfile: async (name, hashedPassword, userId) => {
     const data = {
       name: name,
-      email: email,
       password: hashedPassword,
     };
-    const [[emailExist]] = await pool.query('SELECT email FROM user WHERE email = ?', [
-      email,
-    ]);
-
-    if (emailExist && emailExist.email !== email) {
-      return false;
-    }
     
     const conn = await pool.getConnection();
     try {
