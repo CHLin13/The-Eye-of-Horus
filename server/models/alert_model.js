@@ -134,7 +134,8 @@ message: ${message}`;
     const conn = await pool.getConnection();
     try {
       const [[eval_every_input]] = await pool.query(
-        'SELECT eval_every_input FROM alert'
+        'SELECT eval_every_input FROM alert WHERE id = ?',
+        [alertId]
       );
       const sql = 'DELETE FROM alert WHERE id = ?';
       await conn.query(sql, [alertId]);
