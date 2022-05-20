@@ -1,9 +1,11 @@
+require('dotenv').config();
 const { superPermission, userStatus } = require('../../utils/enums');
 const { validationResult } = require('express-validator');
 const userModel = require('../models/user_model');
 const roleModel = require('../models/role_model');
 const bcrypt = require('bcryptjs');
 const util = require('util');
+const { DEFAULT_PASSWORD, BCRYPT_SALT } = process.env;
 
 const hash = util.promisify(bcrypt.hash);
 
@@ -33,8 +35,8 @@ const userController = {
       const { userId } = req.params;
       const { name, email, superuser, status, role } = req.body;
 
-      const passwordDefault = 'aaaaaaaa';
-      const saltRounds = 10;
+      const passwordDefault = DEFAULT_PASSWORD;
+      const saltRounds = BCRYPT_SALT;
       const hashedPassword = await hash(passwordDefault, saltRounds);
 
       const errors = validationResult(req);
@@ -102,13 +104,13 @@ const userController = {
 
   deleteUser: async (req, res) => {
     const { userId } = req.params;
-    const user = res.locals.localUser
+    const user = res.locals.localUser;
     try {
       if (Number(userId) === user.id) {
         req.flash('error_messages', 'Can not delete yourself');
         return res.status(301).redirect('/admin/users');
       }
-      
+
       await userModel.deleteUser(userId);
       return res.status(301).redirect('/admin/users');
     } catch (error) {

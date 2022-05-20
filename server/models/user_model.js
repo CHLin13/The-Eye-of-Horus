@@ -8,7 +8,7 @@ const userModel = {
   },
 
   postUser: async (name, email, password, superuser, status, roles, userId) => {
-    userId = Number(userId);
+    
     const data = {
       name: name,
       email: email,
@@ -20,6 +20,7 @@ const userModel = {
 
     try {
       if (userId) {
+        userId = Number(userId);
         await conn.query('UPDATE user SET ? WHERE id = ?', [data, userId]);
         await conn.query('DELETE FROM user_role WHERE user_id = ?', [userId]);
       } else {
@@ -49,6 +50,7 @@ const userModel = {
     } catch (error) {
       await conn.query('ROLLBACK');
       console.log(error);
+      return false;
     } finally {
       conn.release();
     }
