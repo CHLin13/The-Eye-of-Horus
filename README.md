@@ -188,8 +188,6 @@ Create .env file and write the content follow by [.env.example](./docs/docker.en
 
 Here is the [docker-compose.yml](./docs/docker-compose.yml) that powers the whole setup.
 
-### **All in one**
-
 1. Update your .env file, influxdb port and nginx folder path in docker-compose.yml
 2. Run all containers with docker-compose up
 ```
