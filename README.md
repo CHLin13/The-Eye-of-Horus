@@ -186,7 +186,7 @@ vi /etc/collectd.conf
 
 Here is the [docker-compose.yml](./docs/docker-compose.yml) that powers the whole setup.
 1. Create .env file and write the content follow by [.env.example](./docs/docker.env)
-2. Update your .env file, influxdb port and nginx folder path in docker-compose.yml
+2. Update your `.env` file, `influxdb port` and `nginx folder path` in docker-compose.yml
 3. Run all containers with docker-compose up
 ```
 docker-compose up -d
