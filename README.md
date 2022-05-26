@@ -178,13 +178,13 @@ yum install collectd
 vi /etc/collectd.conf
 ```
 
-3. Add lines to collectd.conf according to [collectd.conf](./docs/influxdb.conf.example)
+3. Add lines to collectd.conf according to [collectd.conf](./docs/collectd.conf)
 
 
 
 ### **Installing**
 
-Create .env file and write the content follow by [.env.example](./docs/docker.env.example).
+Create .env file and write the content follow by [.env.example](./docs/docker.env).
 
 Here is the [docker-compose.yml](./docs/docker-compose.yml) that powers the whole setup.
 
@@ -206,14 +206,14 @@ docker exec -it the-eye-of-horus-influx-1 /bin/bash
 vi /etc/influxdb/influxdb.conf
 ```
 
-5. Add lines to influxdb.conf according to [influxdb.conf.example](./docs/influxdb.conf.example)
+5. Add lines to influxdb.conf according to [influxdb.conf.example](./docs/influxdb.conf)
 
 6. Docker pull worker
 ```
 docker pull chlin13/eye-worker
 ```
 
-7. create worker .env file content refer to [worker.env.example](./docs/worker.env.example)
+7. create worker .env file content refer to [worker.env.example](./docs/worker.env)
 
 
 8. Add New Job in Crontab
