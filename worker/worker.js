@@ -1,4 +1,4 @@
-require('dotenv').config({ path: './.env' });
+require('dotenv').config({ path: './worker/.env' });
 const redis = require('./configs/redisConnect');
 const pool = require('./configs/mysqlConnect');
 const Influxdb = require('influx');
