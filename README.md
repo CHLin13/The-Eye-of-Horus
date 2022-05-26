@@ -213,7 +213,7 @@ vi /etc/influxdb/influxdb.conf
 docker pull chlin13/eye-worker
 ```
 
-7. create worker .env file content refer to [worker.env.example](./docs/worker.env)
+7. Create worker .env file content refer to [worker.env.example](./docs/worker.env)
 
 
 8. Add New Job in Crontab
