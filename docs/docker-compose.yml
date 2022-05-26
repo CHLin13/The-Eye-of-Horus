@@ -1,0 +1,82 @@
+version: '1.0'
+
+services:
+   mysql:
+     image: mysql:8
+     ports:
+       - "${MYSQL_PORT}:3306"
+     volumes:
+       - "mysqlV:/var/lib/mysql"
+       - "sqlV:/docker-entrypoint-initdb.d"
+     restart: always
+     environment:
+       MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+
+   redis:
+     image: redis:6.2-alpine
+     command: --requirepass ${REDIS_PASSWORD}
+     volumes:
+       - "redisV:/var/lib/redis"
+     ports:
+       - "${REDIS_PORT}:6379"
+     restart: always
+
+   influx:
+     image: influxdb:1.8.10-alpine
+     ports:
+       - "${INFLUX_PORT}:8086"
+       - "${INFLUX_SERVER_PORT}:25826/udp"
+       - "${INFLUX_CLIENT_PORT}: __other_influx_client_port_here__/udp"
+     volumes:
+       - "influxV:/var/lib/influxdb"
+       - "etcInfluxV:/etc/influxdb"
+       - "/usr/share/collectd:/usr/share/collectd"
+
+     restart: always
+
+   eye:
+     depends_on:
+       - mysql
+       - redis
+       - influx
+     image: chlin13/eye:latest
+     ports:
+       - "${PORT}:3000"
+     volumes:
+       - "sqlV:/usr/src/app/sql"
+     restart: always
+     env_file:
+       - __your_.env_file_path_here__
+
+   nginx:
+     depends_on:
+       - eye
+     image: nginx
+     ports:
+       - "${NGINX_80PORT}:80"
+       - "${NGINX_443PORT}:443"
+     volumes:
+       - "__your_nginx_folder_path_here__:/etc/nginx"
+     restart: always
+
+volumes:
+  mysqlV:
+    external: false
+  redisV:
+    external: false
+  etcRedisV:
+    external: false
+  influxV:
+    external: false
+  etcInfluxV:
+    external: false
+  sqlV:
+    external: false
+  nginxV:
+    external: false
+
+networks:
+  default:
+    driver: bridge
+    external: false
+    name: eye-net

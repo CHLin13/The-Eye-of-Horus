@@ -1,0 +1,27 @@
+# Local server
+[[collectd]]
+  enabled = true
+  bind-address = ":25826"
+  database = "collectd"
+  retention-policy = ""
+  batch-size = 5000
+  batch-pending = 10
+  batch-timeout = "10s"
+  read-buffer = 0
+  typesdb = "/usr/share/collectd/types.db"
+  security-level = "none"
+  parse-multivalue-plugin = "split"
+
+# Client server
+#[[collectd]]
+#  enabled = true
+#  bind-address = "__other_influx_client_port_here__"
+#  database = "Client"
+#  retention-policy = ""
+#  batch-size = 5000
+#  batch-pending = 10
+#  batch-timeout = "10s"
+#  read-buffer = 0
+#  typesdb = "/usr/share/collectd/types.db"
+#  security-level = "none"
+#  parse-multivalue-plugin = "split"
