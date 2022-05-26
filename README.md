@@ -184,49 +184,47 @@ vi /etc/collectd.conf
 
 ### **Installing**
 
-Create .env file and write the content follow by [.env.example](./docs/docker.env).
-
 Here is the [docker-compose.yml](./docs/docker-compose.yml) that powers the whole setup.
-
-1. Update your .env file, influxdb port and nginx folder path in docker-compose.yml
-2. Run all containers with docker-compose up
+1. Create .env file and write the content follow by [.env.example](./docs/docker.env)
+2. Update your .env file, influxdb port and nginx folder path in docker-compose.yml
+3. Run all containers with docker-compose up
 ```
 docker-compose up -d
 ```
-3. Run a new command in influx container
+4. Run a new command in influx container
 
 ```
 docker exec -it the-eye-of-horus-influx-1 /bin/bash
 ```
 
-4. Open influxdb.conf with default editor
+5. Open influxdb.conf with default editor
 ```
 vi /etc/influxdb/influxdb.conf
 ```
 
-5. Add lines to influxdb.conf according to [influxdb.conf.example](./docs/influxdb.conf)
+6. Add lines to influxdb.conf according to [influxdb.conf.example](./docs/influxdb.conf)
 
-6. Docker pull worker
+7. Docker pull worker
 ```
 docker pull chlin13/eye-worker
 ```
 
-7. Create worker .env file content refer to [worker.env.example](./docs/worker.env)
+8. Create worker .env file content refer to [worker.env.example](./docs/worker.env)
 
 
-8. Add New Job in Crontab
+9. Add New Job in Crontab
 
 ```
 crontab -e
 ```
 
-9. Crontab setting example
+10. Crontab setting example
 
 ```
 * * * * * docker run --name ___worker_name___ --env-file ___worker_.env_file_path___ --rm eye-worker >> ___log_file_path___ 2>&1
 ```
 
-10. (Optional) Use [npm package](https://www.npmjs.com/package/@chlin13/the-eye-of-horus) to collect application performance data
+11. (Optional) Use [npm package](https://www.npmjs.com/package/@chlin13/the-eye-of-horus) to collect application performance data
 
 ```
 npm i @chlin13/the-eye-of-horus
