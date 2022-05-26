@@ -172,13 +172,13 @@ npm i @chlin13/the-eye-of-horus
 yum install collectd
 ```
 
-2. Open collectd.conf with default editor
+2. Open `collectd.conf` with default editor
 
 ```
 vi /etc/collectd.conf
 ```
 
-3. Add lines to collectd.conf according to [collectd.conf](./docs/collectd.conf)
+3. Add lines to `collectd.conf` according to [collectd.conf](./docs/collectd.conf)
 
 
 
@@ -197,22 +197,22 @@ docker-compose up -d
 docker exec -it the-eye-of-horus-influx-1 /bin/bash
 ```
 
-5. Open influxdb.conf with default editor
+4. Open `influxdb.conf` with default editor
 ```
 vi /etc/influxdb/influxdb.conf
 ```
 
-6. Add lines to influxdb.conf according to [influxdb.conf.example](./docs/influxdb.conf)
+5. Add lines to `influxdb.conf` according to [influxdb.conf.example](./docs/influxdb.conf)
 
 7. Docker pull worker
 ```
 docker pull chlin13/eye-worker
 ```
 
-8. Create worker .env file content refer to [worker.env.example](./docs/worker.env)
+7. Create `worker .env file` content refer to [worker.env.example](./docs/worker.env)
 
 
-9. Add New Job in Crontab
+8. Add new job in crontab
 
 ```
 crontab -e
