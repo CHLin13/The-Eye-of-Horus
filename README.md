@@ -25,6 +25,8 @@ Password: aaaaaaaa
 Email:	intern@example.com  
 Password: aaaaaaaa  
 
+<br>
+
 ## **Table of Contents**
 
 - [Architecture](#Architecture)
@@ -87,23 +89,27 @@ Password: aaaaaaaa
 
 ## **Demo**
 
-### Login page & Dashboard detail
+### **Login page & Dashboard detail**
+Users can check charts in the dashboard by entry each dashboard. Charts immediately update without refresh website. The period of charts' update is according to interval setting.
 
 ![Login page & Dashboard detail](/gif/login_dashboard.gif)
 
-### Add dashboard
+### **Add dashboard**
+Create/set dashboard with different permission.
 
 ![Add dashboard](/gif/add_dashboard.gif)
 
-### Create chart
-
+### **Create chart**
+Users can create charts with different source and customized the title, time range, chart style, interval, select and x(y)-Axis title.
 ![Create chart](/gif/create_chart.gif)
 
-### Add receiver
+### **Add receiver**
+Create specific receivers. Receiver type can be email, discord, or slack.
 
 ![Add receiver](/gif/add_receiver.gif)
 
-### Add alert
+### **Add alert**
+Users can define alert rules and send customized alert messages via email, discord, and slack.
 
 ![Add alert](/gif/add_alert.gif)
 
@@ -214,7 +220,7 @@ vi /etc/influxdb/influxdb.conf
 
 5. Add lines to `influxdb.conf` according to [influxdb.conf.example](./docs/influxdb.conf)
 
-6. Docker pull worker
+6. Docker pull [worker](https://hub.docker.com/r/chlin13/eye-worker)
 ```
 docker pull chlin13/eye-worker
 ```
