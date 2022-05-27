@@ -174,6 +174,8 @@ npm i @chlin13/the-eye-of-horus
 
 ### **Prerequisites**
 
+
+- [Install Docker](https://docs.docker.com/engine/install/)
 - [Install Docker Compose](https://docs.docker.com/compose/install/)
 - [Install crontab](https://tecadmin.net/install-crontab-in-linux/)
 - Create nginx.conf [example](https://www.nginx.com/resources/wiki/start/topics/examples/full/)
