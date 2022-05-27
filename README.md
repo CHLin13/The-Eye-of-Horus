@@ -22,7 +22,7 @@ Email: developer@example.com
 Password: aaaaaaaa  
 
 * Intern  
-Email:	intern@example.com
+Email:	intern@example.com  
 Password: aaaaaaaa  
 
 ## **Table of Contents**
