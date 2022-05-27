@@ -1,11 +1,4 @@
-<p align="center">
-  <img src="./public/eye.PNG">
-</p>  
-<p align="center">
-  <a href="https://baboo.shop/">view demo</a>
-</p>
-
-# The Eye of Horus
+# <img src="./public/eye.PNG" style="height:20px"> The Eye of Horus
 
 ### A Monitoring and Alerting Application
 
@@ -17,6 +10,21 @@
 
 <br>
 
+## **Test accounts**
+Demo: https://baboo.shop/
+
+* Super user  
+Email: super@example.com  
+Password: aaaaaaaa  
+
+* Develope  
+Email: developer@example.com  
+Password: aaaaaaaa  
+
+* Intern  
+Email:	intern@example.com
+Password: aaaaaaaa  
+
 ## **Table of Contents**
 
 - [Architecture](#Architecture)
@@ -24,8 +32,8 @@
 - [Database Schema](#Database-Schema)
 - [Demo](#Demo)
 - [Getting Started](#Getting-Started)
-  - [Deploy by Git Clone](#Deploy-by-Git-Clone)
-  - [Deploy by Docker Compose](#Deploy-by-Docker-Compose)
+  - [Install from a source](#Install-from-a-source)
+  - [Install The-Eye-of-Horus with Docker](#Install-The-Eye-of-Horus-with-Docker)
 - [Contact](#Contact)
 
 <br>
@@ -103,7 +111,7 @@
 
 # Getting Started
 
-## **Deploy by Git Clone**
+## **Install from a source**
 
 ### **Prerequisites**
 
@@ -156,16 +164,17 @@ npm i @chlin13/the-eye-of-horus
 <br>  
 <br>
 
-## **Deploy by Docker Compose**
+## **Install The-Eye-of-Horus with Docker**
 
 ### **Prerequisites**
 
 - [Install Docker Compose](https://docs.docker.com/compose/install/)
 - [Install crontab](https://tecadmin.net/install-crontab-in-linux/)
+- Create nginx.conf [example](https://www.nginx.com/resources/wiki/start/topics/examples/full/)
 
-* collectd setting
+* collectd setting 
 
-1. Install collectd
+1. Install collectd (Red Hat Linux) [other OS](https://collectd.org/download.shtml)
 
 ```
 yum install collectd
