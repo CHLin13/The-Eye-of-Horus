@@ -1,11 +1,4 @@
-<p align="center">
-  <img src="./public/eye.PNG">
-</p>  
-<p align="center">
-  <a href="https://baboo.shop/">view demo</a>
-</p>
-
-# The Eye of Horus
+# <img src="./public/eye.PNG" style="height:20px"> The Eye of Horus
 
 ### A Monitoring and Alerting Application
 
@@ -17,6 +10,23 @@
 
 <br>
 
+## **Test accounts**
+Demo: https://baboo.shop/
+
+* Super user  
+Email: super@example.com  
+Password: aaaaaaaa  
+
+* Develope  
+Email: developer@example.com  
+Password: aaaaaaaa  
+
+* Intern  
+Email:	intern@example.com  
+Password: aaaaaaaa  
+
+<br>
+
 ## **Table of Contents**
 
 - [Architecture](#Architecture)
@@ -24,8 +34,8 @@
 - [Database Schema](#Database-Schema)
 - [Demo](#Demo)
 - [Getting Started](#Getting-Started)
-  - [Deploy by Git Clone](#Deploy-by-Git-Clone)
-  - [Deploy by Docker Compose](#Deploy-by-Docker-Compose)
+  - [Install from a source](#Install-from-a-source)
+  - [Install The-Eye-of-Horus with Docker](#Install-The-Eye-of-Horus-with-Docker)
 - [Contact](#Contact)
 
 <br>
@@ -79,23 +89,27 @@
 
 ## **Demo**
 
-### Login page & Dashboard detail
+### **Login page & Dashboard detail**
+Users can check charts in the dashboard by entry each dashboard. Charts immediately update without refresh website. The period of charts' update is according to interval setting.
 
 ![Login page & Dashboard detail](/gif/login_dashboard.gif)
 
-### Add dashboard
+### **Add dashboard**
+Create/set dashboard with different permission.
 
 ![Add dashboard](/gif/add_dashboard.gif)
 
-### Create chart
-
+### **Create chart**
+Users can create charts with different source and customized the title, time range, chart style, interval, select and x(y)-Axis title.
 ![Create chart](/gif/create_chart.gif)
 
-### Add receiver
+### **Add receiver**
+Create specific receivers. Receiver type can be email, discord, or slack.
 
 ![Add receiver](/gif/add_receiver.gif)
 
-### Add alert
+### **Add alert**
+Users can define alert rules and send customized alert messages via email, discord, and slack.
 
 ![Add alert](/gif/add_alert.gif)
 
@@ -103,7 +117,7 @@
 
 # Getting Started
 
-## **Deploy by Git Clone**
+## **Install from a source**
 
 ### **Prerequisites**
 
@@ -156,16 +170,17 @@ npm i @chlin13/the-eye-of-horus
 <br>  
 <br>
 
-## **Deploy by Docker Compose**
+## **Install The-Eye-of-Horus with Docker**
 
 ### **Prerequisites**
 
 - [Install Docker Compose](https://docs.docker.com/compose/install/)
 - [Install crontab](https://tecadmin.net/install-crontab-in-linux/)
+- Create nginx.conf [example](https://www.nginx.com/resources/wiki/start/topics/examples/full/)
 
-* collectd setting
+* collectd setting 
 
-1. Install collectd
+1. Install collectd (Red Hat Linux) [other OS](https://collectd.org/download.shtml)
 
 ```
 yum install collectd
@@ -203,7 +218,7 @@ vi /etc/influxdb/influxdb.conf
 
 5. Add lines to `influxdb.conf` according to [influxdb.conf.example](./docs/influxdb.conf)
 
-7. Docker pull worker
+6. Docker pull [worker](https://hub.docker.com/r/chlin13/eye-worker)
 ```
 docker pull chlin13/eye-worker
 ```
