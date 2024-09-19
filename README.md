@@ -10,23 +10,6 @@
 
 <br>
 
-## **Test accounts**
-Demo: https://baboo.shop/
-
-* Super user  
-Email: super@example.com  
-Password: aaaaaaaa  
-
-* Develope  
-Email: developer@example.com  
-Password: aaaaaaaa  
-
-* Intern  
-Email:	intern@example.com  
-Password: aaaaaaaa  
-
-<br>
-
 ## **Table of Contents**
 
 - [Architecture](#Architecture)
