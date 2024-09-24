@@ -179,6 +179,11 @@ vi /etc/collectd.conf
 
 3. Add lines to `collectd.conf` according to [collectd.conf](./docs/collectd.conf)
 
+4. Restart collectd
+```
+sudo systemctl restart collectd
+```
+
 
 
 ### **Installing**
