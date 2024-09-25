@@ -225,7 +225,7 @@ crontab -e
 10. Crontab setting example
 
 ```
-* * * * * docker run --name ___worker_name___ --env-file ___worker_.env_file_path___ --rm chlin13/eye-worker >> ___log_file_path___ 2>&1
+* * * * * docker run --name ___worker_name___ --env-file ___worker_.env_file_path___ --net host --rm chlin13/eye-worker >> ___log_file_path___ 2>&1
 ```
 
 11. (Optional) Use [npm package](https://www.npmjs.com/package/@chlin13/the-eye-of-horus) to collect application performance data
