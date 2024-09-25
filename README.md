@@ -174,7 +174,7 @@ yum install collectd
 2. Open `collectd.conf` with default editor
 
 ```
-vi /etc/collectd.conf
+vi /etc/collectd/collectd.conf
 ```
 
 3. Add lines to `collectd.conf` according to [collectd.conf](./docs/collectd.conf)
